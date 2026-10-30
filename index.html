@@ -224,7 +224,7 @@ body.edu { background: var(--paper); color: var(--ink); font-family: var(--font-
 /* ===== baza ===== */
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
-html { -webkit-text-size-adjust: 100%; }
+html { -webkit-text-size-adjust: 100%; scroll-padding-top: calc(var(--head-h) + 12px); } /* fokus nie chowa się pod lepkim nagłówkiem */
 body { margin: 0; font-size: var(--body); line-height: 1.6; }
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 60; background: var(--paper); }
 h1, h2, h3, h4 { margin: 0; text-wrap: balance; }
@@ -344,6 +344,60 @@ details.more > summary::after { content: "+"; font-family: var(--font-mono); }
 details.more[open] > summary { border-bottom: 1px dashed var(--line-2); border-radius: var(--r-md) var(--r-md) 0 0; }
 details.more[open] > summary::after { content: "−"; }
 details.more > :not(summary) { margin: 10px 14px; font-size: var(--body-sm); }
+
+/* ===== klocki lekcji: nagłówek wiersza, kafelki w kolumnie, odczyt ===== */
+/* <div class="row-head"><span class="badge"><i data-lucide="target" class="ic" aria-hidden="true"></i></span><h3>Tytuł</h3></div> */
+.row-head { display: flex; align-items: center; gap: 10px; min-width: 0; }
+.row-head h3 { min-width: 0; }
+.tiles.stack { grid-template-columns: minmax(0, 1fr); }
+.tiles.stack .tile { gap: 2px 12px; align-items: start; }
+.tiles.stack .badge { grid-row: 1 / span 2; }
+.tiles.stack .tile p { grid-column: 2; }
+.mini-note { font-size: var(--body-sm); line-height: 1.45; }
+.mini .readout { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; font-family: var(--font-sans); font-weight: 400; font-size: var(--body-sm); line-height: 1.35; color: var(--ink-2); }
+.readout > span { display: grid; align-content: start; gap: 2px; background: var(--paper-2); border-radius: var(--r-sm); padding: 8px 12px; min-width: 0; }
+.readout b { font-family: var(--font-display); font-weight: 700; font-size: 1.5rem; line-height: 1.15; color: var(--ink); }
+
+/* ===== m-pizza ===== */
+.units.pizzas { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; max-width: 28rem; }
+.unit.pizza, .unit.pizza.off {
+  position: relative; width: auto; height: auto; aspect-ratio: 1; border: 2px solid var(--ink); border-radius: 50%;
+  background:
+    repeating-conic-gradient(var(--ink) 0 1.5deg, transparent 1.5deg 90deg),
+    radial-gradient(circle at 33% 30%, var(--red-soft) 0 9%, transparent 9.5%),
+    radial-gradient(circle at 70% 36%, var(--red-soft) 0 9%, transparent 9.5%),
+    radial-gradient(circle at 36% 72%, var(--red-soft) 0 9%, transparent 9.5%),
+    radial-gradient(circle at 70% 68%, var(--red-soft) 0 9%, transparent 9.5%),
+    var(--yellow);
+}
+.unit.pizza::after { content: ""; position: absolute; inset: -1px; border-radius: 50%; background: conic-gradient(transparent 0 var(--fill, 100%), var(--paper-3) 0); }
+.unit.pizza.off { border-color: var(--line-strong); }
+
+/* ===== m-target ===== */
+[data-seg="deflacja"] { --seg: var(--blue-soft); }
+[data-seg="ponizej"]  { --seg: var(--yellow-soft); }
+[data-seg="cel"]      { --seg: var(--green-soft); }
+[data-seg="wysoko"]   { --seg: var(--red-soft); }
+.scale { margin: 8px 10px 0; display: grid; gap: 4px; } /* margines = połowa suwaka: znacznik stoi nad jego uchwytem */
+.scale-bar { position: relative; display: grid; grid-template-columns: 2fr 1.5fr 2fr 11.5fr; height: 26px; }
+.scale-bar > [data-seg] { background: var(--seg); border: 1px solid var(--line-strong); }
+.scale-bar > [data-seg="deflacja"] { border-radius: var(--r-xs) 0 0 var(--r-xs); }
+.scale-bar > [data-seg="wysoko"] { border-radius: 0 var(--r-xs) var(--r-xs) 0; }
+.scale-marker { position: absolute; top: -7px; bottom: -7px; left: 26.47%; width: 6px; transform: translateX(-50%); background: var(--ink); border-radius: var(--r-pill); box-shadow: 0 0 0 2px var(--surface); transition: left .2s ease; }
+.scale-ticks { position: relative; height: 1.5em; margin-top: 4px; font-family: var(--font-mono); font-size: var(--overline); color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.scale-ticks > span { position: absolute; transform: translateX(-50%); white-space: nowrap; }
+.scale-ticks > span:first-child { transform: none; }
+.scale-ticks > span:last-child { transform: translateX(-100%); }
+.explain ul.zones { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; }
+.zones li { display: flex; align-items: center; gap: 8px; padding: 3px 10px; border: 1px solid var(--line-2); border-radius: var(--r-pill); font-size: var(--caption); line-height: 1.4; color: var(--ink-2); min-width: 0; transition: background-color .15s, color .15s; }
+.zones li[aria-current="true"] { background: var(--ink); border-color: var(--ink); color: var(--paper); font-weight: 600; }
+.swatch { flex: none; width: 10px; height: 10px; border-radius: 3px; background: var(--seg); border: 1px solid var(--line-strong); }
+.mini .zone-say { display: block; min-height: 5.6em; padding: 10px 12px; border-radius: var(--r-sm); font-family: var(--font-sans); font-weight: 400; font-size: var(--body-sm); line-height: 1.45; background: var(--say); color: var(--say-ink); transition: background-color .15s, color .15s; }
+.zone-say b { display: block; font-family: var(--font-display); font-weight: 700; font-size: var(--body); }
+#m-target[data-zone="deflacja"] { --say: var(--blue-soft);   --say-ink: var(--blue-ink); }
+#m-target[data-zone="ponizej"]  { --say: var(--yellow-soft); --say-ink: var(--yellow-ink); }
+#m-target[data-zone="cel"]      { --say: var(--green-soft);  --say-ink: var(--green-ink); }
+#m-target[data-zone="wysoko"]   { --say: var(--red-soft);    --say-ink: var(--red-ink); }
 
 /* ===== kontrolki ===== */
 .controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr)); gap: 14px 22px; }
@@ -532,31 +586,24 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
     <div class="split">
       <div class="explain">
         <section>
-          <h3><i data-lucide="shopping-basket" class="ic" aria-hidden="true"></i>Co to jest?</h3>
-          <p><strong>Inflacja</strong> to tempo, w jakim rosną ceny ogółem. Gdy GUS podaje „inflacja 5%”, znaczy to, że typowy koszyk zakupów (jedzenie, mieszkanie, transport, rozrywka) kosztuje o 5% więcej niż rok wcześniej.</p>
-          <p>Ekonomiści mówią wtedy, że spada <strong>siła nabywcza pieniądza</strong>: za 100 zł kupisz mniej rzeczy niż rok temu.</p>
-        </section>
-        <section>
-          <h3><i data-lucide="factory" class="ic" aria-hidden="true"></i>Skąd się bierze?</h3>
-          <ul>
-            <li><strong>Popyt:</strong> ludzie chcą kupić więcej, niż firmy są w stanie wyprodukować, więc firmy podnoszą ceny.</li>
-            <li><strong>Koszty:</strong> drożeje prąd, paliwo, surowce albo pensje, więc produkcja kosztuje więcej.</li>
-            <li><strong>Oczekiwania:</strong> jeśli wszyscy spodziewają się podwyżek, sklepy podnoszą ceny „na zapas”, a pracownicy żądają wyższych pensji. Tak powstaje spirala.</li>
-          </ul>
-        </section>
-        <section>
-          <h3><i data-lucide="target" class="ic" aria-hidden="true"></i>Czy inflacja zawsze jest zła?</h3>
-          <p>Niewielka inflacja jest normalna. Narodowy Bank Polski ma cel: <strong>2,5% rocznie, z tolerancją ±1 punkt procentowy</strong>. Gorsze od lekkiej inflacji bywa jej przeciwieństwo, czyli <strong>deflacja</strong>: gdy ceny spadają, ludzie odkładają zakupy na później, firmy sprzedają mniej i zwalniają pracowników.</p>
-        </section>
-        <section>
-          <h3><i data-lucide="calculator" class="ic" aria-hidden="true"></i>Policz sam</h3>
+          <div class="row-head"><span class="badge"><i data-lucide="shopping-basket" class="ic" aria-hidden="true"></i></span><h3>Co to jest?</h3></div>
+          <p>Inflacja to tempo, w jakim rosną ceny. Banknot się nie zmienia, ale kupuje coraz mniej. To spadek <strong>siły nabywczej</strong>.</p>
+          <div class="mini" id="m-pizza">
+            <p class="mini-note">Masz 100 zł. Pizza kosztuje 25 zł, a inflacja wynosi 5% rocznie.</p>
+            <div class="units pizzas" aria-hidden="true"><span class="unit pizza"></span><span class="unit pizza"></span><span class="unit pizza"></span><span class="unit pizza"></span></div>
+            <div class="ctl"><label for="pizza-years">Ile lat mija</label><span class="val" id="pizza-years-o"></span><input type="range" id="pizza-years" min="0" max="20" step="1" value="10" data-out="yrs"></div>
+            <output class="readout" id="pizza-out" aria-live="polite" for="pizza-years"><span><b id="pizza-price"></b> cena pizzy</span> <span><b id="pizza-count"></b> pizzy za 100 zł</span></output>
+          </div>
           <div class="formula">wartość realna = kwota ÷ (1 + inflacja)<sup>lata</sup></div>
-          <p>Reguła 70: podziel 70 przez inflację, a dowiesz się, po ilu latach pieniądze stracą połowę wartości. Przy 7% to około 10 lat.</p>
         </section>
-        <div class="fact">
-          <span class="tag"><i data-lucide="chart-line" class="ic" aria-hidden="true"></i>Prawdziwe dane</span>
-          <p>W 2022 roku średnia inflacja w Polsce wyniosła 14,4%. Tak wysoko nie było od ponad 25 lat. Jeszcze w 2015 i 2016 roku ceny lekko spadały.</p>
-        </div>
+        <section>
+          <div class="row-head"><span class="badge"><i data-lucide="factory" class="ic" aria-hidden="true"></i></span><h3>Skąd się bierze?</h3></div>
+          <div class="tiles stack">
+            <div class="tile"><span class="badge"><i data-lucide="users" class="ic" aria-hidden="true"></i></span><h4>Popyt</h4><p>Chętnych jest więcej niż towaru, więc ceny idą w górę.</p></div>
+            <div class="tile"><span class="badge"><i data-lucide="factory" class="ic" aria-hidden="true"></i></span><h4>Koszty</h4><p>Drożeją prąd, surowce i pensje, więc produkcja kosztuje więcej.</p></div>
+            <div class="tile"><span class="badge"><i data-lucide="brain" class="ic" aria-hidden="true"></i></span><h4>Oczekiwania</h4><p>Wszyscy czekają na podwyżki, więc sklepy podnoszą ceny na zapas.</p></div>
+          </div>
+        </section>
       </div>
 
       <div class="labs">
@@ -584,7 +631,47 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
           </div>
           </div>
         </div>
+      </div>
+    </div>
+    </div>
+    <div class="band">
+    <div class="split">
+      <div class="explain">
+        <section>
+          <div class="row-head"><span class="badge"><i data-lucide="target" class="ic" aria-hidden="true"></i></span><h3>Czy inflacja zawsze jest zła?</h3></div>
+          <div class="mini" id="m-target">
+            <div class="scale" aria-hidden="true">
+              <div class="scale-bar"><span data-seg="deflacja"></span><span data-seg="ponizej"></span><span data-seg="cel"></span><span data-seg="wysoko"></span><span class="scale-marker"></span></div>
+              <div class="scale-ticks"><span style="left:0">−2</span><span style="left:11.76%">0</span><span style="left:20.59%">1,5</span><span style="left:32.35%">3,5</span><span style="left:100%">15%</span></div>
+            </div>
+            <div class="ctl"><label for="target-val">Ustaw inflację</label><span class="val" id="target-val-o"></span><input type="range" id="target-val" min="-2" max="15" step="0.5" value="2.5" data-out="pct"></div>
+            <ul class="zones">
+              <li data-seg="deflacja"><i class="swatch"></i>deflacja</li>
+              <li data-seg="ponizej"><i class="swatch"></i>poniżej celu</li>
+              <li data-seg="cel"><i class="swatch"></i>cel NBP</li>
+              <li data-seg="wysoko"><i class="swatch"></i>wysoko</li>
+            </ul>
+            <output class="zone-say" id="target-out" aria-live="polite" for="target-val"></output>
+          </div>
+        </section>
+        <div class="fact">
+          <span class="tag"><i data-lucide="chart-line" class="ic" aria-hidden="true"></i>Prawdziwe dane</span>
+          <p>W 2022 roku średnia inflacja w Polsce wyniosła 14,4%.</p>
+        </div>
+        <details class="more">
+          <summary>Więcej</summary>
+          <p><strong>Reguła 70.</strong> Podziel 70 przez inflację, a dowiesz się, po ilu latach pieniądze stracą połowę wartości. Przy 7% to około 10 lat.</p>
+          <p><strong>Spirala oczekiwań.</strong> Jeśli wszyscy spodziewają się podwyżek, sklepy podnoszą ceny „na zapas”, a pracownicy żądają wyższych pensji. Tak powstaje spirala.</p>
+          <p><strong>Deflacja.</strong> Gorsze od lekkiej inflacji bywa jej przeciwieństwo: gdy ceny spadają, ludzie odkładają zakupy na później, firmy sprzedają mniej i zwalniają pracowników. W 2015 i 2016 roku ceny w Polsce lekko spadały.</p>
+          <p><strong>Cel NBP.</strong> Niewielka inflacja jest normalna. Narodowy Bank Polski ma cel: 2,5% rocznie, z tolerancją ±1 punkt procentowy.</p>
+          <p><strong>Koszyk GUS.</strong> Gdy GUS podaje „inflacja 5%”, znaczy to, że typowy koszyk zakupów (jedzenie, mieszkanie, transport, rozrywka) kosztuje o 5% więcej niż rok wcześniej.</p>
+          <p><strong>Siła nabywcza pieniądza.</strong> Ekonomiści mówią, że spada siła nabywcza, gdy za 100 zł kupisz mniej rzeczy niż rok temu.</p>
+          <p><strong>Koszty.</strong> Oprócz prądu, surowców i pensji produkcję drożą też ceny paliwa.</p>
+          <p><strong>Rok 2022.</strong> Inflacja 14,4% to najwyżej od ponad 25 lat.</p>
+        </details>
+      </div>
 
+      <div class="labs">
         <div class="lab" id="lab-hist">
           <div class="lab-head"><span class="badge"><i data-lucide="flask-conical" class="ic" aria-hidden="true"></i></span><h3>Inflacja w Polsce 2015–2024</h3></div>
           <div class="lab-body">
@@ -1347,6 +1434,54 @@ function drawHist() {
   const f = HIST.reduce((acc, d) => acc * (1 + d[1] / 100), 1);
   $('#hist-insight').innerHTML = `Licząc średnioroczne wskaźniki, zakupy za <b>100 zł</b> z 2014 roku kosztowały w 2024 roku około <b>${zl(100 * f)}</b>. Prawie cały ten wzrost przypadł na trzy lata: 2021–2023.`;
 }
+
+/* ----- mini: pizza za 100 zł ----- */
+const PIZZA = { cash: 100, price: 25, rate: 0.05 };
+mini('m-pizza', (el) => {
+  const range = $('#pizza-years', el), units = $$('.unit', el);
+  const render = () => {
+    const y = +range.value, price = PIZZA.price * Math.pow(1 + PIZZA.rate, y), count = PIZZA.cash / price;
+    el.dataset.year = y;
+    el.dataset.price = price.toFixed(2);
+    el.dataset.count = count.toFixed(2);
+    units.forEach((u, i) => {
+      const fill = clamp(count - i, 0, 1) * 100;
+      u.style.setProperty('--fill', fill.toFixed(2) + '%');
+      u.classList.toggle('off', fill === 0);
+    });
+    $('#pizza-price', el).textContent = zl2(price);
+    $('#pizza-count', el).textContent = NF2.format(count);
+    range.setAttribute('aria-valuetext', FMT.yrs(y));
+  };
+  range.addEventListener('input', render);
+  render();
+});
+
+/* ----- mini: strefy inflacji, skala od -2% do 15% ----- */
+const SCALE = { min: -2, max: 15 };
+const ZONES = [
+  { id: 'deflacja', test: (v) => v < 0, name: 'Deflacja', say: 'Ceny spadają, ludzie odkładają zakupy, a firmy sprzedają mniej i zwalniają.' },
+  { id: 'ponizej', test: (v) => v < 1.5, name: 'Poniżej celu', say: 'Ceny rosną bardzo wolno, a stąd już blisko do deflacji.' },
+  { id: 'cel', test: (v) => v <= 3.5, name: 'Cel NBP', say: 'Ceny rosną spokojnie: NBP celuje w 2,5% rocznie, z tolerancją ±1 punkt procentowy.' },
+  { id: 'wysoko', test: () => true, name: 'Wysoko', say: 'Ceny rosną szybko, a pieniądze wyraźnie tracą siłę nabywczą.' }
+];
+mini('m-target', (el) => {
+  const range = $('#target-val', el), marker = $('.scale-marker', el), out = $('#target-out', el), labels = $$('.zones [data-seg]', el);
+  const render = () => {
+    const v = +range.value, zone = ZONES.find((z) => z.test(v)), pos = (v - SCALE.min) / (SCALE.max - SCALE.min) * 100;
+    el.dataset.value = v;
+    el.dataset.pos = pos.toFixed(2);
+    marker.style.left = pos.toFixed(3) + '%';
+    if (el.dataset.zone !== zone.id) { /* zdanie zmienia się tylko przy zmianie strefy, żeby czytnik ekranu nie powtarzał go przy każdym kroku */
+      el.dataset.zone = zone.id;
+      labels.forEach((l) => { if (l.dataset.seg === zone.id) l.setAttribute('aria-current', 'true'); else l.removeAttribute('aria-current'); });
+      out.innerHTML = `<b>${zone.name}</b> ${zone.say}`;
+    }
+    range.setAttribute('aria-valuetext', pc(v) + ', ' + zone.name);
+  };
+  range.addEventListener('input', render);
+  render();
+});
 
 /* ================= STOPY: gra ================= */
 const ROUNDS = 10;
