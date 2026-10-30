@@ -466,6 +466,25 @@ details.more > :not(summary) { margin: 10px 14px; font-size: var(--body-sm); }
 .mini .readout#share-out { grid-template-columns: repeat(3, minmax(0, 1fr)); }
 .mini .readout#share-out b { font-size: 1.15rem; }
 @media (max-width: 768px) { .mini .readout#share-out { grid-template-columns: minmax(0, 1fr); } }
+/* ===== m-rata, m-zero ===== */
+.rbars { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; max-width: 24rem; }
+.rcol { display: grid; grid-template-rows: auto 6rem auto auto; gap: 4px; justify-items: stretch; text-align: center; min-width: 0; }
+.rcol .rnum { font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; color: var(--ink); font-variant-numeric: tabular-nums; }
+.rtrack { display: flex; align-items: flex-end; }
+.rstack { display: flex; flex-direction: column; width: 100%; height: var(--h, 0%); transition: height .2s ease; }
+.rstack > span { display: block; border: 1px solid var(--line-strong); min-height: 3px; }
+.rstack > [data-part="odsetki"] { flex: none; height: var(--i, 0%); background: var(--red); border-radius: var(--r-xs) var(--r-xs) 0 0; transition: height .2s ease; }
+.rstack > [data-part="kapital"] { flex: 1; background: var(--blue); }
+.rlab { font-family: var(--font-mono); font-size: var(--overline); color: var(--ink-2); text-transform: uppercase; letter-spacing: .06em; }
+.rint, .rleg > span { display: inline-flex; align-items: center; justify-content: center; gap: 6px; font-size: var(--body-sm); color: var(--ink-2); font-variant-numeric: tabular-nums; }
+.rint::before, .rleg > span::before { content: ""; width: 12px; height: 12px; border-radius: var(--r-xs); border: 1px solid var(--line-strong); background: var(--red); flex: none; }
+.rleg { display: flex; flex-wrap: wrap; gap: 6px 16px; }
+.rleg > [data-k="kapital"]::before { background: var(--blue); }
+#m-rata .btns button[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.mini .readout#rata-out, .mini .readout#zero-out { grid-template-columns: minmax(0, 1fr); }
+.mini .readout:empty { display: none; }
+.mini .readout#zero-out { display: block; background: var(--paper-2); border-radius: var(--r-sm); padding: 8px 12px; }
+.mini .readout#zero-out:empty { display: none; }
 
 /* ===== kontrolki ===== */
 .controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr)); gap: 14px 22px; }
@@ -1264,32 +1283,36 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
     <div class="split">
       <div class="explain">
         <section>
-          <h3><i data-lucide="book-open" class="ic" aria-hidden="true"></i>Słowniczek kredytu</h3>
-          <ul>
-            <li><strong>Kapitał:</strong> kwota, którą pożyczasz.</li>
-            <li><strong>Odsetki:</strong> cena za pożyczenie, liczona od kwoty, którą jeszcze jesteś winien.</li>
-            <li><strong>Oprocentowanie zmienne:</strong> wskaźnik rynkowy (np. WIBOR) + marża banku. Gdy stopy NBP rosną, rośnie też twoja rata.</li>
-            <li><strong>Prowizja:</strong> jednorazowa opłata za udzielenie kredytu.</li>
-            <li><strong>RRSO:</strong> rzeczywista roczna stopa oprocentowania. Uwzględnia odsetki, prowizje i inne opłaty. To najlepsza liczba do porównywania ofert.</li>
-          </ul>
+          <div class="row-head"><span class="badge"><i data-lucide="book-open" class="ic" aria-hidden="true"></i></span><h3>Słowniczek</h3></div>
+          <div class="tiles stack">
+            <div class="tile"><span class="badge"><i data-lucide="banknote" class="ic" aria-hidden="true"></i></span><h4>Kapitał</h4><p>Kwota, którą pożyczasz.</p></div>
+            <div class="tile"><span class="badge"><i data-lucide="percent" class="ic" aria-hidden="true"></i></span><h4>Odsetki</h4><p>Cena za pożyczenie, liczona od tego, co jeszcze jesteś winien.</p></div>
+            <div class="tile"><span class="badge"><i data-lucide="waves" class="ic" aria-hidden="true"></i></span><h4>Oprocentowanie zmienne</h4><p>Wskaźnik rynkowy (np. WIBOR) + marża banku. Gdy stopy NBP rosną, rośnie też twoja rata.</p></div>
+            <div class="tile"><span class="badge"><i data-lucide="receipt" class="ic" aria-hidden="true"></i></span><h4>Prowizja</h4><p>Jednorazowa opłata za udzielenie kredytu.</p></div>
+            <div class="tile"><span class="badge"><i data-lucide="scale" class="ic" aria-hidden="true"></i></span><h4>RRSO</h4><p>Rzeczywista roczna stopa oprocentowania: odsetki plus prowizje i opłaty. Najlepsza liczba do porównywania ofert.</p></div>
+          </div>
         </section>
         <section>
-          <h3><i data-lucide="chart-line" class="ic" aria-hidden="true"></i>Raty równe czy malejące?</h3>
-          <p>W <strong>ratach równych</strong> co miesiąc płacisz tyle samo, ale na początku prawie cała rata to odsetki. W <strong>ratach malejących</strong> spłacasz co miesiąc tę samą część kapitału, więc pierwsze raty są wyższe, ale łącznie oddajesz mniej.</p>
+          <div class="row-head"><span class="badge"><i data-lucide="chart-line" class="ic" aria-hidden="true"></i></span><h3>Raty równe czy malejące?</h3></div>
+          <p>W ratach malejących szybciej spłacasz kapitał, więc odsetki liczysz od coraz mniejszej kwoty. Za to pierwsze raty są wyższe.</p>
+          <div class="mini" id="m-rata" data-type="rowne" data-rata="" data-odsetki="" data-total="">
+            <p class="mini-note">400 000 zł, 25 lat, 7,5%. Słupek to rata w zł.</p>
+            <div class="btns"><button type="button" data-type="rowne" aria-pressed="true">Raty równe</button><button type="button" data-type="malejace" aria-pressed="false">Raty malejące</button></div>
+            <div class="rbars" role="group" aria-label="Rata nr 1, 109 i 289">
+              <div class="rcol"><b class="rnum" data-v="rata"></b><div class="rtrack"><div class="rstack"><span data-part="odsetki"></span><span data-part="kapital"></span></div></div><span class="rlab">Rok 1</span><span class="rint" data-v="odsetki"></span></div>
+              <div class="rcol"><b class="rnum" data-v="rata"></b><div class="rtrack"><div class="rstack"><span data-part="odsetki"></span><span data-part="kapital"></span></div></div><span class="rlab">Rok 10</span><span class="rint" data-v="odsetki"></span></div>
+              <div class="rcol"><b class="rnum" data-v="rata"></b><div class="rtrack"><div class="rstack"><span data-part="odsetki"></span><span data-part="kapital"></span></div></div><span class="rlab">Rok 25</span><span class="rint" data-v="odsetki"></span></div>
+            </div>
+            <div class="rleg" aria-hidden="true"><span data-k="kapital">kapitał</span><span data-k="odsetki">odsetki</span></div>
+            <output class="readout" id="rata-out" aria-live="polite"></output>
+          </div>
+          <div class="mini" id="m-zero" data-rrso="">
+            <p class="mini-note">Telefon „0%”. Cena za gotówkę 2700 zł, 20 rat po 150 zł, razem 3000 zł.</p>
+            <div class="btns"><button type="button" id="zero-btn" aria-expanded="false" aria-controls="zero-out">Pokaż RRSO</button></div>
+            <output class="readout" id="zero-out" aria-live="polite"></output>
+            <p class="mini-note">Inaczej niż w presecie z laba: tam „0%” nic nie kosztuje.</p>
+          </div>
         </section>
-        <section>
-          <h3><i data-lucide="shield" class="ic" aria-hidden="true"></i>Zasady bezpiecznego pożyczania</h3>
-          <ul>
-            <li>Rata nie powinna przekraczać około <strong>30–40% dochodu</strong>.</li>
-            <li>Porównuj <strong>RRSO</strong>, a nie samo oprocentowanie czy hasło „0%”.</li>
-            <li>Szybkie pożyczki przez internet bywają bardzo drogie: RRSO potrafi przekraczać 100%.</li>
-            <li>Spóźnione raty trafiają do <strong>BIK</strong>. Zła historia kredytowa utrudni później kredyt na mieszkanie.</li>
-          </ul>
-        </section>
-        <div class="fact">
-          <span class="tag"><i data-lucide="wallet" class="ic" aria-hidden="true"></i>Zanim weźmiesz</span>
-          <p>Zadaj sobie pytanie: czy ta rzecz będzie mi służyć dłużej niż będę ją spłacać? Mieszkanie na 25 lat ma sens. Wakacje na raty, spłacane jeszcze przez dwa lata po powrocie, raczej nie.</p>
-        </div>
       </div>
       <div class="labs">
         <div class="lab" id="lab-kr">
@@ -1323,7 +1346,33 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
           <p class="task">Wykres pokazuje, z czego składa się każda rata: ile spłaca dług (kapitał), a ile to zapłata dla banku (odsetki).</p>
           </div>
         </div>
-
+      </div>
+    </div>
+    </div>
+    <div class="band">
+    <div class="split">
+      <div class="explain">
+        <section>
+          <div class="row-head"><span class="badge"><i data-lucide="shield" class="ic" aria-hidden="true"></i></span><h3>Bezpieczne pożyczanie</h3></div>
+          <div class="tiles stack">
+            <div class="tile"><span class="badge"><i data-lucide="gauge" class="ic" aria-hidden="true"></i></span><h4>Rata</h4><p>Do około 30–40% dochodu.</p></div>
+            <div class="tile"><span class="badge"><i data-lucide="search" class="ic" aria-hidden="true"></i></span><h4>Porównuj RRSO</h4><p>Nie samo oprocentowanie czy hasło „0%”.</p></div>
+            <div class="tile"><span class="badge"><i data-lucide="zap" class="ic" aria-hidden="true"></i></span><h4>Szybkie pożyczki</h4><p>Przez internet bywają bardzo drogie: RRSO potrafi przekraczać 100%.</p></div>
+            <div class="tile"><span class="badge"><i data-lucide="database" class="ic" aria-hidden="true"></i></span><h4>BIK</h4><p>Spóźnione raty trafiają do BIK. Zła historia kredytowa utrudni później kredyt na mieszkanie.</p></div>
+          </div>
+        </section>
+        <div class="fact">
+          <span class="tag"><i data-lucide="wallet" class="ic" aria-hidden="true"></i>Zanim weźmiesz</span>
+          <p>Czy ta rzecz posłuży mi dłużej, niż będę ją spłacać?</p>
+          <p>Mieszkanie na 25 lat ma sens. Wakacje na raty, spłacane jeszcze dwa lata po powrocie, raczej nie.</p>
+        </div>
+        <details class="more">
+          <summary>Więcej</summary>
+          <p><strong>Pierwsze raty.</strong> W ratach równych na początku prawie cała rata to odsetki, więc dług maleje powoli.</p>
+          <p><strong>Prowizja.</strong> Płacisz ją raz, na początku, ale RRSO rozkłada ją na cały okres kredytu.</p>
+        </details>
+      </div>
+      <div class="labs">
         <div class="lab" id="lab-shock">
           <div class="lab-head"><span class="badge"><i data-lucide="flask-conical" class="ic" aria-hidden="true"></i></span><h3>Test: co jeśli stopy wzrosną?</h3></div>
           <div class="lab-body">
@@ -2256,6 +2305,50 @@ $('#kr-presets').addEventListener('click', (e) => {
   $('#kr-amt').value = p.amt; setVal('kr-n', p.n); setVal('kr-rate', p.rate); setVal('kr-fee', p.fee); setVal('kr-inc', p.inc);
   $('#kr-type').value = p.type;
   updLoan();
+});
+
+/* ----- mini: raty równe i malejące, rata nr 1, 109 i 289 w jednej skali ----- */
+const RATA = { amt: 400000, n: 300, rate: 7.5, picks: [1, 109, 289] };
+mini('m-rata', (el) => {
+  const rows = { rowne: schedule(RATA.amt, RATA.n, RATA.rate, 'rowne'), malejace: schedule(RATA.amt, RATA.n, RATA.rate, 'malejace') };
+  const sample = (t) => RATA.picks.map((k) => rows[t][k - 1]);
+  const max = Math.max(...Object.keys(rows).flatMap((t) => sample(t).map((r) => r.pay))); /* 100% = najwyższa rata w obu trybach */
+  const cols = $$('.rcol', el), btns = $$('.btns button', el), out = $('#rata-out', el);
+  const render = (type) => {
+    const pick = sample(type);
+    const total = rows[type].reduce((a, r) => a + r.int, 0);
+    el.dataset.type = type;
+    el.dataset.rata = pick.map((r) => Math.round(r.pay)).join(',');
+    el.dataset.odsetki = pick.map((r) => Math.round(r.int)).join(',');
+    el.dataset.total = Math.round(total);
+    btns.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.type === type)));
+    cols.forEach((c, i) => {
+      const r = pick[i];
+      $('.rstack', c).style.setProperty('--h', (r.pay / max * 100).toFixed(2) + '%');
+      $('[data-part="odsetki"]', c).style.setProperty('--i', (r.int / r.pay * 100).toFixed(2) + '%');
+      $('[data-v="rata"]', c).textContent = Math.round(r.pay);
+      $('[data-v="odsetki"]', c).textContent = Math.round(r.int);
+    });
+    out.innerHTML = '<span>Odsetki razem <b>' + zl(total) + '</b></span>';
+  };
+  btns.forEach((b) => b.addEventListener('click', () => render(b.dataset.type)));
+  render('rowne');
+});
+
+/* ----- mini: telefon „0%” na raty, RRSO policzone tą samą bisekcją co w labie ----- */
+const ZERO = { cash: 2700, rates: 20, each: 150 };
+mini('m-zero', (el) => {
+  const btn = $('#zero-btn', el), out = $('#zero-out', el);
+  const R = rrso(ZERO.cash, Array(ZERO.rates).fill(ZERO.each)) * 100;
+  const over = ZERO.rates * ZERO.each - ZERO.cash;
+  el.dataset.rrso = R.toFixed(2);
+  const render = (open) => {
+    btn.setAttribute('aria-expanded', String(open));
+    btn.textContent = open ? 'Ukryj' : 'Pokaż RRSO';
+    out.innerHTML = open ? 'Przepłacasz <b>' + zl(over) + '</b>. RRSO to około <b>' + Math.round(R) + '%</b>.' : '';
+  };
+  btn.addEventListener('click', () => render(btn.getAttribute('aria-expanded') !== 'true'));
+  render(false);
 });
 
 /* ================= QUIZ ================= */
