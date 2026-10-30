@@ -407,6 +407,10 @@ details.more > :not(summary) { margin: 10px 14px; font-size: var(--body-sm); }
 #m-chain[data-dir="down"] .dir-up, #m-chain:not([data-dir="down"]) .dir-down { display: none; }
 #m-chain button[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 
+/* ===== dolny pas lekcji 2 ===== */
+.explain.wide .tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.pair { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: start; }
+
 /* ===== m-real ===== */
 .real-row { display: grid; gap: 6px; min-width: 0; }
 .bar { height: 14px; background: var(--paper-2); border: 1px solid var(--line-strong); border-radius: var(--r-xs); overflow: hidden; }
@@ -522,6 +526,7 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
   kbd.keys { display: none; }
   .band { padding-top: 28px; padding-bottom: 32px; }
   .split { grid-template-columns: minmax(0, 1fr); }
+  .explain.wide .tiles, .pair { grid-template-columns: minmax(0, 1fr); }
   .demo-body { grid-template-columns: minmax(0, 1fr); }
   .lab-head, .card-head { padding: 12px 16px; }
   .lab-body { padding: 16px; }
@@ -716,11 +721,6 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
         <section>
           <div class="row-head"><span class="badge"><i data-lucide="percent" class="ic" aria-hidden="true"></i></span><h3>Co to jest?</h3></div>
           <p><strong>Stopa procentowa</strong> mówi, ile procent rocznie płacisz za pożyczone pieniądze albo dostajesz, gdy pożyczasz bankowi, np. na lokacie.</p>
-          <div class="tiles stack">
-            <div class="tile"><span class="badge"><i data-lucide="landmark" class="ic" aria-hidden="true"></i></span><h4>RPP</h4><p>Rada Polityki Pieniężnej przy NBP ustala stopy procentowe w Polsce.</p></div>
-            <div class="tile"><span class="badge"><i data-lucide="percent" class="ic" aria-hidden="true"></i></span><h4>Stopa referencyjna</h4><p>Podstawowa stopa procentowa. Od niej zależy oprocentowanie lokat i kredytów.</p></div>
-            <div class="tile"><span class="badge"><i data-lucide="chart-line" class="ic" aria-hidden="true"></i></span><h4>WIBOR</h4><p>Wskaźnik rynkowy zależny od stóp, stopniowo zastępowany nowym wskaźnikiem.</p></div>
-          </div>
         </section>
         <section>
           <div class="row-head"><span class="badge"><i data-lucide="list-checks" class="ic" aria-hidden="true"></i></span><h3>Jak to działa?</h3></div>
@@ -732,7 +732,7 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
             <ol class="chain">
               <li class="link" data-up="RPP podnosi stopy." data-down="RPP obniża stopy."><span class="t">RPP podnosi stopy.</span></li>
               <li class="link" data-up="Kredyty drożeją, a lokaty dają więcej." data-down="Kredyty tanieją, a lokaty dają mniej."><span class="t">Kredyty drożeją, a lokaty dają więcej.</span> <i data-lucide="arrow-up" class="ic dir-up" aria-hidden="true"></i><i data-lucide="arrow-down" class="ic dir-down" aria-hidden="true"></i></li>
-              <li class="link" data-up="Ludzie i firmy mniej pożyczają, mniej wydają, więcej oszczędzają." data-down="Ludzie i firmy więcej pożyczają, wydają, mniej oszczędzają."><span class="t">Ludzie i firmy mniej pożyczają, mniej wydają, więcej oszczędzają.</span></li>
+              <li class="link" data-up="Ludzie i firmy mniej pożyczają, mniej wydają, więcej oszczędzają." data-down="Ludzie i firmy więcej pożyczają i wydają, a mniej oszczędzają."><span class="t">Ludzie i firmy mniej pożyczają, mniej wydają, więcej oszczędzają.</span></li>
               <li class="link" data-up="Popyt spada, więc firmy wolniej podnoszą ceny." data-down="Popyt rośnie, więc firmy szybciej podnoszą ceny."><span class="t">Popyt spada, więc firmy wolniej podnoszą ceny.</span></li>
               <li class="link" data-up="Inflacja spada, ale dopiero po 1–2 latach." data-down="Gospodarka rusza, ale po 1–2 latach inflacja może wzrosnąć."><span class="t">Inflacja spada, ale dopiero po 1–2 latach.</span></li>
             </ol>
@@ -746,7 +746,7 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
           <div class="mini" id="m-real" data-real="-3.00" data-verdict="traci">
             <p class="mini-note">Lokata zarabia swoje procenty, ale ceny rosną o inflację.</p>
             <div class="real-row">
-              <div class="ctl"><label for="real-dep">Lokata</label><span class="val" id="real-dep-o"></span><input type="range" id="real-dep" min="0" max="12" step="0.5" value="5" data-out="pct"></div>
+              <div class="ctl"><label for="real-dep">Lokata</label><span class="val" id="real-dep-o"></span><input type="range" id="real-dep" min="0" max="15" step="0.5" value="5" data-out="pct"></div>
               <div class="bar" aria-hidden="true"><span data-bar="dep"></span></div>
             </div>
             <div class="real-row">
@@ -756,16 +756,6 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
             <output class="readout real-out" id="real-out" aria-live="polite" for="real-dep real-inf"><span id="real-say"></span></output>
           </div>
         </section>
-        <div class="fact">
-          <span class="tag"><i data-lucide="history" class="ic" aria-hidden="true"></i>Prawdziwa historia</span>
-          <p>Jesienią 2021 roku stopa referencyjna NBP wynosiła zaledwie 0,1%. Rok później, we wrześniu 2022, było to już 6,75%.</p>
-          <p>Raty kredytów wielu rodzin wzrosły wtedy o kilkadziesiąt procent.</p>
-        </div>
-        <details class="more">
-          <summary>Więcej</summary>
-          <p><strong>Obniżka stóp.</strong> Działa odwrotnie: pobudza gospodarkę, ale może podbić inflację.</p>
-          <p><strong>Dokładniej.</strong> Stopa realna to (1 + stopa) ÷ (1 + inflacja) − 1. Różnica stóp to przybliżenie: przy lokacie 5% i inflacji 8% dokładny wynik to −2,78%, nie −3%.</p>
-        </details>
       </div>
 
       <div class="labs">
@@ -799,6 +789,30 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
         </div>
       </div>
     </div>
+    </div>
+    <div class="band">
+      <div class="explain wide">
+        <section>
+          <div class="row-head"><span class="badge"><i data-lucide="landmark" class="ic" aria-hidden="true"></i></span><h3>Kto ustala stopy?</h3></div>
+          <div class="tiles">
+            <div class="tile"><span class="badge"><i data-lucide="landmark" class="ic" aria-hidden="true"></i></span><h4>RPP</h4><p>Rada Polityki Pieniężnej przy NBP ustala stopy procentowe w Polsce.</p></div>
+            <div class="tile"><span class="badge"><i data-lucide="percent" class="ic" aria-hidden="true"></i></span><h4>Stopa referencyjna</h4><p>Podstawowa stopa procentowa. Od niej zależy oprocentowanie lokat i kredytów.</p></div>
+            <div class="tile"><span class="badge"><i data-lucide="chart-line" class="ic" aria-hidden="true"></i></span><h4>WIBOR</h4><p>Wskaźnik, od którego zależy oprocentowanie wielu kredytów. Stopniowo zastępuje go nowy wskaźnik.</p></div>
+          </div>
+        </section>
+        <div class="pair">
+          <div class="fact">
+            <span class="tag"><i data-lucide="history" class="ic" aria-hidden="true"></i>Prawdziwa historia</span>
+            <p>Jesienią 2021 roku stopa referencyjna NBP wynosiła zaledwie 0,1%. Rok później, we wrześniu 2022, było to już 6,75%.</p>
+            <p>Raty kredytów wielu rodzin wzrosły wtedy o kilkadziesiąt procent.</p>
+          </div>
+          <details class="more">
+            <summary>Więcej</summary>
+            <p><strong>Obniżka stóp.</strong> Działa odwrotnie: pobudza gospodarkę, ale może podbić inflację.</p>
+            <p><strong>Dokładniej.</strong> Stopa realna to (1 + stopa) ÷ (1 + inflacja) − 1. Różnica stóp to przybliżenie: przy lokacie 5% i inflacji 8% dokładny wynik to −2,78%, nie −3%.</p>
+          </details>
+        </div>
+      </div>
     </div>
     <div class="next"><a href="#oszczedzanie">Dalej: procent składany →</a></div>
 </section>
