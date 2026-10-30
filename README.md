@@ -1,19 +1,19 @@
-# Kasa bez tajemnic
+# Finanse bez tajemnic
 
-Interaktywna aplikacja webowa dla nastolatków, która tłumaczy podstawy finansów i pozwala na eksperymenty.
+Interaktywna aplikacja webowa o podstawach finansów: sześć lekcji, w każdej małe demo i kalkulator do własnych eksperymentów, na końcu quiz. Całość w jednym pliku `index.html` w stylu edulab.
 
-Otwórz `index.html` w przeglądarce. Nie wymaga instalacji ani serwera (czcionki ładują się z Google Fonts, bez internetu użyte zostaną czcionki systemowe).
+Otwórz `index.html` w przeglądarce. Nie wymaga instalacji ani serwera. Ikony Lucide i czcionki Google Fonts ładują się z CDN. Bez sieci aplikacja działa i liczy wszystko tak samo, tylko bez ikon i z czcionkami systemowymi.
 
-## Lekcje i laboratoria
+## Lekcje
 
-| Lekcja | Czego uczy | Eksperyment |
+| Lekcja | Demo | Kalkulator |
 |---|---|---|
-| Inflacja | siła nabywcza, przyczyny inflacji, cel NBP | wehikuł czasu dla koszyka zakupów, dane GUS 2015–2024 |
-| Stopy procentowe | stopa referencyjna, mechanizm transmisji, stopa realna | gra „zostań prezesem banku centralnego” |
-| Procent składany | kapitalizacja i jej częstotliwość, oprocentowanie efektywne, podatek Belki i moment jego pobrania, inflacja | kalkulator oszczędzania, porównanie częstotliwości kapitalizacji, start w wieku 16 vs 26 lat |
-| Obligacje skarbowe | rodzaje obligacji detalicznych, ryzyka | stałe vs indeksowane (EDO z kapitalizacją, COI z wypłatą odsetek) w różnych scenariuszach, huśtawka cena–stopy |
-| Akcje | udział w firmie, dywidendy, dywersyfikacja, ETF, emocje | symulacja 1 firma vs koszyk 20 firm, reinwestowanie vs wydawanie dywidend, 1000 scenariuszy Monte Carlo |
-| Kredyty | kapitał, odsetki, RRSO, raty równe i malejące | kalkulator z RRSO, test wzrostu stóp |
+| Inflacja | pizza za 100 zł po latach inflacji, skala z celem NBP | wehikuł czasu dla portfela, inflacja w Polsce 2015–2024 |
+| Stopy procentowe | łańcuch skutków podwyżki i obniżki stóp, lokata kontra inflacja | gra „zostań prezesem banku centralnego” |
+| Procent składany | kula śnieżna: wpłata, odsetki proste i odsetki od odsetek rok po roku | oszczędzanie z podatkiem i inflacją, porównanie częstotliwości kapitalizacji |
+| Obligacje skarbowe | wybór rodzaju obligacji z okresem i oprocentowaniem | stałe czy indeksowane w różnych scenariuszach, huśtawka cena–stopy |
+| Akcje | koszyki jajek: jedna firma kontra dwadzieścia, siatka 100 akcji z dywidendą | symulacja jednej firmy i koszyka, reinwestowanie dywidend, 1000 możliwych przyszłości |
+| Kredyty | raty równe i malejące na słupkach, telefon „0%” z RRSO | kalkulator kredytu z RRSO, test wzrostu stóp |
 | Quiz | powtórka | 14 pytań z wyjaśnieniami |
 
 Materiał edukacyjny, nie porada inwestycyjna. Modele są uproszczone, a parametry przykładowe.
