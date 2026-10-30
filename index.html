@@ -95,7 +95,7 @@
   --sky:      var(--green);                                     --sky-soft:      var(--green-soft);  --sky-ink:      var(--green-ink);
   --coral:    var(--red);    --coral-600:    var(--red-600);    --coral-soft:    var(--red-soft);    --coral-ink:    var(--red-ink);
 
-  /* Play palette - subject/category colours in the kids app */
+  /* Play palette - subject/category colours */
   --play-sun:    #FFD500;
   --play-grass:  #00A651;
   --play-berry:  #C6478B;
@@ -412,6 +412,7 @@ td.r, th.r { text-align: right; font-variant-numeric: tabular-nums; white-space:
 .seesaw g.rot { transition: transform .35s ease; transform-origin: 160px 104px; }
 
 /* ===== quiz ===== */
+.sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .quiz { display: grid; gap: 16px; min-width: 0; }
 #qz-list { grid-template-columns: repeat(auto-fill, minmax(min(28rem, 100%), 1fr)); align-items: start; }
 .q { padding: 0 20px 20px; display: grid; gap: 14px; }
@@ -422,6 +423,7 @@ td.r, th.r { text-align: right; font-variant-numeric: tabular-nums; white-space:
 .q .opts button:disabled { cursor: default; }
 .q .opts button.ok { background: var(--green-soft); color: var(--green-ink); border-color: var(--green-soft); }
 .q .opts button.no { background: var(--red-soft); color: var(--red-ink); border-color: var(--red-soft); }
+.q .opts button kbd.keys { font-family: var(--font-mono); font-size: var(--body-sm); color: var(--ink-3); background: var(--paper-2); border: 1px solid var(--line-strong); border-radius: var(--r-sm); padding: 0 6px; margin-right: 10px; }
 .q .why { font-size: var(--body-sm); color: var(--ink-2); }
 .q .why b { color: var(--green-600); }
 .q:has(.opts .no) .why b { color: var(--red-600); }
@@ -435,13 +437,14 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
   .split { grid-template-columns: 22rem 1fr; }
 }
 @media (max-width: 768px) {
-  :root { --head-h: 105px; }
+  :root { --head-h: 106px; }
   .edu-header-inner { flex-wrap: wrap; gap: 0 8px; padding-top: 2px; padding-bottom: 2px; }
   .edu-logo { width: 44px; height: 44px; margin-left: -8px; margin-right: -4px; }
   nav.tabs { flex: 1 1 100%; margin: 0 -6px; }
   .lesson-head { padding-top: 28px; padding-bottom: 24px; }
   .lesson-title { flex-direction: column; align-items: flex-start; gap: 10px; }
   .cards { grid-template-columns: minmax(0, 1fr); }
+  kbd.keys { display: none; }
   .band { padding-top: 28px; padding-bottom: 32px; }
   .split { grid-template-columns: minmax(0, 1fr); }
   .demo-body { grid-template-columns: minmax(0, 1fr); }
@@ -513,7 +516,7 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
       <a class="card tone-grape" href="#kredyty"><div class="card-head"><span class="badge"><i data-lucide="credit-card" class="ic" aria-hidden="true"></i></span><h3>Kredyty</h3></div><p class="card-body">Ile naprawdę kosztuje pożyczka, czym jest RRSO i dlaczego raty rosną.</p></a>
     </div>
     <div class="quizband edu-block">
-      <div><h3><i data-lucide="trophy" class="ic" aria-hidden="true"></i>Sprawdź się w quizie</h3><p>14 pytań, każde z wyjaśnieniem. Najlepiej po przejściu lekcji.</p></div>
+      <div><h3><i data-lucide="brain" class="ic" aria-hidden="true"></i>Sprawdź się w quizie</h3><p>14 pytań, każde z wyjaśnieniem. Najlepiej po przejściu lekcji.</p></div>
       <a class="cta" href="#quiz">Do quizu</a>
     </div>
   </div>
@@ -1063,7 +1066,8 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
     <div class="band">
     <div class="quiz">
       <div class="score num" id="qz-score" aria-live="polite">Wynik: 0 / 0</div>
-      <div id="qz-list" class="quiz"></div>
+      <div class="sr-only" id="qz-live" aria-live="polite"></div>
+      <div id="qz-list" class="quiz" data-done="0" data-ok="0"></div>
       <div class="btns"><button type="button" id="qz-reset">Rozwiąż jeszcze raz</button></div>
     </div>
     </div>
@@ -1294,9 +1298,6 @@ function draw(cv) {
     }
   });
 }
-const mq = window.matchMedia('(prefers-color-scheme: dark)');
-if (mq.addEventListener) mq.addEventListener('change', redrawAll);
-new MutationObserver(redrawAll).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme', 'class'] });
 if (document.fonts && document.fonts.ready) document.fonts.ready.then(redrawAll);
 
 /* ================= START ================= */
@@ -1815,21 +1816,47 @@ function renderQuiz() {
   qOk = 0; qDone = 0;
   $('#qz-list').innerHTML = QUIZ.map(([q, opts], qi) =>
     `<div class="q" data-q="${qi}"><h3><i data-lucide="circle-question-mark" class="ic" aria-hidden="true"></i>${qi + 1}. ${q}</h3><div class="opts">${opts.map((o, oi) => `<button type="button" data-o="${oi}">${o}</button>`).join('')}</div><p class="why" hidden></p></div>`).join('');
+  $('#qz-live').textContent = '';
   updScore();
+  markNext();
   icons($('#qz-list'));
 }
-function updScore() { $('#qz-score').textContent = `Wynik: ${qOk} / ${qDone}` + (qDone === QUIZ.length ? ` · ${qOk >= 12 ? 'Mistrz finansów!' : qOk >= 9 ? 'Dobra robota!' : 'Wróć do lekcji i spróbuj jeszcze raz.'}` : ''); }
-$('#qz-list').addEventListener('click', (e) => {
-  const b = e.target.closest('button[data-o]'); if (!b) return;
-  const card = b.closest('.q'); if (card.dataset.answered) return;
-  const qi = +card.dataset.q, oi = +b.dataset.o, good = QUIZ[qi][2];
+function markNext() {
+  $$('#qz-list kbd.keys').forEach((k) => k.remove());
+  const next = $('#qz-list .q:not([data-answered])');
+  if (!next) return;
+  $$('button[data-o]', next).forEach((b) => {
+    const k = document.createElement('kbd'); k.className = 'keys'; k.setAttribute('aria-hidden', 'true'); k.textContent = +b.dataset.o + 1;
+    b.insertBefore(k, b.firstChild);
+  });
+}
+function answer(card, oi) {
+  if (card.dataset.answered) return;
+  const b = card.querySelector(`button[data-o="${oi}"]`); if (!b) return;
+  const qi = +card.dataset.q, good = QUIZ[qi][2];
   card.dataset.answered = '1'; qDone++;
+  $$('kbd.keys', card).forEach((k) => k.remove());
   $$('button', card).forEach((x) => { x.disabled = true; x.style.opacity = 1; });
   card.querySelector(`button[data-o="${good}"]`).classList.add('ok');
   if (oi === good) qOk++; else b.classList.add('no');
   const why = card.querySelector('.why');
   why.innerHTML = `<b>${oi === good ? 'Dobrze!' : 'Nie tym razem.'}</b> ${QUIZ[qi][3]}`; why.hidden = false;
+  $('#qz-live').textContent = `Pytanie ${qi + 1}: ${oi === good ? 'dobrze' : 'źle'}`;
   updScore();
+  markNext();
+}
+function updScore() { $('#qz-list').dataset.done = qDone; $('#qz-list').dataset.ok = qOk; $('#qz-score').textContent = `Wynik: ${qOk} / ${qDone}` + (qDone === QUIZ.length ? ` · ${qOk >= 12 ? 'Mistrz finansów!' : qOk >= 9 ? 'Dobra robota!' : 'Wróć do lekcji i spróbuj jeszcze raz.'}` : ''); }
+$('#qz-list').addEventListener('click', (e) => {
+  const b = e.target.closest('button[data-o]'); if (!b) return;
+  answer(b.closest('.q'), +b.dataset.o);
+});
+document.addEventListener('keydown', (e) => {
+  if (!/^[1-4]$/.test(e.key) || e.ctrlKey || e.metaKey || e.altKey || e.shiftKey) return;
+  if ($('#v-quiz').hidden || e.target.closest('input, select, textarea, [contenteditable]')) return;
+  const next = $('#qz-list .q:not([data-answered])'); if (!next) return;
+  e.preventDefault();
+  answer(next, +e.key - 1);
+  next.scrollIntoView({ block: 'nearest' });
 });
 $('#qz-reset').addEventListener('click', () => { renderQuiz(); window.scrollTo(0, 0); });
 
