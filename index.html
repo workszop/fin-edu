@@ -424,6 +424,24 @@ details.more > :not(summary) { margin: 10px 14px; font-size: var(--body-sm); }
 #m-real[data-verdict="zyskuje"] { --say: var(--green-soft); --say-ink: var(--green-ink); }
 #m-real[data-verdict="zero"]    { --say: var(--paper-2);    --say-ink: var(--ink); }
 
+/* ===== m-snow ===== */
+.explain.wide .tiles.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.snow-bar { display: flex; height: 22px; }
+.snow-bar > span { flex: none; width: var(--w, 0%); transition: width .2s ease; }
+.snow-bar > span + span { box-shadow: -1px 0 0 var(--paper); }
+.bar > [data-bar="pay"] { --bar: var(--ink); }
+.bar > [data-bar="simple"] { --bar: var(--blue-soft); }
+.bar > [data-bar="comp"] { --bar: var(--yellow); }
+.snow-out > [data-part]::before { content: ""; width: 12px; height: 12px; border-radius: var(--r-xs); border: 1px solid var(--line-strong); background: var(--bar, var(--paper)); }
+.snow-out > [data-part="pay"] { --bar: var(--ink); }
+.snow-out > [data-part="simple"] { --bar: var(--blue-soft); }
+.snow-out > [data-part="compound"] { --bar: var(--yellow); }
+.snow-out > [data-part="total"]::before { display: none; }
+.snow-out > [data-part="total"] { background: var(--ink); color: var(--paper); }
+.snow-out > [data-part="total"] b { color: var(--paper); }
+.snow-note { grid-column: 1 / -1; background: var(--yellow-soft); color: var(--yellow-ink); }
+.snow-note:empty { display: none; }
+
 /* ===== kontrolki ===== */
 .controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr)); gap: 14px 22px; }
 .ctl { display: grid; grid-template-columns: 1fr auto; align-items: baseline; gap: 4px 8px; min-width: 0; }
@@ -526,7 +544,7 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
   kbd.keys { display: none; }
   .band { padding-top: 28px; padding-bottom: 32px; }
   .split { grid-template-columns: minmax(0, 1fr); }
-  .explain.wide .tiles, .pair { grid-template-columns: minmax(0, 1fr); }
+  .explain.wide .tiles, .explain.wide .tiles.two, .pair { grid-template-columns: minmax(0, 1fr); }
   .demo-body { grid-template-columns: minmax(0, 1fr); }
   .lab-head, .card-head { padding: 12px 16px; }
   .lab-body { padding: 16px; }
@@ -827,33 +845,30 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
     <div class="split">
       <div class="explain">
         <section>
-          <h3><i data-lucide="sprout" class="ic" aria-hidden="true"></i>Co to jest?</h3>
-          <p>Wpłacasz 1000 zł na lokatę z oprocentowaniem 5%. Po roku masz 1050 zł. W drugim roku odsetki liczą się już od 1050 zł, a nie od 1000 zł. To jest <strong>procent składany</strong>, czyli <strong>kapitalizacja odsetek</strong>.</p>
+          <div class="row-head"><span class="badge"><i data-lucide="sprout" class="ic" aria-hidden="true"></i></span><h3>Co to jest?</h3></div>
+          <p><strong>Procent składany</strong> to odsetki od odsetek, czyli <strong>kapitalizacja odsetek</strong>.</p>
+          <p>1000 zł przy 5% daje po roku 1050 zł. W drugim roku liczysz od 1050 zł.</p>
           <div class="formula">kwota końcowa = kwota × (1 + stopa)<sup>lata</sup></div>
         </section>
         <section>
-          <h3><i data-lucide="hourglass" class="ic" aria-hidden="true"></i>Dlaczego to ważne?</h3>
-          <p>Na początku różnica jest mała. Po 20–30 latach odsetki potrafią być większe niż wszystko, co wpłaciłeś. Wykres rośnie coraz szybciej, jak kula śnieżna.</p>
-          <p>Reguła 72: podziel 72 przez oprocentowanie, a dowiesz się, po ilu latach pieniądze się podwoją. Przy 6% to około 12 lat.</p>
+          <div class="row-head"><span class="badge"><i data-lucide="snowflake" class="ic" aria-hidden="true"></i></span><h3>Kula śnieżna</h3></div>
+          <p>Po 20–30 latach odsetki potrafią być większe niż wszystko, co wpłaciłeś.</p>
+          <div class="mini" id="m-snow" data-year="0" data-compound="0" data-simple="0" data-total="1000">
+            <p class="mini-note">Przykład: 1000 zł, 10% rocznie, bez podatku.</p>
+            <div class="btns">
+              <button class="primary" type="button" data-act="next">+1 rok</button>
+              <button type="button" data-act="reset">Od nowa</button>
+            </div>
+            <div class="bar snow-bar" aria-hidden="true"><span data-bar="pay"></span><span data-bar="simple"></span><span data-bar="comp"></span></div>
+            <output class="readout snow-out" id="snow-out" aria-live="polite">
+              <span data-part="pay"></span>
+              <span data-part="simple"></span>
+              <span data-part="compound"></span>
+              <span data-part="total"></span>
+              <span class="snow-note" id="snow-note"></span>
+            </output>
+          </div>
         </section>
-        <section>
-          <h3><i data-lucide="repeat" class="ic" aria-hidden="true"></i>Jak często dopisywane są odsetki?</h3>
-          <p>Bank może dopisywać odsetki codziennie, co miesiąc, co kwartał, raz w roku albo dopiero na koniec lokaty. To jest <strong>częstotliwość kapitalizacji</strong>. Im częściej odsetki trafiają na konto, tym szybciej same zaczynają zarabiać.</p>
-          <p>Dlatego oprócz oprocentowania z reklamy (<strong>nominalnego</strong>) liczy się oprocentowanie <strong>efektywne</strong>, czyli ile naprawdę zarobisz w ciągu roku.</p>
-          <div class="formula">efektywne = (1 + stopa ÷ k)<sup>k</sup> − 1<br>k = ile razy w roku dopisuje się odsetki</div>
-          <p>Przykład: 6% z kapitalizacją miesięczną to naprawdę około 6,17% rocznie. Różnica rośnie razem z oprocentowaniem i liczbą lat.</p>
-        </section>
-        <section>
-          <h3><i data-lucide="triangle-alert" class="ic" aria-hidden="true"></i>Dwa haczyki</h3>
-          <ul>
-            <li><strong>Podatek Belki:</strong> od zysków z lokat, obligacji i akcji państwo pobiera 19%. Na lokacie bank pobiera go przy każdym dopisaniu odsetek, a w obligacjach EDO dopiero przy wykupie. To drugie jest korzystniejsze: do końca procentuje cała kwota, łącznie z „przyszłym podatkiem”.</li>
-            <li><strong>Inflacja:</strong> liczy się nie to, ile złotych masz, ale co możesz za nie kupić. Lokata na 4% przy inflacji 5% realnie traci.</li>
-          </ul>
-        </section>
-        <div class="fact">
-          <span class="tag"><i data-lucide="lightbulb" class="ic" aria-hidden="true"></i>Ciekawostka</span>
-          <p>Procent składany działa też w drugą stronę. Niespłacony dług na karcie kredytowej rośnie w ten sam sposób, tylko dużo szybciej, bo oprocentowanie jest wysokie.</p>
-        </div>
       </div>
       <div class="labs">
         <div class="lab" id="lab-sv">
@@ -892,7 +907,21 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
           <p class="insight" id="sv-early"></p>
           </div>
         </div>
-
+      </div>
+    </div>
+    </div>
+    <div class="band">
+    <div class="split">
+      <div class="explain">
+        <section>
+          <div class="row-head"><span class="badge"><i data-lucide="repeat" class="ic" aria-hidden="true"></i></span><h3>Jak często dopisywane są odsetki?</h3></div>
+          <div class="tiles stack"><div class="tile"><span class="badge"><i data-lucide="calendar-clock" class="ic" aria-hidden="true"></i></span><h4>Kapitalizacja</h4><p>Bank dopisuje odsetki codziennie, co miesiąc, co kwartał, raz w roku albo na koniec lokaty.</p></div></div>
+          <p>Reklamowe oprocentowanie to <strong>nominalne</strong>, a zysk w roku pokazuje <strong>efektywne</strong>.</p>
+          <div class="formula">efektywne = (1 + stopa ÷ k)<sup>k</sup> − 1<br>k = ile razy w roku dopisuje się odsetki</div>
+          <p>6% z kapitalizacją miesięczną to około 6,17% rocznie.</p>
+        </section>
+      </div>
+      <div class="labs">
         <div class="lab" id="lab-cap">
           <div class="lab-head"><span class="badge"><i data-lucide="flask-conical" class="ic" aria-hidden="true"></i></span><h3>Ta sama stopa, różna kapitalizacja</h3></div>
           <div class="lab-body">
@@ -910,6 +939,29 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
         </div>
       </div>
     </div>
+    </div>
+    <div class="band">
+      <div class="explain wide">
+        <section>
+          <div class="row-head"><span class="badge"><i data-lucide="triangle-alert" class="ic" aria-hidden="true"></i></span><h3>Dwa haczyki</h3></div>
+          <div class="tiles two">
+            <div class="tile"><span class="badge"><i data-lucide="receipt" class="ic" aria-hidden="true"></i></span><h4>Podatek Belki</h4><p>Od zysków z lokat, obligacji i akcji państwo pobiera 19%.</p></div>
+            <div class="tile"><span class="badge"><i data-lucide="flame" class="ic" aria-hidden="true"></i></span><h4>Inflacja</h4><p>Liczy się, co możesz kupić. Lokata na 4% przy inflacji 5% realnie traci.</p></div>
+          </div>
+        </section>
+        <div class="pair">
+          <div class="fact">
+            <span class="tag"><i data-lucide="lightbulb" class="ic" aria-hidden="true"></i>Ciekawostka</span>
+            <p>Działa też w drugą stronę: niespłacony dług na karcie kredytowej rośnie szybciej, bo oprocentowanie jest wysokie.</p>
+          </div>
+          <details class="more">
+            <summary>Więcej</summary>
+            <p><strong>Kiedy płacisz podatek.</strong> Na lokacie bank pobiera go przy każdym dopisaniu odsetek. W obligacjach EDO dopiero przy wykupie, więc do końca procentuje cała kwota, także ta, z której zapłacisz podatek.</p>
+            <p><strong>Reguła 72.</strong> Podziel 72 przez oprocentowanie, a dowiesz się, po ilu latach pieniądze się podwoją. Przy 6% to około 12 lat.</p>
+            <p><strong>Częściej znaczy szybciej.</strong> Im częściej odsetki trafiają na konto, tym szybciej same zaczynają zarabiać. Różnica rośnie razem z oprocentowaniem i liczbą lat.</p>
+          </details>
+        </div>
+      </div>
     </div>
     <div class="next"><a href="#obligacje">Dalej: obligacje skarbowe →</a></div>
 </section>
@@ -1582,6 +1634,42 @@ mini('m-real', (el) => {
   };
   dep.addEventListener('input', render);
   inf.addEventListener('input', render);
+  render();
+});
+
+/* ----- mini: kula śnieżna, przykład 1000 zł i 10% rocznie ----- */
+const SNOW = { start: 1000, rate: 0.1, years: 20 };
+mini('m-snow', (el) => {
+  const next = $('[data-act="next"]', el), reset = $('[data-act="reset"]', el), note = $('#snow-note', el);
+  const bars = { pay: $('[data-bar="pay"]', el), simple: $('[data-bar="simple"]', el), comp: $('[data-bar="comp"]', el) };
+  const cells = Object.fromEntries($$('[data-part]', el).map((c) => [c.dataset.part, c]));
+  const max = SNOW.start * Math.pow(1 + SNOW.rate, SNOW.years); /* skala stała: suma w 20. roku */
+  let year = 0;
+  const cell = (key, label, v) => { cells[key].innerHTML = label + ' <b>' + zl(v) + '</b>'; };
+  const render = () => {
+    const total = Math.round(SNOW.start * Math.pow(1 + SNOW.rate, year));
+    const simple = Math.round(SNOW.start * SNOW.rate * year);
+    const comp = total - SNOW.start - simple; /* trzy części zawsze sumują się do wyświetlonej sumy */
+    el.dataset.year = year;
+    el.dataset.compound = comp;
+    el.dataset.simple = simple;
+    el.dataset.total = total;
+    bars.pay.style.setProperty('--w', (SNOW.start / max * 100).toFixed(3) + '%');
+    bars.simple.style.setProperty('--w', (simple / max * 100).toFixed(3) + '%');
+    bars.comp.style.setProperty('--w', (comp / max * 100).toFixed(3) + '%');
+    cell('pay', 'Wpłata', SNOW.start);
+    cell('simple', 'Odsetki proste', simple);
+    cell('compound', 'Odsetki od odsetek', comp);
+    cell('total', 'Razem, rok ' + year, total);
+    note.textContent = year === 1 ? 'Odsetki od odsetek zaczną się w 2. roku.' : '';
+    next.disabled = year >= SNOW.years;
+  };
+  next.addEventListener('click', () => {
+    if (year < SNOW.years) year++;
+    render();
+    if (next.disabled) reset.focus(); /* po ostatnim kliknięciu fokus nie ginie */
+  });
+  reset.addEventListener('click', () => { year = 0; render(); });
   render();
 });
 
