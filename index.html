@@ -453,6 +453,20 @@ details.more > :not(summary) { margin: 10px 14px; font-size: var(--body-sm); }
 #m-picker[data-kind="fixed"] .k-fixed, #m-picker[data-kind="variable"] .k-variable, #m-picker[data-kind="indexed"] .k-indexed, #m-picker[data-kind="family"] .k-family { display: inline-block; }
 .tile.wide { grid-column: 1 / -1; }
 
+/* ===== m-share, m-eggs ===== */
+.units.shares { display: grid; grid-template-columns: repeat(10, minmax(0, 1fr)); gap: 3px; max-width: 16rem; }
+.units.shares .unit { width: auto; height: auto; aspect-ratio: 1; }
+.baskets { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.basket { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 6px; align-content: start; min-height: 7rem; padding: 10px; border: 2px solid var(--ink); border-radius: var(--r-xs) var(--r-xs) var(--r-md) var(--r-md); background: var(--paper-2); }
+.egg { aspect-ratio: 4 / 5; min-width: 0; border: 2px solid var(--ink); border-radius: 50% 50% 50% 50% / 62% 62% 38% 38%; background: var(--surface); transition: background-color .15s, transform .15s; }
+.egg.broken { background: var(--red); border-style: dashed; transform: rotate(-24deg) translateY(2px); }
+.baskets.cap { margin-top: -4px; font-family: var(--font-mono); font-size: var(--overline); color: var(--ink-2); }
+.mini .readout#eggs-out:empty { display: none; }
+.mini .readout#eggs-out > span:first-child { grid-column: 1; }
+.mini .readout#share-out { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.mini .readout#share-out b { font-size: 1.15rem; }
+@media (max-width: 768px) { .mini .readout#share-out { grid-template-columns: minmax(0, 1fr); } }
+
 /* ===== kontrolki ===== */
 .controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr)); gap: 14px 22px; }
 .ctl { display: grid; grid-template-columns: 1fr auto; align-items: baseline; gap: 4px 8px; min-width: 0; }
@@ -1116,38 +1130,26 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
     <div class="split">
       <div class="explain">
         <section>
-          <h3><i data-lucide="chart-pie" class="ic" aria-hidden="true"></i>Co to jest?</h3>
-          <p><strong>Akcja</strong> to udział w spółce. Jeśli firma ma milion akcji, a ty kupisz jedną, należy do ciebie jedna milionowa jej części. W Polsce akcjami handluje się na <strong>Giełdzie Papierów Wartościowych w Warszawie</strong>.</p>
+          <div class="row-head"><span class="badge"><i data-lucide="chart-pie" class="ic" aria-hidden="true"></i></span><h3>Co to jest?</h3></div>
+          <p><strong>Akcja</strong> to kawałek firmy. Jesteś jej współwłaścicielem, ale nikt nie gwarantuje zysku.</p>
         </section>
         <section>
-          <h3><i data-lucide="coins" class="ic" aria-hidden="true"></i>Jak się na nich zarabia?</h3>
-          <ul>
-            <li><strong>Wzrost ceny:</strong> kupujesz taniej, sprzedajesz drożej.</li>
-            <li><strong>Dywidenda:</strong> część zysku, którą firma wypłaca akcjonariuszom, zwykle raz w roku. Od dywidendy płacisz 19% podatku.</li>
-          </ul>
-          <p>Dywidendę możesz wydać albo <strong>reinwestować</strong>, czyli kupić za nią kolejne akcje. Te nowe akcje też płacą dywidendy, więc działa ten sam procent składany co na lokacie. W długim terminie reinwestowane dywidendy to duża część całego zysku z akcji.</p>
+          <div class="row-head"><span class="badge"><i data-lucide="shield" class="ic" aria-hidden="true"></i></span><h3>Jak zmniejszyć ryzyko?</h3></div>
+          <div class="mini" id="m-eggs" data-crashed="0">
+            <p class="mini-note">Jedna firma bankrutuje. Każda firma ma w koszyku tyle samo.</p>
+            <div class="baskets" aria-hidden="true">
+              <div class="basket" data-basket="one"><span class="egg"></span></div>
+              <div class="basket" data-basket="many"><span class="egg"></span><span class="egg"></span><span class="egg"></span><span class="egg"></span><span class="egg"></span><span class="egg"></span><span class="egg"></span><span class="egg"></span><span class="egg"></span><span class="egg"></span><span class="egg"></span><span class="egg"></span><span class="egg"></span><span class="egg"></span><span class="egg"></span><span class="egg"></span><span class="egg"></span><span class="egg"></span><span class="egg"></span><span class="egg"></span></div>
+            </div>
+            <div class="baskets cap" aria-hidden="true"><span>1 firma</span><span>20 firm</span></div>
+            <div class="btns"><button class="primary" type="button" id="eggs-crash">Firma bankrutuje</button><button type="button" id="eggs-reset" disabled>Jeszcze raz</button></div>
+            <output class="readout" id="eggs-out" aria-live="polite" for="eggs-crash"></output>
+          </div>
+          <div class="tiles stack">
+            <div class="tile"><span class="badge"><i data-lucide="layers" class="ic" aria-hidden="true"></i></span><h4>Dywersyfikacja</h4><p>Nie wkładaj wszystkich jajek do jednego koszyka. Firma może zbankrutować, cała gospodarka raczej nie.</p></div>
+            <div class="tile"><span class="badge"><i data-lucide="package" class="ic" aria-hidden="true"></i></span><h4>Fundusz indeksowy (ETF)</h4><p>Kupujesz kawałek wielu firm naraz, np. całego indeksu WIG20.</p></div>
+          </div>
         </section>
-        <section>
-          <h3><i data-lucide="chart-candlestick" class="ic" aria-hidden="true"></i>Dlaczego ceny skaczą?</h3>
-          <p>Cena akcji to efekt tego, ile ludzie są gotowi za nią zapłacić. Wpływają na to wyniki firmy, wiadomości, stopy procentowe, a także emocje: strach i chciwość. W krótkim terminie ceny są bardzo nieprzewidywalne. W długim zwykle podążają za zyskami firm.</p>
-        </section>
-        <section>
-          <h3><i data-lucide="shield" class="ic" aria-hidden="true"></i>Jak zmniejszyć ryzyko?</h3>
-          <ul>
-            <li><strong>Dywersyfikacja:</strong> nie wkładaj wszystkich jajek do jednego koszyka. Pojedyncza firma może zbankrutować, cała gospodarka raczej nie.</li>
-            <li><strong>Fundusze indeksowe (ETF):</strong> jedną transakcją kupujesz kawałek wielu firm naraz, np. całego indeksu WIG20.</li>
-            <li><strong>Czas:</strong> im dłużej trzymasz, tym mniejsza szansa, że skończysz na minusie.</li>
-            <li><strong>Spokój:</strong> sprzedawanie w panice po spadkach to jeden z najczęstszych błędów.</li>
-          </ul>
-        </section>
-        <div class="fact">
-          <span class="tag"><i data-lucide="lightbulb" class="ic" aria-hidden="true"></i>Ciekawostka</span>
-          <p>Indeks WIG20 pokazuje tylko ceny akcji. Jego „bliźniak” WIG20TR liczy też reinwestowane dywidendy. Po latach różnica między nimi jest bardzo wyraźna.</p>
-        </div>
-        <div class="fact">
-          <span class="tag"><i data-lucide="triangle-alert" class="ic" aria-hidden="true"></i>Ważne</span>
-          <p>Akcje to nie loteria, ale też nie lokata. Inwestuj tylko pieniądze, których nie będziesz potrzebować przez wiele lat. Rachunek maklerski przed 18. rokiem życia zakłada się razem z rodzicem.</p>
-        </div>
       </div>
       <div class="labs">
         <div class="lab" id="lab-st">
@@ -1163,7 +1165,32 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
           <div class="stats" id="st-stats"></div>
           </div>
         </div>
-
+      </div>
+    </div>
+    </div>
+    <div class="band">
+    <div class="split">
+      <div class="explain">
+        <section>
+          <div class="row-head"><span class="badge"><i data-lucide="coins" class="ic" aria-hidden="true"></i></span><h3>Jak się zarabia?</h3></div>
+          <div class="tiles stack">
+            <div class="tile"><span class="badge"><i data-lucide="trending-up" class="ic" aria-hidden="true"></i></span><h4>Wzrost ceny</h4><p>Kupujesz taniej, sprzedajesz drożej.</p></div>
+            <div class="tile"><span class="badge"><i data-lucide="hand-coins" class="ic" aria-hidden="true"></i></span><h4>Dywidenda</h4><p>Część zysku dla akcjonariuszy, zwykle raz w roku. Podatek: 19%.</p></div>
+            <div class="tile"><span class="badge"><i data-lucide="repeat" class="ic" aria-hidden="true"></i></span><h4>Reinwestowanie</h4><p>Za dywidendę kupujesz kolejne akcje. Działa ten sam procent składany co na lokacie.</p></div>
+          </div>
+          <div class="mini" id="m-share" data-owned="5" data-net="40.50">
+            <p class="mini-note">Wyobraź sobie firmę podzieloną na 100 akcji. Prawdziwe spółki mają ich miliony. Dywidenda: 1000 zł.</p>
+            <div class="units shares" aria-hidden="true"></div>
+            <div class="ctl"><label for="share-n">Ile masz akcji</label><output class="val" id="share-n-o" for="share-n"></output><input type="range" id="share-n" min="0" max="100" step="1" value="5"></div>
+            <output class="readout" id="share-out" aria-live="polite" for="share-n"><span><b id="share-pct"></b> firmy</span> <span><b id="share-gross"></b> brutto</span> <span><b id="share-net"></b> po podatku 19%</span></output>
+          </div>
+        </section>
+        <div class="fact">
+          <span class="tag"><i data-lucide="lightbulb" class="ic" aria-hidden="true"></i>Ciekawostka</span>
+          <p>WIG20 pokazuje tylko ceny akcji. Jego bliźniak WIG20TR liczy też reinwestowane dywidendy.</p>
+        </div>
+      </div>
+      <div class="labs">
         <div class="lab" id="lab-dv">
           <div class="lab-head"><span class="badge"><i data-lucide="flask-conical" class="ic" aria-hidden="true"></i></span><h3>Dywidendy: reinwestować czy wydawać?</h3></div>
           <div class="lab-body">
@@ -1179,7 +1206,34 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
           <p class="task">Średni zysk rynku w modelu to nadal około 7% rocznie. Im wyższa dywidenda, tym mniejsza część zysku pochodzi ze wzrostu cen akcji.</p>
           </div>
         </div>
-
+      </div>
+    </div>
+    </div>
+    <div class="band">
+    <div class="split">
+      <div class="explain">
+        <section>
+          <div class="row-head"><span class="badge"><i data-lucide="chart-candlestick" class="ic" aria-hidden="true"></i></span><h3>Dlaczego ceny skaczą?</h3></div>
+          <p>Ceny zależą od wyników firm, wiadomości, stóp i emocji: strachu i chciwości.</p>
+          <p>W krótkim terminie są nieprzewidywalne, w długim podążają za zyskami firm.</p>
+          <div class="tiles stack">
+            <div class="tile"><span class="badge"><i data-lucide="hourglass" class="ic" aria-hidden="true"></i></span><h4>Czas</h4><p>Im dłużej trzymasz, tym mniejsza szansa na stratę.</p></div>
+            <div class="tile"><span class="badge"><i data-lucide="lightbulb" class="ic" aria-hidden="true"></i></span><h4>Spokój</h4><p>Sprzedaż w panice po spadkach to jeden z najczęstszych błędów.</p></div>
+          </div>
+        </section>
+        <div class="fact">
+          <span class="tag"><i data-lucide="triangle-alert" class="ic" aria-hidden="true"></i>Ważne</span>
+          <p>Akcje to nie loteria, ale też nie lokata. Inwestuj tylko pieniądze, których nie będziesz potrzebować przez wiele lat.</p>
+        </div>
+        <details class="more">
+          <summary>Więcej</summary>
+          <p><strong>Giełda.</strong> W Polsce akcjami handluje się na Giełdzie Papierów Wartościowych w Warszawie.</p>
+          <p><strong>Jedna milionowa.</strong> Jeśli firma ma milion akcji, jedna akcja to jedna milionowa firmy.</p>
+          <p><strong>Dywidendy w długim terminie.</strong> Reinwestowane dywidendy to duża część całego zysku z akcji.</p>
+          <p><strong>Rachunek maklerski.</strong> Przed 18. rokiem życia zakłada się go razem z rodzicem.</p>
+        </details>
+      </div>
+      <div class="labs">
         <div class="lab" id="lab-mc">
           <div class="lab-head"><span class="badge"><i data-lucide="flask-conical" class="ic" aria-hidden="true"></i></span><h3>1000 możliwych przyszłości</h3></div>
           <div class="lab-body">
@@ -1737,6 +1791,53 @@ mini('m-picker', (el) => {
   };
   chips.forEach((c) => c.addEventListener('click', () => pick(c)));
   pick(chips.find((c) => c.dataset.bond === 'TOS'));
+});
+
+/* ----- mini: ile masz akcji z 100, dywidenda 1000 zł na całą firmę ----- */
+const SHARE = { total: 100, dividend: 1000, tax: 0.19 };
+function akcji(n) { if (n === 1) return 'akcja'; const d = n % 10, t = n % 100; return (d >= 2 && d <= 4 && !(t >= 12 && t <= 14)) ? 'akcje' : 'akcji'; }
+mini('m-share', (el) => {
+  const range = $('#share-n', el), grid = $('.units', el);
+  grid.innerHTML = '<span class="unit off"></span>'.repeat(SHARE.total);
+  const cells = $$('.unit', grid);
+  const render = () => {
+    const n = +range.value, gross = n * SHARE.dividend / SHARE.total, net = gross * (1 - SHARE.tax);
+    el.dataset.owned = n;
+    el.dataset.net = net.toFixed(2);
+    cells.forEach((c, i) => c.classList.toggle('off', i >= n));
+    $('#share-n-o', el).textContent = n + ' ' + akcji(n);
+    $('#share-pct', el).textContent = n + '%';
+    $('#share-gross', el).textContent = zl2(gross);
+    $('#share-net', el).textContent = zl2(net);
+    range.setAttribute('aria-valuetext', n + ' ' + akcji(n));
+  };
+  range.addEventListener('input', render);
+  render();
+});
+
+/* ----- mini: jedna firma bankrutuje, kosz 1 firmy kontra kosz 20 ----- */
+mini('m-eggs', (el) => {
+  const crash = $('#eggs-crash', el), again = $('#eggs-reset', el), out = $('#eggs-out', el);
+  const baskets = { one: $$('[data-basket="one"] .egg', el), many: $$('[data-basket="many"] .egg', el) };
+  const render = (crashed) => {
+    el.dataset.crashed = crashed ? '1' : '0';
+    Object.values(baskets).forEach((eggs) => eggs.forEach((e, i) => e.classList.toggle('broken', crashed && i === 0)));
+    crash.disabled = crashed;
+    again.disabled = !crashed;
+    if (crashed) {
+      const one = 100 / baskets.one.length, many = 100 / baskets.many.length;
+      el.dataset.lossOne = one;
+      el.dataset.lossMany = many;
+      out.innerHTML = '<span>1 firma: strata <b>' + one + '%</b></span> <span>20 firm: strata <b>' + many + '%</b></span>';
+    } else {
+      delete el.dataset.lossOne;
+      delete el.dataset.lossMany;
+      out.textContent = '';
+    }
+  };
+  crash.addEventListener('click', () => render(true));
+  again.addEventListener('click', () => render(false));
+  render(false);
 });
 
 /* ================= STOPY: gra ================= */
