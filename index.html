@@ -399,6 +399,27 @@ details.more > :not(summary) { margin: 10px 14px; font-size: var(--body-sm); }
 #m-target[data-zone="cel"]      { --say: var(--green-soft);  --say-ink: var(--green-ink); }
 #m-target[data-zone="wysoko"]   { --say: var(--red-soft);    --say-ink: var(--red-ink); }
 
+/* ===== m-chain ===== */
+.mini .chain { gap: 22px; }
+.link { transition: background-color .15s, color .15s, border-color .15s; }
+.link.on { background: var(--tone); color: var(--tone-ink); border-color: var(--tone); }
+.link .ic { vertical-align: -.15em; }
+#m-chain[data-dir="down"] .dir-up, #m-chain:not([data-dir="down"]) .dir-down { display: none; }
+#m-chain button[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+
+/* ===== m-real ===== */
+.real-row { display: grid; gap: 6px; min-width: 0; }
+.bar { height: 14px; background: var(--paper-2); border: 1px solid var(--line-strong); border-radius: var(--r-xs); overflow: hidden; }
+.bar > span { display: block; height: 100%; width: var(--w, 0%); background: var(--bar); transition: width .2s ease; }
+.bar > [data-bar="dep"] { --bar: var(--blue-soft); }
+.bar > [data-bar="inf"] { --bar: var(--red-soft); }
+.mini .real-out { display: block; }
+.real-out > span { display: grid; gap: 2px; padding: 10px 12px; border-radius: var(--r-sm); background: var(--say); color: var(--say-ink); font-family: var(--font-sans); font-weight: 400; font-size: var(--body-sm); line-height: 1.35; transition: background-color .15s, color .15s; }
+.real-out b { color: inherit; }
+#m-real[data-verdict="traci"]   { --say: var(--red-soft);   --say-ink: var(--red-ink); }
+#m-real[data-verdict="zyskuje"] { --say: var(--green-soft); --say-ink: var(--green-ink); }
+#m-real[data-verdict="zero"]    { --say: var(--paper-2);    --say-ink: var(--ink); }
+
 /* ===== kontrolki ===== */
 .controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr)); gap: 14px 22px; }
 .ctl { display: grid; grid-template-columns: 1fr auto; align-items: baseline; gap: 4px 8px; min-width: 0; }
@@ -693,30 +714,58 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
     <div class="split">
       <div class="explain">
         <section>
-          <h3><i data-lucide="percent" class="ic" aria-hidden="true"></i>Co to jest?</h3>
-          <p><strong>Stopa procentowa</strong> mówi, ile procent rocznie płacisz za pożyczone pieniądze albo ile dostajesz, gdy to ty pożyczasz (np. bankowi na lokacie).</p>
-          <p>W Polsce <strong>Rada Polityki Pieniężnej</strong> przy NBP ustala <strong>stopę referencyjną</strong>, czyli podstawową stopę procentową. Od niej zależą oprocentowanie lokat i kredytów oraz wskaźniki rynkowe, takie jak WIBOR (stopniowo zastępowany nowym wskaźnikiem).</p>
+          <div class="row-head"><span class="badge"><i data-lucide="percent" class="ic" aria-hidden="true"></i></span><h3>Co to jest?</h3></div>
+          <p><strong>Stopa procentowa</strong> mówi, ile procent rocznie płacisz za pożyczone pieniądze albo dostajesz, gdy pożyczasz bankowi, np. na lokacie.</p>
+          <div class="tiles stack">
+            <div class="tile"><span class="badge"><i data-lucide="landmark" class="ic" aria-hidden="true"></i></span><h4>RPP</h4><p>Rada Polityki Pieniężnej przy NBP ustala stopy procentowe w Polsce.</p></div>
+            <div class="tile"><span class="badge"><i data-lucide="percent" class="ic" aria-hidden="true"></i></span><h4>Stopa referencyjna</h4><p>Podstawowa stopa procentowa. Od niej zależy oprocentowanie lokat i kredytów.</p></div>
+            <div class="tile"><span class="badge"><i data-lucide="chart-line" class="ic" aria-hidden="true"></i></span><h4>WIBOR</h4><p>Wskaźnik rynkowy zależny od stóp, stopniowo zastępowany nowym wskaźnikiem.</p></div>
+          </div>
         </section>
         <section>
-          <h3><i data-lucide="list-checks" class="ic" aria-hidden="true"></i>Jak to działa?</h3>
-          <ol>
-            <li>RPP <strong>podnosi</strong> stopy.</li>
-            <li>Kredyty drożeją, a lokaty dają więcej.</li>
-            <li>Ludzie i firmy mniej pożyczają i mniej wydają, więcej oszczędzają.</li>
-            <li>Popyt spada, więc sklepy i firmy wolniej podnoszą ceny.</li>
-            <li>Inflacja spada, ale dopiero po <strong>1–2 latach</strong>.</li>
-          </ol>
-          <p>Obniżka stóp działa odwrotnie: pobudza gospodarkę, ale może podbić inflację.</p>
+          <div class="row-head"><span class="badge"><i data-lucide="list-checks" class="ic" aria-hidden="true"></i></span><h3>Jak to działa?</h3></div>
+          <div class="mini" id="m-chain" data-dir="" data-step="0">
+            <div class="btns">
+              <button class="primary" type="button" data-dir="up" aria-pressed="false">Podnieś</button>
+              <button type="button" data-dir="down" aria-pressed="false">Obniż</button>
+            </div>
+            <ol class="chain">
+              <li class="link" data-up="RPP podnosi stopy." data-down="RPP obniża stopy."><span class="t">RPP podnosi stopy.</span></li>
+              <li class="link" data-up="Kredyty drożeją, a lokaty dają więcej." data-down="Kredyty tanieją, a lokaty dają mniej."><span class="t">Kredyty drożeją, a lokaty dają więcej.</span> <i data-lucide="arrow-up" class="ic dir-up" aria-hidden="true"></i><i data-lucide="arrow-down" class="ic dir-down" aria-hidden="true"></i></li>
+              <li class="link" data-up="Ludzie i firmy mniej pożyczają, mniej wydają, więcej oszczędzają." data-down="Ludzie i firmy więcej pożyczają, wydają, mniej oszczędzają."><span class="t">Ludzie i firmy mniej pożyczają, mniej wydają, więcej oszczędzają.</span></li>
+              <li class="link" data-up="Popyt spada, więc firmy wolniej podnoszą ceny." data-down="Popyt rośnie, więc firmy szybciej podnoszą ceny."><span class="t">Popyt spada, więc firmy wolniej podnoszą ceny.</span></li>
+              <li class="link" data-up="Inflacja spada, ale dopiero po 1–2 latach." data-down="Gospodarka rusza, ale po 1–2 latach inflacja może wzrosnąć."><span class="t">Inflacja spada, ale dopiero po 1–2 latach.</span></li>
+            </ol>
+            <output class="sr-only" id="chain-out" aria-live="polite"></output>
+          </div>
         </section>
         <section>
-          <h3><i data-lucide="scale" class="ic" aria-hidden="true"></i>Stopa realna</h3>
+          <div class="row-head"><span class="badge"><i data-lucide="scale" class="ic" aria-hidden="true"></i></span><h3>Stopa realna</h3></div>
           <div class="formula">stopa realna ≈ stopa procentowa − inflacja</div>
-          <p>Jeśli lokata daje 5%, a inflacja wynosi 8%, to realnie tracisz około 3% rocznie. Żeby skutecznie hamować inflację, stopy zwykle muszą być <strong>wyższe</strong> od niej.</p>
+          <p>Żeby skutecznie hamować inflację, stopy zwykle muszą być <strong>wyższe</strong> od inflacji.</p>
+          <div class="mini" id="m-real" data-real="-3.00" data-verdict="traci">
+            <p class="mini-note">Lokata zarabia swoje procenty, ale ceny rosną o inflację.</p>
+            <div class="real-row">
+              <div class="ctl"><label for="real-dep">Lokata</label><span class="val" id="real-dep-o"></span><input type="range" id="real-dep" min="0" max="12" step="0.5" value="5" data-out="pct"></div>
+              <div class="bar" aria-hidden="true"><span data-bar="dep"></span></div>
+            </div>
+            <div class="real-row">
+              <div class="ctl"><label for="real-inf">Inflacja</label><span class="val" id="real-inf-o"></span><input type="range" id="real-inf" min="0" max="15" step="0.5" value="8" data-out="pct"></div>
+              <div class="bar" aria-hidden="true"><span data-bar="inf"></span></div>
+            </div>
+            <output class="readout real-out" id="real-out" aria-live="polite" for="real-dep real-inf"><span id="real-say"></span></output>
+          </div>
         </section>
         <div class="fact">
           <span class="tag"><i data-lucide="history" class="ic" aria-hidden="true"></i>Prawdziwa historia</span>
-          <p>Jesienią 2021 roku stopa referencyjna NBP wynosiła zaledwie 0,1%. Rok później, we wrześniu 2022, było to już 6,75%. Raty kredytów wielu rodzin wzrosły wtedy o kilkadziesiąt procent.</p>
+          <p>Jesienią 2021 roku stopa referencyjna NBP wynosiła zaledwie 0,1%. Rok później, we wrześniu 2022, było to już 6,75%.</p>
+          <p>Raty kredytów wielu rodzin wzrosły wtedy o kilkadziesiąt procent.</p>
         </div>
+        <details class="more">
+          <summary>Więcej</summary>
+          <p><strong>Obniżka stóp.</strong> Działa odwrotnie: pobudza gospodarkę, ale może podbić inflację.</p>
+          <p><strong>Dokładniej.</strong> Stopa realna to (1 + stopa) ÷ (1 + inflacja) − 1. Różnica stóp to przybliżenie: przy lokacie 5% i inflacji 8% dokładny wynik to −2,78%, nie −3%.</p>
+        </details>
       </div>
 
       <div class="labs">
@@ -1477,6 +1526,48 @@ mini('m-target', (el) => {
     range.setAttribute('aria-valuetext', pc(v) + ', ' + zone.name);
   };
   range.addEventListener('input', render);
+  render();
+});
+
+/* ----- mini: łańcuch decyzji RPP ----- */
+const CHAIN_STEP_MS = 450;
+mini('m-chain', (el) => {
+  const links = $$('.link', el), say = $('#chain-out', el), btns = $$('button[data-dir]', el);
+  let timer = 0;
+  const show = (dir, n) => {
+    el.dataset.dir = dir;
+    el.dataset.step = n;
+    links.forEach((l, i) => l.classList.toggle('on', i < n));
+    btns.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.dir === dir)));
+    if (n) say.textContent = $('.t', links[n - 1]).textContent;
+  };
+  const run = (dir) => {
+    clearTimeout(timer); /* jeden zegar naraz: kolejne kliknięcie zaczyna od nowa */
+    links.forEach((l) => { $('.t', l).textContent = l.dataset[dir]; });
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { show(dir, links.length); return; }
+    const tick = (n) => { show(dir, n); if (n < links.length) timer = setTimeout(() => tick(n + 1), CHAIN_STEP_MS); };
+    tick(1);
+  };
+  btns.forEach((b) => b.addEventListener('click', () => run(b.dataset.dir === 'down' ? 'down' : 'up')));
+});
+
+/* ----- mini: stopa realna ----- */
+const REAL_BAR_MAX = 15;
+mini('m-real', (el) => {
+  const dep = $('#real-dep', el), inf = $('#real-inf', el), say = $('#real-say', el), bars = { dep: $('[data-bar="dep"]', el), inf: $('[data-bar="inf"]', el) };
+  const render = () => {
+    const d = +dep.value, f = +inf.value, diff = d - f, abs = NF2.format(Math.abs(diff)) + '%';
+    const verdict = diff < 0 ? 'traci' : diff > 0 ? 'zyskuje' : 'zero';
+    el.dataset.real = diff.toFixed(2);
+    el.dataset.verdict = verdict;
+    bars.dep.style.setProperty('--w', (d / REAL_BAR_MAX * 100).toFixed(2) + '%');
+    bars.inf.style.setProperty('--w', (f / REAL_BAR_MAX * 100).toFixed(2) + '%');
+    say.innerHTML = (verdict === 'traci' ? 'realnie tracisz ' : verdict === 'zyskuje' ? 'realnie zyskujesz ' : 'realnie bez zmian ') + '<b>' + abs + '</b>';
+    dep.setAttribute('aria-valuetext', pc(d));
+    inf.setAttribute('aria-valuetext', pc(f));
+  };
+  dep.addEventListener('input', render);
+  inf.addEventListener('input', render);
   render();
 });
 
