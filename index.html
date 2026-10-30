@@ -1297,7 +1297,7 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
           <div class="row-head"><span class="badge"><i data-lucide="chart-line" class="ic" aria-hidden="true"></i></span><h3>Raty równe czy malejące?</h3></div>
           <p>Malejące szybciej spłacają kapitał, więc odsetki naliczają się od coraz mniejszej kwoty: łącznie płacisz mniej, ale pierwsze raty są wyższe.</p>
           <div class="mini" id="m-rata" data-type="rowne" data-rata="" data-odsetki="" data-total="">
-            <p class="mini-note">400000, 25 lat, 7,5%. Słupek: pierwsza rata roku, w zł.</p>
+            <p class="mini-note">400 000 zł, 25 lat, 7,5%. Słupek: pierwsza rata roku, w zł.</p>
             <div class="btns"><button type="button" data-type="rowne" aria-pressed="true">Raty równe</button><button type="button" data-type="malejace" aria-pressed="false">Raty malejące</button></div>
             <div class="rbars" role="group" aria-label="Rata nr 1, 109 i 289">
               <div class="rcol"><b class="rnum" data-v="rata"></b><div class="rtrack"><div class="rstack"><span data-part="odsetki"></span><span data-part="kapital"></span></div></div><span class="rlab">Rok 1</span><span class="rint"><span class="sr-only">odsetki </span><span data-v="odsetki"></span></span></div>
@@ -2331,7 +2331,7 @@ mini('m-rata', (el) => {
       $('[data-v="rata"]', c).textContent = Math.round(r.pay);
       $('[data-v="odsetki"]', c).textContent = Math.round(r.int);
     });
-    out.innerHTML = '<span>Odsetki razem <b>' + NF0.format(Math.round(total)) + '</b></span>';
+    out.innerHTML = '<span>Odsetki razem <b>' + zl(total) + '</b></span>';
   };
   btns.forEach((b) => b.addEventListener('click', () => render(b.dataset.type)));
   render('rowne');
