@@ -351,6 +351,11 @@ details.more > :not(summary) { margin: 10px 14px; font-size: var(--body-sm); }
 .row-head h3 { min-width: 0; }
 .tiles.stack { grid-template-columns: minmax(0, 1fr); }
 .tiles.stack .tile { gap: 2px 12px; align-items: start; }
+#v-kredyty .tiles { gap: 8px; }
+#v-kredyty .tiles .tile { padding: 9px 14px; }
+#v-kredyty .mini { gap: 8px; }
+#v-kredyty .explain section > p + p { margin-top: -8px; }
+#v-kredyty .mini .readout#rata-out > span { display: flex; align-items: baseline; gap: 8px; padding: 6px 12px; }
 .tiles.stack .badge { grid-row: 1 / span 2; }
 .tiles.stack .tile p { grid-column: 2; }
 .mini-note { font-size: var(--body-sm); line-height: 1.45; }
@@ -891,12 +896,11 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
         <section>
           <div class="row-head"><span class="badge"><i data-lucide="sprout" class="ic" aria-hidden="true"></i></span><h3>Co to jest?</h3></div>
           <p><strong>Procent składany</strong> to odsetki od odsetek, czyli <strong>kapitalizacja odsetek</strong>.</p>
-          <p>1000 zł przy 5% daje po roku 1050 zł. W drugim roku liczysz od 1050 zł.</p>
+          <p>1000 zł przy 5% daje po roku 1050 zł, w drugim liczysz od 1050 zł.</p>
           <div class="formula">kwota końcowa = kwota × (1 + stopa)<sup>lata</sup></div>
         </section>
         <section>
           <div class="row-head"><span class="badge"><i data-lucide="snowflake" class="ic" aria-hidden="true"></i></span><h3>Kula śnieżna</h3></div>
-          <p>Po 20–30 latach odsetki potrafią być większe niż wszystko, co wpłaciłeś.</p>
           <div class="mini" id="m-snow" data-year="0" data-compound="0" data-simple="0" data-total="1000">
             <p class="mini-note">Przykład: 1000 zł, 10% rocznie, bez podatku.</p>
             <div class="btns">
@@ -919,7 +923,7 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
             <div class="tile"><span class="badge"><i data-lucide="receipt" class="ic" aria-hidden="true"></i></span><h4>Podatek Belki</h4><p>Od zysków z lokat, obligacji i akcji państwo pobiera 19%.</p></div>
             <div class="tile"><span class="badge"><i data-lucide="flame" class="ic" aria-hidden="true"></i></span><h4>Inflacja</h4><p>Liczy się, co możesz kupić. Lokata na 4% przy inflacji 5% realnie traci.</p></div>
           </div>
-                </section>
+        </section>
       </div>
       <div class="labs">
         <div class="lab" id="lab-sv">
@@ -967,20 +971,21 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
         <section>
           <div class="row-head"><span class="badge"><i data-lucide="repeat" class="ic" aria-hidden="true"></i></span><h3>Jak często dopisywane są odsetki?</h3></div>
           <div class="tiles stack"><div class="tile"><span class="badge"><i data-lucide="calendar-clock" class="ic" aria-hidden="true"></i></span><h4>Kapitalizacja</h4><p>Bank dopisuje odsetki codziennie, co miesiąc, co kwartał, raz w roku albo na koniec lokaty.</p></div></div>
-          <p>Reklamowe oprocentowanie to <strong>nominalne</strong>, a zysk w roku pokazuje <strong>efektywne</strong>.</p>
+          <p>Oprocentowanie z reklamy to <strong>nominalne</strong>, a ile zarobisz w ciągu roku, pokazuje <strong>efektywne</strong>.</p>
           <div class="formula">efektywne = (1 + stopa ÷ k)<sup>k</sup> − 1<br>k = ile razy w roku dopisuje się odsetki</div>
           <p>6% z kapitalizacją miesięczną to około 6,17% rocznie.</p>
         </section>
-          <div class="fact">
-            <span class="tag"><i data-lucide="lightbulb" class="ic" aria-hidden="true"></i>Ciekawostka</span>
-            <p>Działa też w drugą stronę: niespłacony dług na karcie kredytowej rośnie szybciej, bo oprocentowanie jest wysokie.</p>
-          </div>
-          <details class="more">
-            <summary>Więcej</summary>
-            <p><strong>Kiedy płacisz podatek.</strong> Na lokacie bank pobiera go przy każdym dopisaniu odsetek. W obligacjach EDO dopiero przy wykupie, więc do końca procentuje cała kwota, także ta, z której zapłacisz podatek.</p>
-            <p><strong>Reguła 72.</strong> Podziel 72 przez oprocentowanie, a dowiesz się, po ilu latach pieniądze się podwoją. Przy 6% to około 12 lat.</p>
-            <p><strong>Częściej znaczy szybciej.</strong> Im częściej odsetki trafiają na konto, tym szybciej same zaczynają zarabiać. Różnica rośnie razem z oprocentowaniem i liczbą lat.</p>
-          </details>
+        <div class="fact">
+          <span class="tag"><i data-lucide="lightbulb" class="ic" aria-hidden="true"></i>Ciekawostka</span>
+          <p>Procent składany działa też odwrotnie: niespłacony dług na karcie kredytowej rośnie tak samo, tylko szybciej, bo oprocentowanie jest wysokie.</p>
+        </div>
+        <details class="more">
+          <summary>Więcej</summary>
+          <p><strong>Kiedy płacisz podatek.</strong> Na lokacie bank pobiera go przy każdym dopisaniu odsetek. W obligacjach EDO dopiero przy wykupie, więc do końca procentuje cała kwota, także ta, z której zapłacisz podatek.</p>
+          <p><strong>Po latach.</strong> Po 20–30 latach odsetki potrafią być większe niż wszystko, co wpłaciłeś.</p>
+          <p><strong>Reguła 72.</strong> Podziel 72 przez oprocentowanie, a dowiesz się, po ilu latach pieniądze się podwoją. Przy 6% to około 12 lat.</p>
+          <p><strong>Częściej znaczy szybciej.</strong> Im częściej odsetki trafiają na konto, tym szybciej same zaczynają zarabiać. Różnica rośnie razem z oprocentowaniem i liczbą lat.</p>
+        </details>
       </div>
       <div class="labs">
         <div class="lab" id="lab-cap">
@@ -1016,17 +1021,17 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
         <section>
           <div class="row-head"><span class="badge"><i data-lucide="scroll-text" class="ic" aria-hidden="true"></i></span><h3>Co to jest?</h3></div>
           <p><strong>Obligacja</strong> to dług: pożyczasz pieniądze emitentowi, a on oddaje je z odsetkami.</p>
-          <p>Gdy emitentem jest Skarb Państwa, to <strong>obligacje skarbowe</strong>: jedna z najbezpieczniejszych form oszczędzania w Polsce.</p>
+          <p>Gdy pożycza Skarb Państwa, mówimy o <strong>obligacjach skarbowych</strong>. To jedna z najbezpieczniejszych form oszczędzania w Polsce.</p>
           <ol class="chain">
             <li class="link">Pożyczasz państwu 100 zł.</li>
-            <li class="link">Co roku naliczają się odsetki.</li>
-            <li class="link">Na koniec państwo oddaje pożyczone pieniądze.</li>
+            <li class="link">Przez cały okres naliczają się odsetki.</li>
+            <li class="link">Na koniec państwo oddaje dług.</li>
           </ol>
         </section>
         <section>
           <div class="row-head"><span class="badge"><i data-lucide="layers" class="ic" aria-hidden="true"></i></span><h3>Rodzaje obligacji</h3></div>
           <div class="mini" id="m-picker" data-bond="TOS" data-months="36" data-kind="fixed">
-            <p class="mini-note">Obligacja kosztuje 100 zł. Wybierz rodzaj.</p>
+            <p class="mini-note">Obligacje detaliczne są dla zwykłych ludzi i kosztują 100 zł. Wybierz rodzaj.</p>
             <div class="chips" role="group" aria-label="Rodzaj obligacji">
               <button class="chip" type="button" data-bond="OTS" data-months="3" aria-pressed="false">OTS</button>
               <button class="chip" type="button" data-bond="ROR" data-months="12" aria-pressed="false">ROR</button>
@@ -1050,7 +1055,7 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
           <div class="row-head"><span class="badge"><i data-lucide="coins" class="ic" aria-hidden="true"></i></span><h3>Jak płacą odsetki?</h3></div>
           <div class="tiles">
             <div class="tile"><span class="badge"><i data-lucide="piggy-bank" class="ic" aria-hidden="true"></i></span><h4>EDO</h4><p>Odsetki doliczają się co roku i procentują dalej. Podatek płacisz raz, przy wykupie. Tak samo działa TOS.</p></div>
-            <div class="tile"><span class="badge"><i data-lucide="banknote" class="ic" aria-hidden="true"></i></span><h4>COI</h4><p>Odsetki dostajesz co roku na konto, a podatek pobiera się od każdej wypłaty.</p></div>
+            <div class="tile"><span class="badge"><i data-lucide="banknote" class="ic" aria-hidden="true"></i></span><h4>COI</h4><p>Odsetki dostajesz co roku na konto, a podatek płacisz od każdej wypłaty.</p></div>
             <div class="tile wide"><span class="badge"><i data-lucide="scale" class="ic" aria-hidden="true"></i></span><h4>Stała czy indeksowana?</h4><p>Indeksowana płaci inflację + marżę, więc wygrywa, gdy inflacja rośnie. Stała wygrywa, gdy inflacja spada.</p></div>
           </div>
         </section>
@@ -1089,14 +1094,14 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
       <div class="explain">
         <div class="fact">
           <span class="tag"><i data-lucide="search" class="ic" aria-hidden="true"></i>Dla dociekliwych</span>
-          <p>Obligacjami <strong>rynkowymi</strong> handluje się na giełdzie. Ich cena zmienia się codziennie i zależy od stóp procentowych.</p>
-          <p>Jak na huśtawce obok: stopy w górę, cena w dół.</p>
+          <p>Obligacjami <strong>rynkowymi</strong> handluje się na giełdzie.</p>
+          <p>Ich cena zmienia się codziennie i zależy od stóp procentowych: gdy stopy rosną, cena spada.</p>
         </div>
         <section>
           <div class="row-head"><span class="badge"><i data-lucide="triangle-alert" class="ic" aria-hidden="true"></i></span><h3>Na co uważać?</h3></div>
           <ul>
-            <li><strong>Wcześniejszy wykup</strong> kosztuje niewielką opłatę, potrącaną z odsetek.</li>
-            <li>Od zysku płacisz <strong>podatek Belki</strong> (19%), chyba że kupujesz w ramach konta <strong>IKE</strong>.</li>
+            <li><strong>Wcześniejszy wykup</strong> jest możliwy, ale kosztuje niewielką opłatę, potrącaną z odsetek.</li>
+            <li>Od zysku płacisz <strong>podatek Belki</strong> (19%), chyba że kupujesz przez <strong>IKE</strong>.</li>
           </ul>
         </section>
         <details class="more">
@@ -1150,12 +1155,12 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
       <div class="explain">
         <section>
           <div class="row-head"><span class="badge"><i data-lucide="chart-pie" class="ic" aria-hidden="true"></i></span><h3>Co to jest?</h3></div>
-          <p><strong>Akcja</strong> to kawałek firmy. Jesteś jej współwłaścicielem, ale nikt nie gwarantuje zysku.</p>
+          <p><strong>Akcja</strong> to kawałek firmy. Jesteś współwłaścicielem, ale nikt nie gwarantuje zysku.</p>
         </section>
         <section>
           <div class="row-head"><span class="badge"><i data-lucide="shield" class="ic" aria-hidden="true"></i></span><h3>Jak zmniejszyć ryzyko?</h3></div>
           <div class="mini" id="m-eggs" data-crashed="0">
-            <p class="mini-note">Jedna firma bankrutuje. Każda firma ma w koszyku tyle samo.</p>
+            <p class="mini-note">Jajka to twoje pieniądze, równo podzielone między firmy. Jedna firma bankrutuje.</p>
             <div class="baskets" aria-hidden="true">
               <div class="basket" data-basket="one"><span class="egg"></span></div>
               <div class="basket" data-basket="many"><span class="egg"></span><span class="egg"></span><span class="egg"></span><span class="egg"></span><span class="egg"></span><span class="egg"></span><span class="egg"></span><span class="egg"></span><span class="egg"></span><span class="egg"></span><span class="egg"></span><span class="egg"></span><span class="egg"></span><span class="egg"></span><span class="egg"></span><span class="egg"></span><span class="egg"></span><span class="egg"></span><span class="egg"></span><span class="egg"></span></div>
@@ -1166,7 +1171,7 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
           </div>
           <div class="tiles stack">
             <div class="tile"><span class="badge"><i data-lucide="layers" class="ic" aria-hidden="true"></i></span><h4>Dywersyfikacja</h4><p>Nie wkładaj wszystkich jajek do jednego koszyka. Firma może zbankrutować, cała gospodarka raczej nie.</p></div>
-            <div class="tile"><span class="badge"><i data-lucide="package" class="ic" aria-hidden="true"></i></span><h4>Fundusz indeksowy (ETF)</h4><p>Kupujesz kawałek wielu firm naraz, np. całego indeksu WIG20.</p></div>
+            <div class="tile"><span class="badge"><i data-lucide="package" class="ic" aria-hidden="true"></i></span><h4>Fundusz indeksowy (ETF)</h4><p>Kupujesz kawałek wielu firm naraz, np. indeksu WIG20.</p></div>
           </div>
         </section>
       </div>
@@ -1191,14 +1196,14 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
     <div class="split">
       <div class="explain">
         <section>
-          <div class="row-head"><span class="badge"><i data-lucide="coins" class="ic" aria-hidden="true"></i></span><h3>Jak się zarabia?</h3></div>
+          <div class="row-head"><span class="badge"><i data-lucide="coins" class="ic" aria-hidden="true"></i></span><h3>Skąd zysk?</h3></div>
           <div class="tiles stack">
             <div class="tile"><span class="badge"><i data-lucide="trending-up" class="ic" aria-hidden="true"></i></span><h4>Wzrost ceny</h4><p>Kupujesz taniej, sprzedajesz drożej.</p></div>
             <div class="tile"><span class="badge"><i data-lucide="hand-coins" class="ic" aria-hidden="true"></i></span><h4>Dywidenda</h4><p>Część zysku dla akcjonariuszy, zwykle raz w roku. Podatek: 19%.</p></div>
             <div class="tile"><span class="badge"><i data-lucide="repeat" class="ic" aria-hidden="true"></i></span><h4>Reinwestowanie</h4><p>Za dywidendę kupujesz kolejne akcje. Działa ten sam procent składany co na lokacie.</p></div>
           </div>
           <div class="mini" id="m-share" data-owned="5" data-net="40.50">
-            <p class="mini-note">Wyobraź sobie firmę podzieloną na 100 akcji. Prawdziwe spółki mają ich miliony. Dywidenda: 1000 zł.</p>
+            <p class="mini-note">Wyobraź sobie firmę podzieloną na 100 akcji. Prawdziwe spółki mają ich miliony. Firma wypłaca 1000 zł dywidendy.</p>
             <div class="units shares" aria-hidden="true"></div>
             <div class="ctl"><label for="share-n">Ile masz akcji</label><output class="val" id="share-n-o" for="share-n"></output><input type="range" id="share-n" min="0" max="100" step="1" value="5"></div>
             <output class="readout" id="share-out" aria-live="polite" for="share-n"><span><b id="share-pct"></b> firmy</span> <span><b id="share-gross"></b> brutto</span> <span><b id="share-net"></b> po podatku 19%</span></output>
@@ -1206,7 +1211,7 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
         </section>
         <div class="fact">
           <span class="tag"><i data-lucide="lightbulb" class="ic" aria-hidden="true"></i>Ciekawostka</span>
-          <p>WIG20 pokazuje tylko ceny akcji. Jego bliźniak WIG20TR liczy też reinwestowane dywidendy.</p>
+          <p>WIG20 pokazuje tylko ceny akcji. Jego bliźniak WIG20TR liczy też reinwestowane dywidendy. Po latach różnica jest bardzo wyraźna.</p>
         </div>
       </div>
       <div class="labs">
@@ -1233,8 +1238,7 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
       <div class="explain">
         <section>
           <div class="row-head"><span class="badge"><i data-lucide="chart-candlestick" class="ic" aria-hidden="true"></i></span><h3>Dlaczego ceny skaczą?</h3></div>
-          <p>Ceny zależą od wyników firm, wiadomości, stóp i emocji: strachu i chciwości.</p>
-          <p>W krótkim terminie są nieprzewidywalne, w długim podążają za zyskami firm.</p>
+          <p>Ceny zależą od wyników firm, wiadomości, stóp procentowych oraz emocji: strachu i chciwości.</p>
           <div class="tiles stack">
             <div class="tile"><span class="badge"><i data-lucide="hourglass" class="ic" aria-hidden="true"></i></span><h4>Czas</h4><p>Im dłużej trzymasz, tym mniejsza szansa na stratę.</p></div>
             <div class="tile"><span class="badge"><i data-lucide="lightbulb" class="ic" aria-hidden="true"></i></span><h4>Spokój</h4><p>Sprzedaż w panice po spadkach to jeden z najczęstszych błędów.</p></div>
@@ -1247,7 +1251,8 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
         <details class="more">
           <summary>Więcej</summary>
           <p><strong>Giełda.</strong> W Polsce akcjami handluje się na Giełdzie Papierów Wartościowych w Warszawie.</p>
-          <p><strong>Jedna milionowa.</strong> Jeśli firma ma milion akcji, jedna akcja to jedna milionowa firmy.</p>
+          <p><strong>Krótko i długo.</strong> W krótkim terminie ceny są nieprzewidywalne, w długim podążają za zyskami firm.</p>
+          <p><strong>Jedna milionowa.</strong> Jeśli firma ma milion akcji, jedna akcja to jedna milionowa firmy i jej zysków.</p>
           <p><strong>Dywidendy w długim terminie.</strong> Reinwestowane dywidendy to duża część całego zysku z akcji.</p>
           <p><strong>Rachunek maklerski.</strong> Przed 18. rokiem życia zakłada się go razem z rodzicem.</p>
         </details>
@@ -1286,31 +1291,32 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
           <div class="row-head"><span class="badge"><i data-lucide="book-open" class="ic" aria-hidden="true"></i></span><h3>Słowniczek</h3></div>
           <div class="tiles stack">
             <div class="tile"><span class="badge"><i data-lucide="banknote" class="ic" aria-hidden="true"></i></span><h4>Kapitał</h4><p>Kwota, którą pożyczasz.</p></div>
-            <div class="tile"><span class="badge"><i data-lucide="percent" class="ic" aria-hidden="true"></i></span><h4>Odsetki</h4><p>Cena za pożyczenie, liczona od tego, co jeszcze jesteś winien.</p></div>
+            <div class="tile"><span class="badge"><i data-lucide="percent" class="ic" aria-hidden="true"></i></span><h4>Odsetki</h4><p>Cena pożyczki, liczona od tego, co jeszcze jesteś winien.</p></div>
             <div class="tile"><span class="badge"><i data-lucide="waves" class="ic" aria-hidden="true"></i></span><h4>Oprocentowanie zmienne</h4><p>Wskaźnik rynkowy (np. WIBOR) + marża banku. Gdy stopy NBP rosną, rośnie też twoja rata.</p></div>
             <div class="tile"><span class="badge"><i data-lucide="receipt" class="ic" aria-hidden="true"></i></span><h4>Prowizja</h4><p>Jednorazowa opłata za udzielenie kredytu.</p></div>
-            <div class="tile"><span class="badge"><i data-lucide="scale" class="ic" aria-hidden="true"></i></span><h4>RRSO</h4><p>Rzeczywista roczna stopa oprocentowania: odsetki plus prowizje i opłaty. Najlepsza liczba do porównywania ofert.</p></div>
+            <div class="tile"><span class="badge"><i data-lucide="scale" class="ic" aria-hidden="true"></i></span><h4>RRSO</h4><p>Rzeczywista roczna stopa oprocentowania: odsetki plus prowizje i opłaty. Najlepsza do porównywania ofert.</p></div>
           </div>
         </section>
         <section>
           <div class="row-head"><span class="badge"><i data-lucide="chart-line" class="ic" aria-hidden="true"></i></span><h3>Raty równe czy malejące?</h3></div>
-          <p>W ratach malejących szybciej spłacasz kapitał, więc odsetki liczysz od coraz mniejszej kwoty. Za to pierwsze raty są wyższe.</p>
+          <p>W ratach malejących szybciej spłacasz kapitał, więc odsetki naliczają się od coraz mniejszej kwoty i łącznie płacisz mniej,</p>
+          <p>ale pierwsze raty są wyższe.</p>
           <div class="mini" id="m-rata" data-type="rowne" data-rata="" data-odsetki="" data-total="">
-            <p class="mini-note">400 000 zł, 25 lat, 7,5%. Słupek to rata w zł.</p>
+            <p class="mini-note">400 000 zł, 25 lat, 7,5%. Słupek: pierwsza rata roku.</p>
             <div class="btns"><button type="button" data-type="rowne" aria-pressed="true">Raty równe</button><button type="button" data-type="malejace" aria-pressed="false">Raty malejące</button></div>
             <div class="rbars" role="group" aria-label="Rata nr 1, 109 i 289">
-              <div class="rcol"><b class="rnum" data-v="rata"></b><div class="rtrack"><div class="rstack"><span data-part="odsetki"></span><span data-part="kapital"></span></div></div><span class="rlab">Rok 1</span><span class="rint" data-v="odsetki"></span></div>
-              <div class="rcol"><b class="rnum" data-v="rata"></b><div class="rtrack"><div class="rstack"><span data-part="odsetki"></span><span data-part="kapital"></span></div></div><span class="rlab">Rok 10</span><span class="rint" data-v="odsetki"></span></div>
-              <div class="rcol"><b class="rnum" data-v="rata"></b><div class="rtrack"><div class="rstack"><span data-part="odsetki"></span><span data-part="kapital"></span></div></div><span class="rlab">Rok 25</span><span class="rint" data-v="odsetki"></span></div>
+              <div class="rcol"><b class="rnum" data-v="rata"></b><div class="rtrack"><div class="rstack"><span data-part="odsetki"></span><span data-part="kapital"></span></div></div><span class="rlab">Rok 1</span><span class="rint"><span class="sr-only">odsetki </span><span data-v="odsetki"></span></span></div>
+              <div class="rcol"><b class="rnum" data-v="rata"></b><div class="rtrack"><div class="rstack"><span data-part="odsetki"></span><span data-part="kapital"></span></div></div><span class="rlab">Rok 10</span><span class="rint"><span class="sr-only">odsetki </span><span data-v="odsetki"></span></span></div>
+              <div class="rcol"><b class="rnum" data-v="rata"></b><div class="rtrack"><div class="rstack"><span data-part="odsetki"></span><span data-part="kapital"></span></div></div><span class="rlab">Rok 25</span><span class="rint"><span class="sr-only">odsetki </span><span data-v="odsetki"></span></span></div>
             </div>
             <div class="rleg" aria-hidden="true"><span data-k="kapital">kapitał</span><span data-k="odsetki">odsetki</span></div>
             <output class="readout" id="rata-out" aria-live="polite"></output>
           </div>
           <div class="mini" id="m-zero" data-rrso="">
-            <p class="mini-note">Telefon „0%”. Cena za gotówkę 2700 zł, 20 rat po 150 zł, razem 3000 zł.</p>
+            <p class="mini-note"><strong>Telefon „0%” na raty.</strong> Cena za gotówkę 2700 zł, 20 rat po 150 zł, razem 3000 zł.</p>
             <div class="btns"><button type="button" id="zero-btn" aria-expanded="false" aria-controls="zero-out">Pokaż RRSO</button></div>
             <output class="readout" id="zero-out" aria-live="polite"></output>
-            <p class="mini-note">Inaczej niż w presecie z laba: tam „0%” nic nie kosztuje.</p>
+            <p class="mini-note">To inny przypadek niż „Telefon 0%” w kalkulatorze obok: tam raty naprawdę nic nie kosztują.</p>
           </div>
         </section>
       </div>
@@ -1318,32 +1324,32 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
         <div class="lab" id="lab-kr">
           <div class="lab-head"><span class="badge"><i data-lucide="flask-conical" class="ic" aria-hidden="true"></i></span><h3>Kalkulator kredytu</h3></div>
           <div class="lab-body">
-          <p class="task">Wybierz przykład albo wpisz własne liczby. Zwróć uwagę, jak bardzo RRSO różni się od oprocentowania, gdy w grę wchodzi prowizja.</p>
-          <div class="btns" id="kr-presets">
-            <button class="chip" type="button" data-p="dom" aria-pressed="true">Mieszkanie</button>
-            <button class="chip" type="button" data-p="auto" aria-pressed="false">Używane auto</button>
-            <button class="chip" type="button" data-p="tel" aria-pressed="false">Telefon „0%”</button>
-            <button class="chip" type="button" data-p="chwil" aria-pressed="false">Szybka pożyczka</button>
-          </div>
-          <div class="controls">
-            <div class="ctl"><label for="kr-amt">Pożyczasz (zł)</label><span class="val"></span><input type="number" id="kr-amt" min="100" max="3000000" step="100" value="400000" inputmode="numeric"></div>
-            <div class="ctl"><label for="kr-n">Okres spłaty</label><output id="kr-n-o"></output><input type="range" id="kr-n" min="3" max="360" step="1" value="300" data-out="mies"></div>
-            <div class="ctl"><label for="kr-rate">Oprocentowanie roczne</label><output id="kr-rate-o"></output><input type="range" id="kr-rate" min="0" max="25" step="0.1" value="7.5" data-out="pct"></div>
-            <div class="ctl"><label for="kr-fee">Prowizja</label><output id="kr-fee-o"></output><input type="range" id="kr-fee" min="0" max="30" step="0.5" value="0" data-out="pct"></div>
-            <div class="ctl"><label for="kr-type">Rodzaj rat</label><span class="val"></span>
-              <select id="kr-type"><option value="rowne">Równe</option><option value="malejace">Malejące</option></select></div>
-            <div class="ctl"><label for="kr-inc">Dochód netto miesięcznie</label><output id="kr-inc-o"></output><input type="range" id="kr-inc" min="2000" max="30000" step="500" value="9000" data-out="zl"></div>
-          </div>
-          <div class="stats">
-            <div class="stat acc"><span class="k" id="kr-rata-k">Rata miesięczna</span><span class="v" id="kr-rata">–</span><span class="s" id="kr-rata-s"></span></div>
-            <div class="stat bad"><span class="k">Odsetki łącznie</span><span class="v" id="kr-int">–</span></div>
-            <div class="stat"><span class="k">Oddasz w sumie</span><span class="v" id="kr-total">–</span><span class="s" id="kr-total-s"></span></div>
-            <div class="stat" id="kr-rrso-st"><span class="k">RRSO</span><span class="v" id="kr-rrso">–</span><span class="s">rzeczywisty koszt rocznie</span></div>
-            <div class="stat" id="kr-dti-st"><span class="k">Rata / dochód</span><span class="v" id="kr-dti">–</span><span class="s" id="kr-dti-s"></span></div>
-          </div>
-          <div class="legend"></div>
-          <div class="chart"><canvas id="ch-kr" aria-label="Wykres części kapitałowej i odsetkowej raty"></canvas></div>
-          <p class="task">Wykres pokazuje, z czego składa się każda rata: ile spłaca dług (kapitał), a ile to zapłata dla banku (odsetki).</p>
+            <p class="task">Wybierz przykład albo wpisz własne liczby. Zwróć uwagę, jak bardzo RRSO różni się od oprocentowania, gdy w grę wchodzi prowizja.</p>
+            <div class="btns" id="kr-presets">
+              <button class="chip" type="button" data-p="dom" aria-pressed="true">Mieszkanie</button>
+              <button class="chip" type="button" data-p="auto" aria-pressed="false">Używane auto</button>
+              <button class="chip" type="button" data-p="tel" aria-pressed="false">Telefon „0%”</button>
+              <button class="chip" type="button" data-p="chwil" aria-pressed="false">Szybka pożyczka</button>
+            </div>
+            <div class="controls">
+              <div class="ctl"><label for="kr-amt">Pożyczasz (zł)</label><span class="val"></span><input type="number" id="kr-amt" min="100" max="3000000" step="100" value="400000" inputmode="numeric"></div>
+              <div class="ctl"><label for="kr-n">Okres spłaty</label><output id="kr-n-o"></output><input type="range" id="kr-n" min="3" max="360" step="1" value="300" data-out="mies"></div>
+              <div class="ctl"><label for="kr-rate">Oprocentowanie roczne</label><output id="kr-rate-o"></output><input type="range" id="kr-rate" min="0" max="25" step="0.1" value="7.5" data-out="pct"></div>
+              <div class="ctl"><label for="kr-fee">Prowizja</label><output id="kr-fee-o"></output><input type="range" id="kr-fee" min="0" max="30" step="0.5" value="0" data-out="pct"></div>
+              <div class="ctl"><label for="kr-type">Rodzaj rat</label><span class="val"></span>
+                <select id="kr-type"><option value="rowne">Równe</option><option value="malejace">Malejące</option></select></div>
+              <div class="ctl"><label for="kr-inc">Dochód netto miesięcznie</label><output id="kr-inc-o"></output><input type="range" id="kr-inc" min="2000" max="30000" step="500" value="9000" data-out="zl"></div>
+            </div>
+            <div class="stats">
+              <div class="stat acc"><span class="k" id="kr-rata-k">Rata miesięczna</span><span class="v" id="kr-rata">–</span><span class="s" id="kr-rata-s"></span></div>
+              <div class="stat bad"><span class="k">Odsetki łącznie</span><span class="v" id="kr-int">–</span></div>
+              <div class="stat"><span class="k">Oddasz w sumie</span><span class="v" id="kr-total">–</span><span class="s" id="kr-total-s"></span></div>
+              <div class="stat" id="kr-rrso-st"><span class="k">RRSO</span><span class="v" id="kr-rrso">–</span><span class="s">rzeczywisty koszt rocznie</span></div>
+              <div class="stat" id="kr-dti-st"><span class="k">Rata / dochód</span><span class="v" id="kr-dti">–</span><span class="s" id="kr-dti-s"></span></div>
+            </div>
+            <div class="legend"></div>
+            <div class="chart"><canvas id="ch-kr" aria-label="Wykres części kapitałowej i odsetkowej raty"></canvas></div>
+            <p class="task">Wykres pokazuje, z czego składa się każda rata: ile spłaca dług (kapitał), a ile to zapłata dla banku (odsetki).</p>
           </div>
         </div>
       </div>
@@ -1355,16 +1361,16 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
         <section>
           <div class="row-head"><span class="badge"><i data-lucide="shield" class="ic" aria-hidden="true"></i></span><h3>Bezpieczne pożyczanie</h3></div>
           <div class="tiles stack">
-            <div class="tile"><span class="badge"><i data-lucide="gauge" class="ic" aria-hidden="true"></i></span><h4>Rata</h4><p>Do około 30–40% dochodu.</p></div>
+            <div class="tile"><span class="badge"><i data-lucide="gauge" class="ic" aria-hidden="true"></i></span><h4>Rata</h4><p>Nie powinna przekraczać około 30–40% dochodu.</p></div>
             <div class="tile"><span class="badge"><i data-lucide="search" class="ic" aria-hidden="true"></i></span><h4>Porównuj RRSO</h4><p>Nie samo oprocentowanie czy hasło „0%”.</p></div>
-            <div class="tile"><span class="badge"><i data-lucide="zap" class="ic" aria-hidden="true"></i></span><h4>Szybkie pożyczki</h4><p>Przez internet bywają bardzo drogie: RRSO potrafi przekraczać 100%.</p></div>
-            <div class="tile"><span class="badge"><i data-lucide="database" class="ic" aria-hidden="true"></i></span><h4>BIK</h4><p>Spóźnione raty trafiają do BIK. Zła historia kredytowa utrudni później kredyt na mieszkanie.</p></div>
+            <div class="tile"><span class="badge"><i data-lucide="zap" class="ic" aria-hidden="true"></i></span><h4>Szybkie pożyczki</h4><p>Internetowe bywają bardzo drogie: RRSO potrafi przekraczać 100%.</p></div>
+            <div class="tile"><span class="badge"><i data-lucide="database" class="ic" aria-hidden="true"></i></span><h4>BIK (rejestr historii kredytowej)</h4><p>Spóźnione raty trafiają do BIK. Zła historia kredytowa utrudni kredyt na mieszkanie.</p></div>
           </div>
         </section>
         <div class="fact">
           <span class="tag"><i data-lucide="wallet" class="ic" aria-hidden="true"></i>Zanim weźmiesz</span>
           <p>Czy ta rzecz posłuży mi dłużej, niż będę ją spłacać?</p>
-          <p>Mieszkanie na 25 lat ma sens. Wakacje na raty, spłacane jeszcze dwa lata po powrocie, raczej nie.</p>
+          <p>Mieszkanie na 25 lat ma sens. Wakacje na raty, spłacane dwa lata po powrocie, raczej nie.</p>
         </div>
         <details class="more">
           <summary>Więcej</summary>
@@ -1376,16 +1382,16 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
         <div class="lab" id="lab-shock">
           <div class="lab-head"><span class="badge"><i data-lucide="flask-conical" class="ic" aria-hidden="true"></i></span><h3>Test: co jeśli stopy wzrosną?</h3></div>
           <div class="lab-body">
-          <p class="task">Kredyty na mieszkanie w Polsce mają zwykle zmienne oprocentowanie. Sprawdź, jak zmieni się rata z kalkulatora wyżej, gdy bank centralny podniesie stopy.</p>
-          <div class="controls">
-            <div class="ctl"><label for="sh-up">Wzrost stóp procentowych</label><output id="sh-up-o"></output><input type="range" id="sh-up" min="0" max="7" step="0.25" value="3" data-out="pp"></div>
-          </div>
-          <div class="stats">
-            <div class="stat"><span class="k">Rata dziś</span><span class="v" id="sh-now">–</span></div>
-            <div class="stat bad"><span class="k">Rata po podwyżce</span><span class="v" id="sh-new">–</span><span class="s" id="sh-diff"></span></div>
-            <div class="stat" id="sh-dti-st"><span class="k">Rata / dochód</span><span class="v" id="sh-dti">–</span></div>
-          </div>
-          <p class="insight" id="sh-insight"></p>
+            <p class="task">Kredyty na mieszkanie w Polsce mają zwykle zmienne oprocentowanie. Sprawdź, jak zmieni się rata z kalkulatora wyżej, gdy bank centralny podniesie stopy.</p>
+            <div class="controls">
+              <div class="ctl"><label for="sh-up">Wzrost stóp procentowych</label><output id="sh-up-o"></output><input type="range" id="sh-up" min="0" max="7" step="0.25" value="3" data-out="pp"></div>
+            </div>
+            <div class="stats">
+              <div class="stat"><span class="k">Rata dziś</span><span class="v" id="sh-now">–</span></div>
+              <div class="stat bad"><span class="k">Rata po podwyżce</span><span class="v" id="sh-new">–</span><span class="s" id="sh-diff"></span></div>
+              <div class="stat" id="sh-dti-st"><span class="k">Rata / dochód</span><span class="v" id="sh-dti">–</span></div>
+            </div>
+            <p class="insight" id="sh-insight"></p>
           </div>
         </div>
       </div>
@@ -1796,7 +1802,7 @@ mini('m-snow', (el) => {
     bars.simple.style.setProperty('--w', (simple / max * 100).toFixed(3) + '%');
     bars.comp.style.setProperty('--w', (comp / max * 100).toFixed(3) + '%');
     cell('pay', 'Wpłata', SNOW.start);
-    cell('simple', 'Odsetki proste', simple);
+    cell('simple', 'Odsetki od wpłaty (proste)', simple);
     cell('compound', 'Odsetki od odsetek', comp);
     cell('total', 'Razem, rok ' + year, total);
     note.textContent = year === 1 ? 'Odsetki od odsetek zaczną się w 2. roku.' : '';
@@ -2329,7 +2335,7 @@ mini('m-rata', (el) => {
       $('[data-v="rata"]', c).textContent = Math.round(r.pay);
       $('[data-v="odsetki"]', c).textContent = Math.round(r.int);
     });
-    out.innerHTML = '<span>Odsetki razem <b>' + zl(total) + '</b></span>';
+    out.innerHTML = '<span>Odsetki <b>' + zl(total) + '</b></span>';
   };
   btns.forEach((b) => b.addEventListener('click', () => render(b.dataset.type)));
   render('rowne');
@@ -2454,6 +2460,7 @@ function route() {
   $('main').dataset.view = v;
   const bar = $('#lesson-progress'), step = VIEWS.indexOf(v);
   bar.setAttribute('aria-valuenow', step);
+  bar.setAttribute('aria-valuetext', ($('nav.tabs a[href="#' + v + '"]') || {}).textContent.trim());
   bar.setAttribute('aria-valuemax', VIEWS.length - 1);
   bar.firstElementChild.style.width = (step / (VIEWS.length - 1) * 100) + '%';
   $$('nav.tabs a').forEach((a) => {
