@@ -1,4 +1,4 @@
-# Kasa bez tajemnic
+# Finanse bez tajemnic
 
 Interaktywna aplikacja webowa, która tłumaczy podstawy finansów i pozwala na eksperymenty.
 
