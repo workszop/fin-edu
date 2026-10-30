@@ -1,0 +1,1546 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kasa bez tajemnic</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Układ: „zeszyt + laboratorium” — po lewej czytasz wyjaśnienie, po prawej eksperymentujesz w panelu LAB z żółtą naklejką. */
+:root {
+  --paper: #EEF2EF;
+  --surface: #FFFFFF;
+  --ink: #12201A;
+  --muted: #56675F;
+  --line: #D3DCD6;
+  --accent: #2443E8;
+  --accent-soft: #E3E8FF;
+  --on-accent: #FFFFFF;
+  --sticker: #FFC93C;
+  --on-sticker: #1C1600;
+  --good: #11855A;
+  --bad: #CC3A2B;
+  --warn: #B86B00;
+  --s2: #E07A12;
+  --s4: #8B45D1;
+  --font-display: "Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
+  --font-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
+  --font-data: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --radius: 14px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0E1512; --surface: #16201B; --ink: #E6EEE9; --muted: #98A9A0; --line: #2A3832;
+    --accent: #8197FF; --accent-soft: #1F2747; --on-accent: #0B1030; --sticker: #FFC93C; --on-sticker: #1C1600;
+    --good: #3FC88D; --bad: #FF7B69; --warn: #F2A93B; --s2: #F59A45; --s4: #C390FF;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0E1512; --surface: #16201B; --ink: #E6EEE9; --muted: #98A9A0; --line: #2A3832;
+  --accent: #8197FF; --accent-soft: #1F2747; --on-accent: #0B1030; --sticker: #FFC93C; --on-sticker: #1C1600;
+  --good: #3FC88D; --bad: #FF7B69; --warn: #F2A93B; --s2: #F59A45; --s4: #C390FF;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--paper); color: var(--ink);
+  font-family: var(--font-body); font-size: 1.0625rem; line-height: 1.6;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
+.wrap { max-width: 1240px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3, h4 { font-family: var(--font-display); line-height: 1.1; text-wrap: balance; margin: 0; }
+p { margin: 0; }
+a { color: var(--accent); }
+:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+.num { font-variant-numeric: tabular-nums; }
+
+/* ---------- nagłówek ---------- */
+header.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--paper); border-bottom: 1px solid var(--line); }
+header.top .wrap { display: flex; align-items: center; gap: 16px; padding-block: 10px; }
+.brand { font-family: var(--font-display); font-weight: 800; font-size: 1.2rem; text-decoration: none; color: var(--ink); white-space: nowrap; display: flex; align-items: center; gap: 8px; }
+.brand .coin { width: 26px; height: 26px; border-radius: 50%; background: var(--sticker); color: var(--on-sticker); display: grid; place-items: center; font-size: .8rem; font-weight: 800; }
+nav.tabs { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; min-width: 0; padding-block: 2px; }
+nav.tabs::-webkit-scrollbar { display: none; }
+nav.tabs a { flex: none; text-decoration: none; color: var(--muted); font-size: .92rem; padding: 6px 12px; border-radius: 999px; border: 1px solid transparent; white-space: nowrap; }
+nav.tabs a:hover { color: var(--ink); border-color: var(--line); }
+nav.tabs a[aria-current="page"] { background: var(--ink); color: var(--paper); }
+
+/* ---------- start ---------- */
+.hero { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 40px; align-items: center; padding-block: 48px 32px; }
+.hero h1 { font-size: clamp(2.3rem, 5.5vw, 4.2rem); font-weight: 800; letter-spacing: -.02em; }
+.hero h1 em { font-style: normal; background: var(--sticker); color: var(--on-sticker); padding: 0 .15em; border-radius: 6px; }
+.hero .lead { margin-top: 18px; font-size: 1.18rem; color: var(--muted); max-width: 34rem; }
+.demo { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; display: grid; gap: 14px; position: relative; }
+.demo .big { font-family: var(--font-display); font-weight: 800; font-size: 3rem; line-height: 1; }
+.demo .note { color: var(--muted); font-size: .95rem; }
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; padding-block: 8px 24px; }
+.card { display: grid; gap: 8px; align-content: start; text-decoration: none; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; transition: transform .15s, border-color .15s; }
+.card:hover { transform: translateY(-2px); border-color: var(--accent); }
+.card .ord { font-family: var(--font-data); font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+.card h3 { font-size: 1.4rem; }
+.card p { color: var(--muted); font-size: .97rem; }
+.quizband { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between; background: var(--ink); color: var(--paper); border-radius: var(--radius); padding: 22px 24px; margin-bottom: 40px; }
+.quizband h3 { font-size: 1.5rem; }
+.quizband p { opacity: .8; }
+.quizband .cta { background: var(--sticker); color: var(--on-sticker); text-decoration: none; font-weight: 700; padding: 10px 20px; border-radius: 999px; }
+
+/* ---------- lekcja ---------- */
+.lesson-head { padding-block: 36px 20px; display: grid; gap: 10px; max-width: 48rem; }
+.eyebrow { font-family: var(--font-data); font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }
+.lesson-head h2 { font-size: clamp(2rem, 4.5vw, 3.2rem); font-weight: 800; letter-spacing: -.015em; }
+.lesson-head .lead { font-size: 1.15rem; color: var(--muted); }
+.split { display: grid; grid-template-columns: minmax(0, 27rem) minmax(0, 1fr); gap: 32px; align-items: start; padding-bottom: 32px; }
+.explain { display: grid; gap: 22px; }
+.explain section { display: grid; gap: 8px; }
+.explain h3 { font-size: 1.25rem; }
+.explain ul, .explain ol { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; }
+.explain strong { font-weight: 700; }
+.fact { border: 2px dashed var(--sticker); border-radius: var(--radius); padding: 14px 16px; display: grid; gap: 6px; }
+.fact .tag { font-family: var(--font-data); font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--warn); }
+.formula { font-family: var(--font-data); font-size: .92rem; background: var(--accent-soft); border-radius: 8px; padding: 10px 12px; overflow-x: auto; }
+.labs { display: grid; gap: 28px; min-width: 0; }
+.lab { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px 22px 22px; display: grid; gap: 18px; position: relative; min-width: 0; }
+.lab::before { content: "LAB"; position: absolute; top: -12px; left: 18px; background: var(--sticker); color: var(--on-sticker); font-family: var(--font-data); font-weight: 500; font-size: .72rem; letter-spacing: .14em; padding: 3px 10px; border-radius: 4px; transform: rotate(-2deg); }
+.lab h3 { font-size: 1.35rem; }
+.lab .task { color: var(--muted); font-size: .98rem; margin-top: 4px; }
+.controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px 22px; }
+.ctl { display: grid; grid-template-columns: 1fr auto; align-items: baseline; gap: 2px 8px; }
+.ctl label { font-size: .93rem; color: var(--muted); }
+.ctl output, .ctl .val { font-family: var(--font-data); font-weight: 500; font-size: .95rem; font-variant-numeric: tabular-nums; }
+.ctl input[type=range], .ctl select, .ctl input[type=number] { grid-column: 1 / -1; width: 100%; }
+input[type=range] { accent-color: var(--accent); height: 28px; margin: 0; }
+select, input[type=number] { font: inherit; font-size: .95rem; color: var(--ink); background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px; }
+.check { display: flex; gap: 8px; align-items: center; font-size: .93rem; color: var(--muted); }
+.check input { accent-color: var(--accent); width: 18px; height: 18px; }
+.btns { display: flex; flex-wrap: wrap; gap: 8px; }
+button { font: inherit; font-size: .95rem; cursor: pointer; border-radius: 999px; padding: 9px 16px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); }
+button:hover { border-color: var(--ink); }
+button.primary { background: var(--accent); color: var(--on-accent); border-color: var(--accent); font-weight: 700; }
+button.primary:hover { filter: brightness(1.08); }
+button:disabled { opacity: .45; cursor: not-allowed; }
+button.chip[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.stat { border-top: 2px solid var(--line); padding-top: 8px; display: grid; gap: 2px; align-content: start; }
+.stat .k { font-family: var(--font-data); font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.stat .v { font-family: var(--font-display); font-weight: 700; font-size: 1.6rem; line-height: 1.15; font-variant-numeric: tabular-nums; }
+.stat .s { font-size: .85rem; color: var(--muted); }
+.stat.good { border-color: var(--good); } .stat.good .v { color: var(--good); }
+.stat.bad { border-color: var(--bad); } .stat.bad .v { color: var(--bad); }
+.stat.warn { border-color: var(--warn); } .stat.warn .v { color: var(--warn); }
+.stat.acc { border-color: var(--accent); }
+.chart { position: relative; height: 270px; min-width: 0; }
+.chart canvas { width: 100%; height: 100%; display: block; }
+.chart.tall { height: 320px; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: .85rem; color: var(--muted); }
+.legend span { display: inline-flex; align-items: center; gap: 6px; }
+.legend i { width: 14px; height: 3px; border-radius: 2px; display: inline-block; }
+.legend i.dash { background-image: linear-gradient(90deg, currentColor 60%, transparent 0) !important; background-size: 5px 3px; }
+.tip { position: absolute; pointer-events: none; background: var(--ink); color: var(--paper); font-family: var(--font-data); font-size: .76rem; line-height: 1.45; padding: 6px 9px; border-radius: 6px; white-space: nowrap; z-index: 2; }
+.insight { background: var(--accent-soft); border-radius: 10px; padding: 12px 14px; font-size: .98rem; }
+.insight b { font-weight: 700; }
+.tbl-wrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: .93rem; }
+th, td { text-align: left; padding: 7px 10px 7px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-family: var(--font-data); font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
+td.r, th.r { text-align: right; font-variant-numeric: tabular-nums; }
+.meter { height: 8px; border-radius: 4px; background: var(--line); min-width: 60px; overflow: hidden; margin-top: 6px; }
+.meter > i { display: block; height: 100%; background: var(--bad); }
+.pill { display: inline-block; font-family: var(--font-data); font-size: .72rem; padding: 2px 8px; border-radius: 999px; border: 1px solid currentColor; }
+.pill.good { color: var(--good); } .pill.bad { color: var(--bad); } .pill.warn { color: var(--warn); }
+.event { border-left: 4px solid var(--sticker); padding: 8px 12px; background: var(--paper); border-radius: 0 8px 8px 0; font-size: .97rem; }
+.next { display: flex; justify-content: flex-end; padding-bottom: 48px; }
+.next a { font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; text-decoration: none; color: var(--ink); border-bottom: 3px solid var(--sticker); }
+.seesaw svg { width: 100%; max-width: 420px; height: auto; display: block; margin: 0 auto; }
+.seesaw .plank { fill: var(--ink); }
+.seesaw .base { fill: var(--muted); }
+.seesaw .boxL { fill: var(--accent); } .seesaw .boxR { fill: var(--s2); }
+.seesaw text { fill: var(--on-accent); font-family: var(--font-data); font-size: 12px; font-weight: 500; }
+.seesaw .lbl { fill: var(--ink); font-size: 13px; }
+.seesaw g.rot { transition: transform .35s ease; transform-origin: 160px 104px; }
+
+/* ---------- quiz ---------- */
+.quiz { display: grid; gap: 16px; max-width: 46rem; padding-bottom: 40px; }
+.q { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; display: grid; gap: 12px; }
+.q h3 { font-size: 1.15rem; font-family: var(--font-body); font-weight: 700; line-height: 1.4; }
+.q .opts { display: grid; gap: 8px; }
+.q .opts button { text-align: left; border-radius: 10px; }
+.q .opts button.ok { background: var(--good); color: var(--surface); border-color: var(--good); }
+.q .opts button.no { background: var(--bad); color: var(--surface); border-color: var(--bad); }
+.q .why { font-size: .97rem; color: var(--muted); }
+.score { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 64px); z-index: 1; justify-self: start; background: var(--sticker); color: var(--on-sticker); font-family: var(--font-data); font-weight: 500; padding: 6px 14px; border-radius: 999px; }
+
+footer { border-top: 1px solid var(--line); padding-block: 22px 32px; color: var(--muted); font-size: .9rem; }
+
+@media (max-width: 960px) {
+  .split { grid-template-columns: minmax(0, 1fr); }
+  .hero { grid-template-columns: minmax(0, 1fr); padding-block: 32px 20px; gap: 24px; }
+}
+@media (max-width: 560px) {
+  header.top .wrap { flex-direction: column; align-items: stretch; gap: 6px; }
+  .lab { padding: 24px 16px 18px; }
+  .chart { height: 230px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; }
+}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#start"><span class="coin">zł</span>Kasa bez tajemnic</a>
+    <nav class="tabs" aria-label="Lekcje">
+      <a href="#start">Start</a>
+      <a href="#inflacja">Inflacja</a>
+      <a href="#stopy">Stopy procentowe</a>
+      <a href="#oszczedzanie">Procent składany</a>
+      <a href="#obligacje">Obligacje</a>
+      <a href="#akcje">Akcje</a>
+      <a href="#kredyty">Kredyty</a>
+      <a href="#quiz">Quiz</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+<!-- ================= START ================= -->
+<section class="view" id="v-start">
+  <div class="wrap">
+    <div class="hero">
+      <div>
+        <h1>Jak naprawdę działają <em>pieniądze</em></h1>
+        <p class="lead">Sześć krótkich lekcji i laboratoria, w których sam ustawiasz stopy procentowe, kupujesz obligacje, inwestujesz w akcje i bierzesz kredyt. Wszystko na niby, więc możesz śmiało eksperymentować.</p>
+      </div>
+      <div class="demo" aria-live="polite">
+        <div class="eyebrow">Szybki eksperyment</div>
+        <p>Chowasz <b>100 zł</b> do szuflady. Ceny rosną co roku o:</p>
+        <div class="ctl"><label for="h-inf">Inflacja rocznie</label><output id="h-inf-o"></output>
+          <input type="range" id="h-inf" min="0" max="15" step="0.5" value="5" data-out="pct"></div>
+        <p>Za 10 lat kupisz za nie tyle, co dziś za</p>
+        <div class="big num" id="h-val">61 zł</div>
+        <p class="note">Banknot się nie zmieni. Zmienią się ceny. Dlaczego tak jest i jak się przed tym bronić, dowiesz się w lekcji 1.</p>
+      </div>
+    </div>
+
+    <div class="cards">
+      <a class="card" href="#inflacja"><span class="ord">Lekcja 1</span><h3>Inflacja</h3><p>Dlaczego pizza drożeje i co dzieje się z pieniędzmi w skarpecie.</p></a>
+      <a class="card" href="#stopy"><span class="ord">Lekcja 2</span><h3>Stopy procentowe</h3><p>Zostań prezesem banku centralnego i spróbuj zbić inflację bez recesji.</p></a>
+      <a class="card" href="#oszczedzanie"><span class="ord">Lekcja 3</span><h3>Procent składany</h3><p>Odsetki od odsetek, czyli dlaczego warto zacząć oszczędzać w wieku 16 lat.</p></a>
+      <a class="card" href="#obligacje"><span class="ord">Lekcja 4</span><h3>Obligacje skarbowe</h3><p>Pożyczasz pieniądze państwu. Stałe czy indeksowane inflacją?</p></a>
+      <a class="card" href="#akcje"><span class="ord">Lekcja 5</span><h3>Akcje</h3><p>Kawałek firmy, ryzyko i 1000 możliwych przyszłości twoich pieniędzy.</p></a>
+      <a class="card" href="#kredyty"><span class="ord">Lekcja 6</span><h3>Kredyty</h3><p>Ile naprawdę kosztuje pożyczka, czym jest RRSO i dlaczego raty rosną.</p></a>
+    </div>
+    <div class="quizband">
+      <div><h3>Sprawdź się w quizie</h3><p>14 pytań, każde z wyjaśnieniem. Najlepiej po przejściu lekcji.</p></div>
+      <a class="cta" href="#quiz">Do quizu</a>
+    </div>
+  </div>
+</section>
+
+<!-- ================= INFLACJA ================= -->
+<section class="view" id="v-inflacja" hidden>
+  <div class="wrap">
+    <div class="lesson-head">
+      <span class="eyebrow">Lekcja 1 z 6</span>
+      <h2>Inflacja: dlaczego wszystko drożeje</h2>
+      <p class="lead">Pieniądz ma wartość tylko dlatego, że coś za niego kupisz. Gdy ceny rosną, ten sam banknot kupuje mniej.</p>
+    </div>
+    <div class="split">
+      <div class="explain">
+        <section>
+          <h3>Co to jest?</h3>
+          <p><strong>Inflacja</strong> to tempo, w jakim rosną ceny ogółem. Gdy GUS podaje „inflacja 5%”, znaczy to, że typowy koszyk zakupów (jedzenie, mieszkanie, transport, rozrywka) kosztuje o 5% więcej niż rok wcześniej.</p>
+          <p>Ekonomiści mówią wtedy, że spada <strong>siła nabywcza pieniądza</strong>: za 100 zł kupisz mniej rzeczy niż rok temu.</p>
+        </section>
+        <section>
+          <h3>Skąd się bierze?</h3>
+          <ul>
+            <li><strong>Popyt:</strong> ludzie chcą kupić więcej, niż firmy są w stanie wyprodukować, więc firmy podnoszą ceny.</li>
+            <li><strong>Koszty:</strong> drożeje prąd, paliwo, surowce albo pensje, więc produkcja kosztuje więcej.</li>
+            <li><strong>Oczekiwania:</strong> jeśli wszyscy spodziewają się podwyżek, sklepy podnoszą ceny „na zapas”, a pracownicy żądają wyższych pensji. Tak powstaje spirala.</li>
+          </ul>
+        </section>
+        <section>
+          <h3>Czy inflacja zawsze jest zła?</h3>
+          <p>Niewielka inflacja jest normalna. Narodowy Bank Polski ma cel: <strong>2,5% rocznie, z tolerancją ±1 punkt procentowy</strong>. Gorsze od lekkiej inflacji bywa jej przeciwieństwo, czyli <strong>deflacja</strong>: gdy ceny spadają, ludzie odkładają zakupy na później, firmy sprzedają mniej i zwalniają pracowników.</p>
+        </section>
+        <section>
+          <h3>Policz sam</h3>
+          <div class="formula">wartość realna = kwota ÷ (1 + inflacja)<sup>lata</sup></div>
+          <p>Reguła 70: podziel 70 przez inflację, a dowiesz się, po ilu latach pieniądze stracą połowę wartości. Przy 7% to około 10 lat.</p>
+        </section>
+        <div class="fact">
+          <span class="tag">Prawdziwe dane</span>
+          <p>W 2022 roku średnia inflacja w Polsce wyniosła 14,4%. Tak wysoko nie było od ponad 25 lat. Jeszcze w 2015 i 2016 roku ceny lekko spadały.</p>
+        </div>
+      </div>
+
+      <div class="labs">
+        <div class="lab" id="lab-inf">
+          <div><h3>Wehikuł czasu dla twojego portfela</h3><p class="task">Ustaw inflację i liczbę lat. Zobacz, ile będą kosztować rzeczy, które kupujesz, i ile będą warte pieniądze trzymane w gotówce.</p></div>
+          <div class="controls">
+            <div class="ctl"><label for="inf-rate">Inflacja rocznie</label><output id="inf-rate-o"></output><input type="range" id="inf-rate" min="0" max="25" step="0.5" value="6" data-out="pct"></div>
+            <div class="ctl"><label for="inf-years">Ile lat do przodu</label><output id="inf-years-o"></output><input type="range" id="inf-years" min="1" max="30" step="1" value="10" data-out="yrs"></div>
+            <div class="ctl"><label for="inf-cash">Gotówka w skarpecie</label><output id="inf-cash-o"></output><input type="range" id="inf-cash" min="100" max="10000" step="100" value="1000" data-out="zl"></div>
+          </div>
+          <div class="stats">
+            <div class="stat bad"><span class="k">Realna wartość gotówki</span><span class="v" id="inf-real">–</span><span class="s" id="inf-real-s"></span></div>
+            <div class="stat warn"><span class="k">Ceny wzrosną o</span><span class="v" id="inf-up">–</span><span class="s">łącznie przez ten czas</span></div>
+            <div class="stat"><span class="k">Połowa wartości po</span><span class="v" id="inf-half">–</span><span class="s">reguła 70</span></div>
+          </div>
+          <div class="legend"></div>
+          <div class="chart"><canvas id="ch-inf" aria-label="Wykres realnej wartości gotówki w czasie"></canvas></div>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Twój koszyk</th><th class="r">Dziś</th><th class="r" id="inf-th">Za 10 lat</th></tr></thead>
+              <tbody id="inf-basket"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="lab" id="lab-hist">
+          <div><h3>Inflacja w Polsce 2015–2024</h3><p class="task">Średnioroczna inflacja CPI według GUS. Zielony pas to cel NBP (1,5–3,5%). Najedź na słupek, żeby zobaczyć wartość.</p></div>
+          <div class="chart"><canvas id="ch-hist" aria-label="Wykres słupkowy inflacji w Polsce w latach 2015-2024"></canvas></div>
+          <p class="insight" id="hist-insight"></p>
+        </div>
+      </div>
+    </div>
+    <div class="next"><a href="#stopy">Dalej: stopy procentowe →</a></div>
+  </div>
+</section>
+
+<!-- ================= STOPY ================= -->
+<section class="view" id="v-stopy" hidden>
+  <div class="wrap">
+    <div class="lesson-head">
+      <span class="eyebrow">Lekcja 2 z 6</span>
+      <h2>Stopa procentowa, czyli cena pieniądza</h2>
+      <p class="lead">Bank centralny nie ustala cen w sklepach. Ma jednak jedno potężne narzędzie: decyduje, ile kosztuje pożyczanie pieniędzy.</p>
+    </div>
+    <div class="split">
+      <div class="explain">
+        <section>
+          <h3>Co to jest?</h3>
+          <p><strong>Stopa procentowa</strong> mówi, ile procent rocznie płacisz za pożyczone pieniądze albo ile dostajesz, gdy to ty pożyczasz (np. bankowi na lokacie).</p>
+          <p>W Polsce <strong>Rada Polityki Pieniężnej</strong> przy NBP ustala <strong>stopę referencyjną</strong>, czyli podstawową stopę procentową. Od niej zależą oprocentowanie lokat i kredytów oraz wskaźniki rynkowe, takie jak WIBOR (stopniowo zastępowany nowym wskaźnikiem).</p>
+        </section>
+        <section>
+          <h3>Jak to działa?</h3>
+          <ol>
+            <li>RPP <strong>podnosi</strong> stopy.</li>
+            <li>Kredyty drożeją, a lokaty dają więcej.</li>
+            <li>Ludzie i firmy mniej pożyczają i mniej wydają, więcej oszczędzają.</li>
+            <li>Popyt spada, więc sklepy i firmy wolniej podnoszą ceny.</li>
+            <li>Inflacja spada, ale dopiero po <strong>1–2 latach</strong>.</li>
+          </ol>
+          <p>Obniżka stóp działa odwrotnie: pobudza gospodarkę, ale może podbić inflację.</p>
+        </section>
+        <section>
+          <h3>Stopa realna</h3>
+          <div class="formula">stopa realna ≈ stopa procentowa − inflacja</div>
+          <p>Jeśli lokata daje 5%, a inflacja wynosi 8%, to realnie tracisz około 3% rocznie. Żeby skutecznie hamować inflację, stopy zwykle muszą być <strong>wyższe</strong> od niej.</p>
+        </section>
+        <div class="fact">
+          <span class="tag">Prawdziwa historia</span>
+          <p>Jesienią 2021 roku stopa referencyjna NBP wynosiła zaledwie 0,1%. Rok później, we wrześniu 2022, było to już 6,75%. Raty kredytów wielu rodzin wzrosły wtedy o kilkadziesiąt procent.</p>
+        </div>
+      </div>
+
+      <div class="labs">
+        <div class="lab" id="lab-cb">
+          <div><h3>Gra: zostań prezesem banku centralnego</h3><p class="task">Inflacja wynosi 11%, a cel to 2,5%. Co pół roku ustalasz stopę procentową. Zbij inflację do celu, ale uważaj: zbyt wysokie stopy wpędzą gospodarkę w recesję. Masz 10 decyzji.</p></div>
+          <div class="stats">
+            <div class="stat" id="cb-st-pi"><span class="k">Inflacja</span><span class="v" id="cb-pi">–</span><span class="s">cel: 2,5% ±1</span></div>
+            <div class="stat" id="cb-st-g"><span class="k">Wzrost PKB</span><span class="v" id="cb-g">–</span><span class="s">poniżej 0 = recesja</span></div>
+            <div class="stat" id="cb-st-u"><span class="k">Bezrobocie</span><span class="v" id="cb-u">–</span><span class="s">mniej = lepiej</span></div>
+            <div class="stat acc"><span class="k">Punkty</span><span class="v" id="cb-score">0</span><span class="s" id="cb-round">Decyzja 1 z 10</span></div>
+          </div>
+          <p class="event" id="cb-event">Start: po pandemii i skoku cen energii inflacja wystrzeliła do 11%. Stopa procentowa wynosi dziś 6,75%. Twoja decyzja?</p>
+          <div class="controls">
+            <div class="ctl"><label for="cb-rate">Twoja stopa procentowa</label><output id="cb-rate-o"></output><input type="range" id="cb-rate" min="0" max="20" step="0.25" value="6.75" data-out="pct2"></div>
+          </div>
+          <div class="stats" id="cb-effects">
+            <div class="stat"><span class="k">Stopa realna</span><span class="v" id="cb-real">–</span><span class="s">stopa − inflacja</span></div>
+            <div class="stat"><span class="k">Rata kredytu na mieszkanie</span><span class="v" id="cb-loan">–</span><span class="s">400 000 zł na 25 lat</span></div>
+            <div class="stat"><span class="k">Odsetki z lokaty</span><span class="v" id="cb-dep">–</span><span class="s">od 10 000 zł rocznie, po podatku</span></div>
+          </div>
+          <div class="btns">
+            <button class="primary" type="button" id="cb-go">Zatwierdź decyzję</button>
+            <button type="button" id="cb-reset">Zacznij od nowa</button>
+          </div>
+          <div class="legend"></div>
+          <div class="chart tall"><canvas id="ch-cb" aria-label="Wykres inflacji, stopy procentowej i wzrostu PKB w grze"></canvas></div>
+          <p class="insight" id="cb-verdict" hidden></p>
+        </div>
+      </div>
+    </div>
+    <div class="next"><a href="#oszczedzanie">Dalej: procent składany →</a></div>
+  </div>
+</section>
+
+<!-- ================= OSZCZĘDZANIE ================= -->
+<section class="view" id="v-oszczedzanie" hidden>
+  <div class="wrap">
+    <div class="lesson-head">
+      <span class="eyebrow">Lekcja 3 z 6</span>
+      <h2>Procent składany: odsetki od odsetek</h2>
+      <p class="lead">Najsilniejszy sprzymierzeniec oszczędzającego to czas. Im wcześniej zaczniesz, tym więcej pracy wykonają za ciebie odsetki.</p>
+    </div>
+    <div class="split">
+      <div class="explain">
+        <section>
+          <h3>Co to jest?</h3>
+          <p>Wpłacasz 1000 zł na lokatę z oprocentowaniem 5%. Po roku masz 1050 zł. W drugim roku odsetki liczą się już od 1050 zł, a nie od 1000 zł. To jest <strong>procent składany</strong>, czyli <strong>kapitalizacja odsetek</strong>.</p>
+          <div class="formula">kwota końcowa = kwota × (1 + stopa)<sup>lata</sup></div>
+        </section>
+        <section>
+          <h3>Dlaczego to ważne?</h3>
+          <p>Na początku różnica jest mała. Po 20–30 latach odsetki potrafią być większe niż wszystko, co wpłaciłeś. Wykres rośnie coraz szybciej, jak kula śnieżna.</p>
+          <p>Reguła 72: podziel 72 przez oprocentowanie, a dowiesz się, po ilu latach pieniądze się podwoją. Przy 6% to około 12 lat.</p>
+        </section>
+        <section>
+          <h3>Jak często dopisywane są odsetki?</h3>
+          <p>Bank może dopisywać odsetki codziennie, co miesiąc, co kwartał, raz w roku albo dopiero na koniec lokaty. To jest <strong>częstotliwość kapitalizacji</strong>. Im częściej odsetki trafiają na konto, tym szybciej same zaczynają zarabiać.</p>
+          <p>Dlatego oprócz oprocentowania z reklamy (<strong>nominalnego</strong>) liczy się oprocentowanie <strong>efektywne</strong>, czyli ile naprawdę zarobisz w ciągu roku.</p>
+          <div class="formula">efektywne = (1 + stopa ÷ k)<sup>k</sup> − 1<br>k = ile razy w roku dopisuje się odsetki</div>
+          <p>Przykład: 6% z kapitalizacją miesięczną to naprawdę około 6,17% rocznie. Różnica rośnie razem z oprocentowaniem i liczbą lat.</p>
+        </section>
+        <section>
+          <h3>Dwa haczyki</h3>
+          <ul>
+            <li><strong>Podatek Belki:</strong> od zysków z lokat, obligacji i akcji państwo pobiera 19%. Na lokacie bank pobiera go przy każdym dopisaniu odsetek, a w obligacjach EDO dopiero przy wykupie. To drugie jest korzystniejsze: do końca procentuje cała kwota, łącznie z „przyszłym podatkiem”.</li>
+            <li><strong>Inflacja:</strong> liczy się nie to, ile złotych masz, ale co możesz za nie kupić. Lokata na 4% przy inflacji 5% realnie traci.</li>
+          </ul>
+        </section>
+        <div class="fact">
+          <span class="tag">Ciekawostka</span>
+          <p>Procent składany działa też w drugą stronę. Niespłacony dług na karcie kredytowej rośnie w ten sam sposób, tylko dużo szybciej, bo oprocentowanie jest wysokie.</p>
+        </div>
+      </div>
+      <div class="labs">
+        <div class="lab" id="lab-sv">
+          <div><h3>Kalkulator kuli śnieżnej</h3><p class="task">Ustaw, ile odkładasz co miesiąc i jak długo. Porównaj, ile wpłacasz ty, a ile dokładają odsetki.</p></div>
+          <div class="controls">
+            <div class="ctl"><label for="sv-start">Wpłata na start</label><output id="sv-start-o"></output><input type="range" id="sv-start" min="0" max="10000" step="100" value="500" data-out="zl"></div>
+            <div class="ctl"><label for="sv-month">Co miesiąc odkładasz</label><output id="sv-month-o"></output><input type="range" id="sv-month" min="0" max="1000" step="10" value="100" data-out="zl"></div>
+            <div class="ctl"><label for="sv-rate">Oprocentowanie rocznie</label><output id="sv-rate-o"></output><input type="range" id="sv-rate" min="0" max="12" step="0.25" value="5" data-out="pct2"></div>
+            <div class="ctl"><label for="sv-years">Przez ile lat</label><output id="sv-years-o"></output><input type="range" id="sv-years" min="1" max="50" step="1" value="25" data-out="yrs"></div>
+            <div class="ctl"><label for="sv-inf">Inflacja rocznie</label><output id="sv-inf-o"></output><input type="range" id="sv-inf" min="0" max="10" step="0.5" value="3" data-out="pct"></div>
+            <div class="ctl"><label for="sv-cap">Kapitalizacja odsetek</label><span class="val"></span>
+              <select id="sv-cap">
+                <option value="365">codzienna</option>
+                <option value="12" selected>miesięczna</option>
+                <option value="4">kwartalna</option>
+                <option value="1">roczna</option>
+                <option value="0">brak, odsetki dopiero na koniec</option>
+              </select></div>
+            <label class="check"><input type="checkbox" id="sv-tax" checked> Uwzględnij podatek Belki (19%)</label>
+            <div class="ctl" id="sv-taxmode-row"><label for="sv-taxmode">Kiedy płacisz podatek</label><span class="val"></span>
+              <select id="sv-taxmode">
+                <option value="cap">przy każdym dopisaniu odsetek (lokata)</option>
+                <option value="end">raz, na samym końcu (obligacje EDO)</option>
+              </select></div>
+          </div>
+          <div class="stats">
+            <div class="stat"><span class="k">Wpłacisz</span><span class="v" id="sv-paid">–</span></div>
+            <div class="stat good"><span class="k">Odsetki dołożą</span><span class="v" id="sv-int">–</span></div>
+            <div class="stat acc"><span class="k">Będziesz mieć</span><span class="v" id="sv-bal">–</span><span class="s" id="sv-bal-s"></span></div>
+            <div class="stat"><span class="k">W dzisiejszych złotych</span><span class="v" id="sv-real">–</span><span class="s">po uwzględnieniu inflacji</span></div>
+          </div>
+          <div class="legend"></div>
+          <div class="chart"><canvas id="ch-sv" aria-label="Wykres oszczędności w czasie"></canvas></div>
+          <p class="insight" id="sv-early"></p>
+        </div>
+
+        <div class="lab" id="lab-cap">
+          <div><h3>Ta sama stopa, różna kapitalizacja</h3><p class="task">Liczby z kalkulatora wyżej, policzone dla każdej częstotliwości dopisywania odsetek. Zmień oprocentowanie albo liczbę lat i zobacz, kiedy różnica robi się duża.</p></div>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Kapitalizacja</th><th class="r">Oprocentowanie efektywne</th><th class="r">Na koniec</th><th class="r">Więcej niż bez kapitalizacji</th></tr></thead>
+              <tbody id="cap-tbl"></tbody>
+            </table>
+          </div>
+          <div class="legend"></div>
+          <div class="chart"><canvas id="ch-cap" aria-label="Wykres porównania częstotliwości kapitalizacji"></canvas></div>
+          <p class="insight" id="cap-tax"></p>
+        </div>
+      </div>
+    </div>
+    <div class="next"><a href="#obligacje">Dalej: obligacje skarbowe →</a></div>
+  </div>
+</section>
+
+<!-- ================= OBLIGACJE ================= -->
+<section class="view" id="v-obligacje" hidden>
+  <div class="wrap">
+    <div class="lesson-head">
+      <span class="eyebrow">Lekcja 4 z 6</span>
+      <h2>Obligacje skarbowe: pożyczasz pieniądze państwu</h2>
+      <p class="lead">Państwo potrzebuje pieniędzy na drogi, szpitale czy szkoły. Część pożycza od zwykłych ludzi i oddaje je z odsetkami.</p>
+    </div>
+    <div class="split">
+      <div class="explain">
+        <section>
+          <h3>Co to jest?</h3>
+          <p><strong>Obligacja</strong> to papier dłużny. Kupując ją, pożyczasz pieniądze emitentowi, a on obiecuje oddać je w określonym dniu z odsetkami. Gdy emitentem jest Skarb Państwa, mówimy o <strong>obligacjach skarbowych</strong>. To jedna z najbezpieczniejszych form oszczędzania w Polsce.</p>
+        </section>
+        <section>
+          <h3>Obligacje oszczędnościowe (detaliczne)</h3>
+          <p>Kosztują 100 zł za sztukę i są przeznaczone dla zwykłych ludzi. Najważniejsze rodzaje:</p>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Symbol</th><th>Okres</th><th>Oprocentowanie</th></tr></thead>
+              <tbody>
+                <tr><td><b>OTS</b></td><td>3 miesiące</td><td>stałe</td></tr>
+                <tr><td><b>ROR</b></td><td>1 rok</td><td>zmienne, zależy od stopy NBP</td></tr>
+                <tr><td><b>DOR</b></td><td>2 lata</td><td>zmienne, stopa NBP + marża</td></tr>
+                <tr><td><b>TOS</b></td><td>3 lata</td><td>stałe</td></tr>
+                <tr><td><b>COI</b></td><td>4 lata</td><td>1. rok stałe, potem inflacja + marża</td></tr>
+                <tr><td><b>EDO</b></td><td>10 lat</td><td>1. rok stałe, potem inflacja + marża</td></tr>
+                <tr><td><b>ROS, ROD</b></td><td>6 i 12 lat</td><td>rodzinne, dla rodzin z programem 800+</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <p>Aktualne oprocentowanie zmienia się co miesiąc. Sprawdzisz je na stronie <a href="https://www.obligacjeskarbowe.pl" target="_blank" rel="noopener">obligacjeskarbowe.pl</a>. Jeśli nie masz 18 lat, konto założysz z pomocą rodzica.</p>
+        </section>
+        <section>
+          <h3>Na co uważać?</h3>
+          <ul>
+            <li><strong>Wcześniejszy wykup</strong> jest możliwy, ale kosztuje niewielką opłatę, potrącaną z odsetek.</li>
+            <li>Od zysku płacisz <strong>podatek Belki</strong> (19%), chyba że kupujesz w ramach konta IKE.</li>
+            <li>Obligacje <strong>stałoprocentowe</strong> wygrywają, gdy inflacja spada. <strong>Indeksowane</strong> chronią, gdy inflacja niespodziewanie rośnie.</li>
+            <li><strong>Kapitalizacja czy wypłata?</strong> W EDO (i TOS) odsetki są co roku doliczane do obligacji i dalej procentują, a podatek płacisz raz, przy wykupie. W COI dostajesz odsetki co roku na konto, a podatek pobierany jest od każdej wypłaty. COI daje regularny dochód, EDO w długim terminie zarabia więcej.</li>
+          </ul>
+        </section>
+        <div class="fact">
+          <span class="tag">Dla dociekliwych</span>
+          <p>Istnieją też obligacje <strong>rynkowe</strong>, którymi handluje się na giełdzie. Ich cena codziennie się zmienia i zależy od stóp procentowych. Sprawdź to na huśtawce obok.</p>
+        </div>
+      </div>
+      <div class="labs">
+        <div class="lab" id="lab-bd">
+          <div><h3>Stałe czy indeksowane inflacją?</h3><p class="task">Wybierz scenariusz inflacji i sprawdź, która obligacja lepiej ochroni twoje oszczędności. Parametry są przykładowe.</p></div>
+          <div class="controls">
+            <div class="ctl"><label for="bd-amt">Kwota</label><output id="bd-amt-o"></output><input type="range" id="bd-amt" min="1000" max="50000" step="1000" value="10000" data-out="zl"></div>
+            <div class="ctl"><label for="bd-scen">Scenariusz inflacji</label><span class="val"></span>
+              <select id="bd-scen">
+                <option value="szok">Szok jak w latach 2021–24</option>
+                <option value="spokojnie">Spokojnie: 3% co roku</option>
+                <option value="niska">Niska inflacja: 1–2%</option>
+                <option value="wlasna">Własna, stała inflacja</option>
+              </select></div>
+            <div class="ctl" id="bd-custom-row" hidden><label for="bd-custom">Twoja inflacja</label><output id="bd-custom-o"></output><input type="range" id="bd-custom" min="0" max="20" step="0.5" value="6" data-out="pct"></div>
+            <div class="ctl"><label for="bd-years">Okres</label><output id="bd-years-o"></output><input type="range" id="bd-years" min="1" max="10" step="1" value="10" data-out="yrs"></div>
+            <div class="ctl"><label for="bd-fixed">Obligacja stała: oprocentowanie</label><output id="bd-fixed-o"></output><input type="range" id="bd-fixed" min="1" max="10" step="0.1" value="5.5" data-out="pct"></div>
+            <div class="ctl"><label for="bd-first">Indeksowana: 1. rok</label><output id="bd-first-o"></output><input type="range" id="bd-first" min="1" max="10" step="0.1" value="5.6" data-out="pct"></div>
+            <div class="ctl"><label for="bd-margin">Indeksowana: marża ponad inflację</label><output id="bd-margin-o"></output><input type="range" id="bd-margin" min="0" max="3" step="0.25" value="1.5" data-out="pct2"></div>
+          </div>
+          <div class="legend"></div>
+          <div class="chart"><canvas id="ch-bd" aria-label="Wykres porównania obligacji stałych, indeksowanych i gotówki"></canvas></div>
+          <div class="stats" id="bd-stats"></div>
+          <p class="insight" id="bd-verdict"></p>
+        </div>
+
+        <div class="lab" id="lab-ss">
+          <div><h3>Huśtawka: stopy procentowe a cena obligacji</h3><p class="task">Masz obligację rynkową: 1000 zł nominału, 5% odsetek rocznie, 5 lat do wykupu. Zmień stopy na rynku i zobacz, za ile ktoś ją od ciebie odkupi.</p></div>
+          <div class="controls">
+            <div class="ctl"><label for="ss-rate">Stopy procentowe na rynku</label><output id="ss-rate-o"></output><input type="range" id="ss-rate" min="1" max="10" step="0.25" value="7" data-out="pct2"></div>
+          </div>
+          <div class="seesaw">
+            <svg viewBox="0 0 320 170" role="img" aria-label="Huśtawka: gdy stopy rosną, cena obligacji spada">
+              <polygon class="base" points="160,108 140,150 180,150"></polygon>
+              <g class="rot" id="ss-g">
+                <rect class="plank" x="20" y="100" width="280" height="8" rx="4"></rect>
+                <rect class="boxL" x="26" y="62" width="104" height="38" rx="6"></rect>
+                <rect class="boxR" x="190" y="62" width="104" height="38" rx="6"></rect>
+                <text x="78" y="86" text-anchor="middle" id="ss-tl">Stopy 7%</text>
+                <text x="242" y="86" text-anchor="middle" id="ss-tr">Cena 918 zł</text>
+              </g>
+              <text class="lbl" x="160" y="166" text-anchor="middle">Nowe obligacje płacą tyle, ile rynek</text>
+            </svg>
+          </div>
+          <div class="stats">
+            <div class="stat" id="ss-st"><span class="k">Cena twojej obligacji</span><span class="v" id="ss-price">–</span><span class="s" id="ss-chg"></span></div>
+          </div>
+          <p class="insight" id="ss-why"></p>
+        </div>
+      </div>
+    </div>
+    <div class="next"><a href="#akcje">Dalej: akcje →</a></div>
+  </div>
+</section>
+
+<!-- ================= AKCJE ================= -->
+<section class="view" id="v-akcje" hidden>
+  <div class="wrap">
+    <div class="lesson-head">
+      <span class="eyebrow">Lekcja 5 z 6</span>
+      <h2>Akcje: kawałek prawdziwej firmy</h2>
+      <p class="lead">Kupując akcję, stajesz się współwłaścicielem firmy. Gdy firmie idzie dobrze, zarabiasz z nią. Gdy idzie źle, tracisz.</p>
+    </div>
+    <div class="split">
+      <div class="explain">
+        <section>
+          <h3>Co to jest?</h3>
+          <p><strong>Akcja</strong> to udział w spółce. Jeśli firma ma milion akcji, a ty kupisz jedną, należy do ciebie jedna milionowa jej części. W Polsce akcjami handluje się na <strong>Giełdzie Papierów Wartościowych w Warszawie</strong>.</p>
+        </section>
+        <section>
+          <h3>Jak się na nich zarabia?</h3>
+          <ul>
+            <li><strong>Wzrost ceny:</strong> kupujesz taniej, sprzedajesz drożej.</li>
+            <li><strong>Dywidenda:</strong> część zysku, którą firma wypłaca akcjonariuszom, zwykle raz w roku. Od dywidendy płacisz 19% podatku.</li>
+          </ul>
+          <p>Dywidendę możesz wydać albo <strong>reinwestować</strong>, czyli kupić za nią kolejne akcje. Te nowe akcje też płacą dywidendy, więc działa ten sam procent składany co na lokacie. W długim terminie reinwestowane dywidendy to duża część całego zysku z akcji.</p>
+        </section>
+        <section>
+          <h3>Dlaczego ceny skaczą?</h3>
+          <p>Cena akcji to efekt tego, ile ludzie są gotowi za nią zapłacić. Wpływają na to wyniki firmy, wiadomości, stopy procentowe, a także emocje: strach i chciwość. W krótkim terminie ceny są bardzo nieprzewidywalne. W długim zwykle podążają za zyskami firm.</p>
+        </section>
+        <section>
+          <h3>Jak zmniejszyć ryzyko?</h3>
+          <ul>
+            <li><strong>Dywersyfikacja:</strong> nie wkładaj wszystkich jajek do jednego koszyka. Pojedyncza firma może zbankrutować, cała gospodarka raczej nie.</li>
+            <li><strong>Fundusze indeksowe (ETF):</strong> jedną transakcją kupujesz kawałek wielu firm naraz, np. całego indeksu WIG20.</li>
+            <li><strong>Czas:</strong> im dłużej trzymasz, tym mniejsza szansa, że skończysz na minusie.</li>
+            <li><strong>Spokój:</strong> sprzedawanie w panice po spadkach to jeden z najczęstszych błędów.</li>
+          </ul>
+        </section>
+        <div class="fact">
+          <span class="tag">Ciekawostka</span>
+          <p>Indeks WIG20 pokazuje tylko ceny akcji. Jego „bliźniak” WIG20TR liczy też reinwestowane dywidendy. Po latach różnica między nimi jest bardzo wyraźna.</p>
+        </div>
+        <div class="fact">
+          <span class="tag">Ważne</span>
+          <p>Akcje to nie loteria, ale też nie lokata. Inwestuj tylko pieniądze, których nie będziesz potrzebować przez wiele lat. Rachunek maklerski przed 18. rokiem życia zakłada się razem z rodzicem.</p>
+        </div>
+      </div>
+      <div class="labs">
+        <div class="lab" id="lab-st">
+          <div><h3>Jedna firma czy cały koszyk?</h3><p class="task">Inwestujesz 10 000 zł. Porównaj akcje jednej firmy, koszyk 20 firm (jak fundusz ETF) i lokatę 3%. Każde losowanie to inna możliwa historia rynku. Wyniki zakładają, że dywidendy są reinwestowane.</p></div>
+          <div class="controls">
+            <div class="ctl"><label for="st-years">Horyzont inwestycji</label><output id="st-years-o"></output><input type="range" id="st-years" min="1" max="30" step="1" value="15" data-out="yrs"></div>
+          </div>
+          <div class="btns"><button class="primary" type="button" id="st-roll">Losuj nową historię</button></div>
+          <div class="legend"></div>
+          <div class="chart tall"><canvas id="ch-st" aria-label="Wykres symulacji wartości inwestycji"></canvas></div>
+          <div class="stats" id="st-stats"></div>
+        </div>
+
+        <div class="lab" id="lab-dv">
+          <div><h3>Dywidendy: reinwestować czy wydawać?</h3><p class="task">Masz 10 000 zł w koszyku firm, które co roku wypłacają część zysku. Ta sama historia rynku, dwie decyzje: za dywidendy dokupujesz akcje albo je wydajesz. Dywidendy są już pomniejszone o 19% podatku.</p></div>
+          <div class="controls">
+            <div class="ctl"><label for="dv-years">Horyzont</label><output id="dv-years-o"></output><input type="range" id="dv-years" min="5" max="40" step="1" value="30" data-out="yrs"></div>
+            <div class="ctl"><label for="dv-yield">Stopa dywidendy rocznie</label><output id="dv-yield-o"></output><input type="range" id="dv-yield" min="0" max="6" step="0.25" value="3" data-out="pct2"></div>
+          </div>
+          <div class="legend"></div>
+          <div class="chart tall"><canvas id="ch-dv" aria-label="Wykres: reinwestowanie dywidend a ich wydawanie"></canvas></div>
+          <div class="stats" id="dv-stats"></div>
+          <p class="insight" id="dv-insight"></p>
+          <p class="task">Średni zysk rynku w modelu to nadal około 7% rocznie. Im wyższa dywidenda, tym mniejsza część zysku pochodzi ze wzrostu cen akcji.</p>
+        </div>
+
+        <div class="lab" id="lab-mc">
+          <div><h3>1000 możliwych przyszłości</h3><p class="task">Jedna historia może być szczęśliwa albo pechowa. Komputer sprawdza 1000 różnych przyszłości dla horyzontu z laboratorium wyżej. Ostatni wiersz to inwestor, który w panice sprzedaje koszyk po spadku o 25% i przenosi pieniądze na lokatę.</p></div>
+          <div class="tbl-wrap">
+            <table>
+              <thead><tr><th>Strategia</th><th class="r">Pechowy wynik<br>(5% najgorszych)</th><th class="r">Typowy wynik<br>(mediana)</th><th class="r">Szczęśliwy wynik<br>(5% najlepszych)</th><th class="r">Szansa na stratę</th></tr></thead>
+              <tbody id="mc-body"></tbody>
+            </table>
+          </div>
+          <p class="insight" id="mc-insight"></p>
+          <p class="task">To uproszczony model: średni zysk rynku około 7% rocznie (wzrost cen + reinwestowane dywidendy) z dużymi wahaniami. Prawdziwy rynek bywa bardziej zaskakujący. Wyniki z przeszłości nie gwarantują przyszłych.</p>
+        </div>
+      </div>
+    </div>
+    <div class="next"><a href="#kredyty">Dalej: kredyty →</a></div>
+  </div>
+</section>
+
+<!-- ================= KREDYTY ================= -->
+<section class="view" id="v-kredyty" hidden>
+  <div class="wrap">
+    <div class="lesson-head">
+      <span class="eyebrow">Lekcja 6 z 6</span>
+      <h2>Kredyty: ile naprawdę kosztuje pożyczka</h2>
+      <p class="lead">Kredyt pozwala kupić coś dziś i zapłacić później. To „później” zawsze kosztuje więcej, a czasem dużo więcej.</p>
+    </div>
+    <div class="split">
+      <div class="explain">
+        <section>
+          <h3>Słowniczek kredytu</h3>
+          <ul>
+            <li><strong>Kapitał:</strong> kwota, którą pożyczasz.</li>
+            <li><strong>Odsetki:</strong> cena za pożyczenie, liczona od kwoty, którą jeszcze jesteś winien.</li>
+            <li><strong>Oprocentowanie zmienne:</strong> wskaźnik rynkowy (np. WIBOR) + marża banku. Gdy stopy NBP rosną, rośnie też twoja rata.</li>
+            <li><strong>Prowizja:</strong> jednorazowa opłata za udzielenie kredytu.</li>
+            <li><strong>RRSO:</strong> rzeczywista roczna stopa oprocentowania. Uwzględnia odsetki, prowizje i inne opłaty. To najlepsza liczba do porównywania ofert.</li>
+          </ul>
+        </section>
+        <section>
+          <h3>Raty równe czy malejące?</h3>
+          <p>W <strong>ratach równych</strong> co miesiąc płacisz tyle samo, ale na początku prawie cała rata to odsetki. W <strong>ratach malejących</strong> spłacasz co miesiąc tę samą część kapitału, więc pierwsze raty są wyższe, ale łącznie oddajesz mniej.</p>
+        </section>
+        <section>
+          <h3>Zasady bezpiecznego pożyczania</h3>
+          <ul>
+            <li>Rata nie powinna przekraczać około <strong>30–40% dochodu</strong>.</li>
+            <li>Porównuj <strong>RRSO</strong>, a nie samo oprocentowanie czy hasło „0%”.</li>
+            <li>Szybkie pożyczki przez internet bywają bardzo drogie: RRSO potrafi przekraczać 100%.</li>
+            <li>Spóźnione raty trafiają do <strong>BIK</strong>. Zła historia kredytowa utrudni później kredyt na mieszkanie.</li>
+          </ul>
+        </section>
+        <div class="fact">
+          <span class="tag">Zanim weźmiesz</span>
+          <p>Zadaj sobie pytanie: czy ta rzecz będzie mi służyć dłużej niż będę ją spłacać? Mieszkanie na 25 lat ma sens. Wakacje na raty, spłacane jeszcze przez dwa lata po powrocie, raczej nie.</p>
+        </div>
+      </div>
+      <div class="labs">
+        <div class="lab" id="lab-kr">
+          <div><h3>Kalkulator kredytu</h3><p class="task">Wybierz przykład albo wpisz własne liczby. Zwróć uwagę, jak bardzo RRSO różni się od oprocentowania, gdy w grę wchodzi prowizja.</p></div>
+          <div class="btns" id="kr-presets">
+            <button class="chip" type="button" data-p="dom" aria-pressed="true">Mieszkanie</button>
+            <button class="chip" type="button" data-p="auto" aria-pressed="false">Używane auto</button>
+            <button class="chip" type="button" data-p="tel" aria-pressed="false">Telefon „0%”</button>
+            <button class="chip" type="button" data-p="chwil" aria-pressed="false">Szybka pożyczka</button>
+          </div>
+          <div class="controls">
+            <div class="ctl"><label for="kr-amt">Pożyczasz (zł)</label><span class="val"></span><input type="number" id="kr-amt" min="100" max="3000000" step="100" value="400000" inputmode="numeric"></div>
+            <div class="ctl"><label for="kr-n">Okres spłaty</label><output id="kr-n-o"></output><input type="range" id="kr-n" min="3" max="360" step="1" value="300" data-out="mies"></div>
+            <div class="ctl"><label for="kr-rate">Oprocentowanie roczne</label><output id="kr-rate-o"></output><input type="range" id="kr-rate" min="0" max="25" step="0.1" value="7.5" data-out="pct"></div>
+            <div class="ctl"><label for="kr-fee">Prowizja</label><output id="kr-fee-o"></output><input type="range" id="kr-fee" min="0" max="30" step="0.5" value="0" data-out="pct"></div>
+            <div class="ctl"><label for="kr-type">Rodzaj rat</label><span class="val"></span>
+              <select id="kr-type"><option value="rowne">Równe</option><option value="malejace">Malejące</option></select></div>
+            <div class="ctl"><label for="kr-inc">Dochód netto miesięcznie</label><output id="kr-inc-o"></output><input type="range" id="kr-inc" min="2000" max="30000" step="500" value="9000" data-out="zl"></div>
+          </div>
+          <div class="stats">
+            <div class="stat acc"><span class="k" id="kr-rata-k">Rata miesięczna</span><span class="v" id="kr-rata">–</span><span class="s" id="kr-rata-s"></span></div>
+            <div class="stat bad"><span class="k">Odsetki łącznie</span><span class="v" id="kr-int">–</span></div>
+            <div class="stat"><span class="k">Oddasz w sumie</span><span class="v" id="kr-total">–</span><span class="s" id="kr-total-s"></span></div>
+            <div class="stat" id="kr-rrso-st"><span class="k">RRSO</span><span class="v" id="kr-rrso">–</span><span class="s">rzeczywisty koszt rocznie</span></div>
+            <div class="stat" id="kr-dti-st"><span class="k">Rata / dochód</span><span class="v" id="kr-dti">–</span><span class="s" id="kr-dti-s"></span></div>
+          </div>
+          <div class="legend"></div>
+          <div class="chart"><canvas id="ch-kr" aria-label="Wykres części kapitałowej i odsetkowej raty"></canvas></div>
+          <p class="task">Wykres pokazuje, z czego składa się każda rata: ile spłaca dług (kapitał), a ile to zapłata dla banku (odsetki).</p>
+        </div>
+
+        <div class="lab" id="lab-shock">
+          <div><h3>Test: co jeśli stopy wzrosną?</h3><p class="task">Kredyty na mieszkanie w Polsce mają zwykle zmienne oprocentowanie. Sprawdź, jak zmieni się rata z kalkulatora wyżej, gdy bank centralny podniesie stopy.</p></div>
+          <div class="controls">
+            <div class="ctl"><label for="sh-up">Wzrost stóp procentowych</label><output id="sh-up-o"></output><input type="range" id="sh-up" min="0" max="7" step="0.25" value="3" data-out="pp"></div>
+          </div>
+          <div class="stats">
+            <div class="stat"><span class="k">Rata dziś</span><span class="v" id="sh-now">–</span></div>
+            <div class="stat bad"><span class="k">Rata po podwyżce</span><span class="v" id="sh-new">–</span><span class="s" id="sh-diff"></span></div>
+            <div class="stat" id="sh-dti-st"><span class="k">Rata / dochód</span><span class="v" id="sh-dti">–</span></div>
+          </div>
+          <p class="insight" id="sh-insight"></p>
+        </div>
+      </div>
+    </div>
+    <div class="next"><a href="#quiz">Dalej: sprawdź się w quizie →</a></div>
+  </div>
+</section>
+
+<!-- ================= QUIZ ================= -->
+<section class="view" id="v-quiz" hidden>
+  <div class="wrap">
+    <div class="lesson-head">
+      <span class="eyebrow">Podsumowanie</span>
+      <h2>Quiz: ile już wiesz?</h2>
+      <p class="lead">Kliknij odpowiedź. Każde pytanie ma krótkie wyjaśnienie, więc nawet błąd czegoś cię nauczy.</p>
+    </div>
+    <div class="quiz">
+      <div class="score num" id="qz-score">Wynik: 0 / 0</div>
+      <div id="qz-list" class="quiz"></div>
+      <div class="btns"><button type="button" id="qz-reset">Rozwiąż jeszcze raz</button></div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Materiał edukacyjny, nie porada inwestycyjna. Symulacje są uproszczone, a parametry przykładowe. Dane o inflacji: GUS (średnioroczny wskaźnik CPI). Aktualne oprocentowanie obligacji sprawdzisz na obligacjeskarbowe.pl, a stopy procentowe na nbp.pl.</p>
+  </div>
+</footer>
+
+<script>
+(() => {
+'use strict';
+
+/* ================= narzędzia ================= */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const nf = (d) => new Intl.NumberFormat('pl-PL', { minimumFractionDigits: d, maximumFractionDigits: d });
+const NF0 = nf(0), NF1 = nf(1), NF2 = nf(2);
+const zl = (v) => NF0.format(Math.round(v)) + ' zł';
+const zl2 = (v) => NF2.format(v) + ' zł';
+const pc = (v, d = 1) => nf(d).format(v) + '%';
+const val = (id) => parseFloat(document.getElementById(id).value);
+const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
+const cssv = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+function lat(n) { if (n === 1) return 'rok'; const d = n % 10, t = n % 100; return (d >= 2 && d <= 4 && !(t >= 12 && t <= 14)) ? 'lata' : 'lat'; }
+function zlShort(v) {
+  const a = Math.abs(v);
+  if (a >= 1e6) return NF1.format(v / 1e6) + ' mln';
+  if (a >= 1e4) return NF0.format(v / 1e3) + ' tys.';
+  return NF0.format(v);
+}
+
+const FMT = {
+  pct: (v) => pc(v, 1),
+  pct2: (v) => pc(v, 2),
+  zl: (v) => zl(v),
+  yrs: (v) => v + ' ' + lat(v),
+  mies: (v) => v + ' mies.' + (v >= 12 ? ' (' + NF1.format(v / 12) + ' ' + (v === 12 ? 'rok' : 'lat') + ')' : ''),
+  pp: (v) => '+' + NF2.format(v) + ' pkt proc.'
+};
+function refreshOut(inp) {
+  const out = document.getElementById(inp.id + '-o');
+  if (out) out.textContent = FMT[inp.dataset.out](+inp.value);
+}
+$$('input[type=range][data-out]').forEach((inp) => {
+  inp.addEventListener('input', () => refreshOut(inp));
+  refreshOut(inp);
+});
+function setVal(id, v) { const el = document.getElementById(id); el.value = v; if (el.dataset.out) refreshOut(el); }
+
+/* ================= wykresy (canvas) ================= */
+const charts = new Map();
+function niceTicks(min, max, count) {
+  if (min === max) { max = min + 1; }
+  const step0 = (max - min) / count;
+  const mag = Math.pow(10, Math.floor(Math.log10(step0)));
+  const e = step0 / mag;
+  const step = (e >= 7.5 ? 10 : e >= 3.5 ? 5 : e >= 1.5 ? 2 : 1) * mag;
+  const lo = Math.floor(min / step) * step, hi = Math.ceil(max / step) * step;
+  const ticks = [];
+  for (let t = lo; t <= hi + step / 2; t += step) ticks.push(+t.toFixed(10));
+  return { lo, hi, ticks };
+}
+function colorOf(c) { return c.startsWith('--') ? cssv(c) : c; }
+
+function chart(canvas, opt) {
+  const first = !charts.has(canvas);
+  charts.set(canvas, opt);
+  const lab = canvas.closest('.lab');
+  const legend = lab && lab.querySelector('.legend');
+  if (legend && !opt.noLegend) {
+    legend.innerHTML = opt.series.map((s) =>
+      `<span><i class="${s.dash ? 'dash' : ''}" style="background:var(${s.color});color:var(${s.color})"></i>${s.name}</span>`).join('');
+  }
+  if (first) {
+    ro.observe(canvas);
+    const tip = document.createElement('div');
+    tip.className = 'tip'; tip.hidden = true;
+    canvas.parentElement.appendChild(tip);
+    const move = (ev) => {
+      const o = charts.get(canvas); const g = o._g; if (!g) return;
+      const rect = canvas.getBoundingClientRect();
+      const x = (ev.touches ? ev.touches[0].clientX : ev.clientX) - rect.left;
+      let i = o.type === 'bar' ? Math.floor((x - g.l) / g.bw) : Math.round((x - g.l) / g.step);
+      i = clamp(i, 0, g.n - 1);
+      if (o.hover === i && !tip.hidden) return;
+      o.hover = i; draw(canvas);
+      const lbl = o.tipLabel ? o.tipLabel(i) : o.labels[i];
+      const rows = o.series.filter((s) => Number.isFinite(s.data[i]))
+        .map((s) => `<span style="color:var(${s.color})">■</span> ${s.name}: ${(s.fmt || o.yFmt)(s.data[i])}`);
+      tip.innerHTML = `<b>${lbl}</b><br>${rows.join('<br>')}`;
+      tip.hidden = false;
+      const px = g.xOf(i);
+      const tw = tip.offsetWidth;
+      tip.style.left = clamp(px + 12 + tw > rect.width ? px - tw - 12 : px + 12, 0, Math.max(0, rect.width - tw)) + 'px';
+      tip.style.top = '6px';
+    };
+    const leave = () => { const o = charts.get(canvas); o.hover = null; tip.hidden = true; draw(canvas); };
+    canvas.addEventListener('mousemove', move);
+    canvas.addEventListener('touchstart', move, { passive: true });
+    canvas.addEventListener('touchmove', move, { passive: true });
+    canvas.addEventListener('mouseleave', leave);
+  }
+  draw(canvas);
+}
+const ro = new ResizeObserver((entries) => entries.forEach((e) => charts.has(e.target) && draw(e.target)));
+function redrawAll() { charts.forEach((_, c) => draw(c)); }
+
+function draw(cv) {
+  const o = charts.get(cv);
+  const w = cv.clientWidth, h = cv.clientHeight;
+  if (!w || !h) return;
+  const dpr = window.devicePixelRatio || 1;
+  cv.width = Math.round(w * dpr); cv.height = Math.round(h * dpr);
+  const ctx = cv.getContext('2d');
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  ctx.clearRect(0, 0, w, h);
+  const fontData = cssv('--font-data');
+  const C = { line: cssv('--line'), muted: cssv('--muted'), ink: cssv('--ink'), good: cssv('--good'), surface: cssv('--surface') };
+  const n = o.labels.length;
+  let vals = o.series.flatMap((s) => s.data).filter(Number.isFinite);
+  if (o.band) vals.push(...o.band);
+  let mn = Math.min(...vals), mx = Math.max(...vals);
+  if (o.zero !== false) mn = Math.min(mn, 0);
+  if (o.yMin != null) mn = Math.min(mn, o.yMin);
+  const tk = niceTicks(mn, mx, o.ticks || 5);
+  ctx.font = `11px ${fontData}`;
+  const yLabelW = Math.max(...tk.ticks.map((t) => ctx.measureText(o.yFmt(t)).width));
+  const P = { l: yLabelW + 14, r: 12, t: 10, b: 24 };
+  const iw = w - P.l - P.r, ih = h - P.t - P.b;
+  const bw = iw / n;
+  const step = n > 1 ? iw / (n - 1) : 0;
+  const xOf = o.type === 'bar' ? (i) => P.l + (i + 0.5) * bw : (i) => P.l + (n > 1 ? i * step : iw / 2);
+  const Y = (v) => P.t + (tk.hi - v) / (tk.hi - tk.lo) * ih;
+  o._g = { l: P.l, bw, step, n, xOf };
+
+  // siatka i oś Y
+  ctx.lineWidth = 1; ctx.textAlign = 'right'; ctx.textBaseline = 'middle';
+  tk.ticks.forEach((t) => {
+    const y = Math.round(Y(t)) + 0.5;
+    ctx.strokeStyle = C.line; ctx.globalAlpha = t === 0 ? 1 : 0.6;
+    ctx.beginPath(); ctx.moveTo(P.l, y); ctx.lineTo(w - P.r, y); ctx.stroke();
+    ctx.globalAlpha = 1; ctx.fillStyle = C.muted;
+    ctx.fillText(o.yFmt(t), P.l - 6, y);
+  });
+  // pas celu
+  if (o.band) {
+    ctx.fillStyle = C.good; ctx.globalAlpha = 0.13;
+    ctx.fillRect(P.l, Y(o.band[1]), iw, Y(o.band[0]) - Y(o.band[1]));
+    ctx.globalAlpha = 1;
+  }
+  // oś X
+  ctx.textBaseline = 'top'; ctx.fillStyle = C.muted;
+  let lastX = -1e9;
+  for (let i = 0; i < n; i++) {
+    const L = o.labels[i]; if (L === '' || L == null) continue;
+    const x = xOf(i); const tw = ctx.measureText(L).width;
+    if (x - tw / 2 < lastX + 10) continue;
+    let ax = 'center', dx = x;
+    if (x - tw / 2 < P.l - 4) { ax = 'left'; dx = Math.max(x - 4, P.l - 4); }
+    if (x + tw / 2 > w) { ax = 'right'; dx = w - 1; }
+    ctx.textAlign = ax; ctx.fillText(L, dx, h - P.b + 7);
+    lastX = ax === 'left' ? dx + tw : ax === 'right' ? dx : x + tw / 2;
+  }
+  // hover
+  if (o.hover != null) {
+    ctx.strokeStyle = C.muted; ctx.globalAlpha = 0.5; ctx.setLineDash([3, 3]);
+    const hx = Math.round(xOf(o.hover)) + 0.5;
+    ctx.beginPath(); ctx.moveTo(hx, P.t); ctx.lineTo(hx, h - P.b); ctx.stroke();
+    ctx.setLineDash([]); ctx.globalAlpha = 1;
+  }
+  // serie
+  o.series.forEach((s) => {
+    const col = colorOf(s.color);
+    if (o.type === 'bar') {
+      s.data.forEach((v, i) => {
+        if (!Number.isFinite(v)) return;
+        ctx.fillStyle = s.colorFn ? colorOf(s.colorFn(v)) : col;
+        ctx.globalAlpha = o.hover == null || o.hover === i ? 1 : 0.55;
+        const y0 = Y(0), y1 = Y(v), bwid = Math.min(bw * 0.68, 46);
+        ctx.fillRect(xOf(i) - bwid / 2, Math.min(y0, y1), bwid, Math.max(1, Math.abs(y1 - y0)));
+        ctx.globalAlpha = 1;
+      });
+      return;
+    }
+    const pts = s.data.map((v, i) => Number.isFinite(v) ? [xOf(i), Y(v)] : null);
+    if (s.fill) {
+      ctx.fillStyle = col; ctx.globalAlpha = 0.14;
+      let seg = [];
+      const flush = () => {
+        if (seg.length > 1) {
+          ctx.beginPath(); ctx.moveTo(seg[0][0], Y(Math.max(0, tk.lo)));
+          seg.forEach((p) => ctx.lineTo(p[0], p[1]));
+          ctx.lineTo(seg[seg.length - 1][0], Y(Math.max(0, tk.lo))); ctx.closePath(); ctx.fill();
+        }
+        seg = [];
+      };
+      pts.forEach((p) => p ? seg.push(p) : flush()); flush();
+      ctx.globalAlpha = 1;
+    }
+    ctx.strokeStyle = col; ctx.lineWidth = s.width || 2.25; ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+    ctx.setLineDash(s.dash ? [6, 5] : []);
+    ctx.beginPath(); let pen = false;
+    pts.forEach((p) => { if (!p) { pen = false; return; } if (pen) ctx.lineTo(p[0], p[1]); else { ctx.moveTo(p[0], p[1]); pen = true; } });
+    ctx.stroke(); ctx.setLineDash([]);
+    if (s.dots) {
+      pts.forEach((p) => { if (!p) return; ctx.beginPath(); ctx.arc(p[0], p[1], 3, 0, 7); ctx.fillStyle = col; ctx.fill(); });
+    }
+    // punkt końcowy
+    let last = null; for (let i = pts.length - 1; i >= 0; i--) if (pts[i]) { last = pts[i]; break; }
+    if (last && !s.dash) {
+      ctx.beginPath(); ctx.arc(last[0], last[1], 4, 0, 7); ctx.fillStyle = C.surface; ctx.fill();
+      ctx.lineWidth = 2; ctx.strokeStyle = col; ctx.stroke();
+    }
+    if (o.hover != null && pts[o.hover]) {
+      ctx.beginPath(); ctx.arc(pts[o.hover][0], pts[o.hover][1], 4, 0, 7); ctx.fillStyle = col; ctx.fill();
+    }
+  });
+}
+const mq = window.matchMedia('(prefers-color-scheme: dark)');
+if (mq.addEventListener) mq.addEventListener('change', redrawAll);
+new MutationObserver(redrawAll).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme', 'class'] });
+if (document.fonts && document.fonts.ready) document.fonts.ready.then(redrawAll);
+
+/* ================= START ================= */
+function updHero() {
+  const i = val('h-inf') / 100;
+  $('#h-val').textContent = zl(100 / Math.pow(1 + i, 10));
+}
+$('#h-inf').addEventListener('input', updHero);
+
+/* ================= INFLACJA ================= */
+const BASKET = [['Pizza dla dwojga', 45], ['Bilet do kina', 32], ['Kebab', 30], ['Bilet miesięczny ulgowy', 55], ['Bluza', 150], ['Słuchawki bezprzewodowe', 350]];
+function updInf() {
+  const i = val('inf-rate') / 100, n = val('inf-years'), cash = val('inf-cash');
+  const f = Math.pow(1 + i, n);
+  $('#inf-real').textContent = zl(cash / f);
+  $('#inf-real-s').textContent = `tyle realnie warte będzie ${zl(cash)} za ${n} ${lat(n)}`;
+  $('#inf-up').textContent = '+' + pc((f - 1) * 100, 0);
+  if (i > 0) { const y = Math.log(2) / Math.log(1 + i); $('#inf-half').textContent = (y > 100 ? 'ponad 100' : '~' + NF0.format(y)) + ' lat'; }
+  else $('#inf-half').textContent = 'nigdy';
+  $('#inf-th').textContent = `Za ${n} ${lat(n)}`;
+  $('#inf-basket').innerHTML = BASKET.map(([name, p]) =>
+    `<tr><td>${name}</td><td class="r">${zl(p)}</td><td class="r"><b>${zl(p * f)}</b></td></tr>`).join('') +
+    `<tr><td><b>Razem</b></td><td class="r"><b>${zl(BASKET.reduce((a, b) => a + b[1], 0))}</b></td><td class="r"><b>${zl(BASKET.reduce((a, b) => a + b[1], 0) * f)}</b></td></tr>`;
+  const labels = [], a = [], b = [];
+  for (let y = 0; y <= n; y++) {
+    labels.push(y === 0 ? 'dziś' : y + ' ' + (n > 12 ? 'l.' : lat(y)));
+    a.push(cash / Math.pow(1 + i, y)); b.push(cash / Math.pow(1.025, y));
+  }
+  chart($('#ch-inf'), {
+    labels, yFmt: (v) => zlShort(v) + ' zł', tipLabel: (k) => k === 0 ? 'dziś' : `po ${k} ${lat(k)}`,
+    series: [
+      { name: `Realna wartość przy inflacji ${pc(i * 100)}`, color: '--bad', data: a, fill: true },
+      { name: 'Przy celu NBP 2,5%', color: '--good', data: b, dash: true }
+    ]
+  });
+}
+$('#lab-inf').addEventListener('input', updInf);
+
+const HIST = [[2015, -0.9], [2016, -0.6], [2017, 2.0], [2018, 1.6], [2019, 2.3], [2020, 3.4], [2021, 5.1], [2022, 14.4], [2023, 11.4], [2024, 3.6]];
+function drawHist() {
+  chart($('#ch-hist'), {
+    type: 'bar', labels: HIST.map((d) => String(d[0])), band: [1.5, 3.5], noLegend: true,
+    yFmt: (v) => NF0.format(v) + '%',
+    series: [{ name: 'Inflacja CPI', color: '--accent', data: HIST.map((d) => d[1]), fmt: (v) => pc(v),
+      colorFn: (v) => v > 3.5 ? '--bad' : v < 1.5 ? '--accent' : '--good' }]
+  });
+  const f = HIST.reduce((acc, d) => acc * (1 + d[1] / 100), 1);
+  $('#hist-insight').innerHTML = `Licząc średnioroczne wskaźniki, zakupy za <b>100 zł</b> z 2014 roku kosztowały w 2024 roku około <b>${zl(100 * f)}</b>. Prawie cały ten wzrost przypadł na trzy lata: 2021–2023.`;
+}
+
+/* ================= STOPY: gra ================= */
+const ROUNDS = 10;
+const EVENTS = {
+  2: { d: 1.5, txt: 'Wiadomość: ceny energii znowu skaczą w górę. To dorzuca do inflacji 1,5 pkt proc.' },
+  5: { d: 0.8, txt: 'Wiadomość: ludzie ruszyli na zakupy, sklepy mają rekordowe obroty. Popyt podbija ceny o 0,8 pkt proc.' },
+  7: { d: -1.0, txt: 'Wiadomość: ropa na świecie tanieje. Inflacja spada o 1 pkt proc. bez twojej pomocy.' }
+};
+const G = {};
+function gReset() {
+  Object.assign(G, { t: 0, pi: [11], i: [], g: [4], u: [5], score: 0, prevGap: 6.75 - 11 - 1, done: false });
+  setVal('cb-rate', 6.75);
+  $('#cb-event').textContent = 'Start: po pandemii i skoku cen energii inflacja wystrzeliła do 11%. Stopa procentowa wynosi dziś 6,75%. Twoja decyzja?';
+  $('#cb-verdict').hidden = true;
+  $('#cb-go').disabled = false;
+  gRender();
+}
+function gStep() {
+  if (G.done) return;
+  const t = G.t, i = val('cb-rate'), pi = G.pi[t];
+  const gap = i - pi - 1;                                  // stopa realna ponad neutralną (1%)
+  const ev = EVENTS[t + 1];
+  let piN = pi - 0.15 * (pi - 2.5) - 0.25 * gap - 0.15 * G.prevGap + (ev ? ev.d : 0);
+  piN = clamp(piN, -3, 30);
+  const gN = clamp(3 - 0.6 * gap - 0.3 * G.prevGap, -5, 7);
+  const uN = clamp(G.u[t] - 0.3 * (gN - 3), 2, 15);
+  G.i[t] = i; G.pi.push(piN); G.g.push(gN); G.u.push(uN); G.prevGap = gap; G.t++;
+  const dist = Math.abs(piN - 2.5);
+  let pts = dist <= 1 ? 2 : dist <= 2 ? 1 : 0;
+  if (gN < 0) pts -= 1;
+  G.score += pts;
+  let msg = ev ? ev.txt + ' ' : '';
+  msg += piN < pi - 0.05 ? `Inflacja spadła do ${pc(piN)}. ` : piN > pi + 0.05 ? `Inflacja wzrosła do ${pc(piN)}. ` : `Inflacja prawie się nie zmieniła. `;
+  if (gN < 0) msg += 'Gospodarka się kurczy: firmy tną zatrudnienie. ';
+  else if (gN > 5) msg += 'Gospodarka pędzi, co może podgrzewać ceny. ';
+  msg += pts > 0 ? `+${pts} pkt.` : pts < 0 ? `${pts} pkt za recesję.` : 'Brak punktów w tej rundzie.';
+  $('#cb-event').textContent = msg;
+  if (G.t >= ROUNDS) {
+    G.done = true; $('#cb-go').disabled = true;
+    const s = G.score;
+    const verdict = s >= 12 ? 'Świetna robota! Inflacja wróciła do celu, a gospodarka to przetrwała. Takie „miękkie lądowanie” to marzenie każdego banku centralnego.'
+      : s >= 6 ? 'Nieźle. Inflacja spadła, ale po drodze były wstrząsy. Prawdziwi bankierzy też rzadko trafiają idealnie.'
+      : 'Trudna kadencja. Podpowiedź: aby zbić inflację, stopa musi być wyższa od inflacji, a efekty przychodzą z opóźnieniem. Nie przesadzaj też w drugą stronę.';
+    $('#cb-verdict').innerHTML = `<b>Koniec kadencji: ${s} pkt na ${ROUNDS * 2} możliwych.</b> ${verdict}`;
+    $('#cb-verdict').hidden = false;
+  }
+  gRender();
+}
+function setStat(el, cls) { el.classList.remove('good', 'bad', 'warn'); if (cls) el.classList.add(cls); }
+function annuity(K, ratePct, n) { const r = ratePct / 100 / 12; return r === 0 ? K / n : K * r / (1 - Math.pow(1 + r, -n)); }
+function gEffects() {
+  const i = val('cb-rate'), pi = G.pi[G.t];
+  const real = i - pi;
+  $('#cb-real').textContent = (real > 0 ? '+' : '') + pc(real);
+  setStat($('#cb-real').parentElement, real > 1 ? 'good' : real < 0 ? 'bad' : 'warn');
+  $('#cb-loan').textContent = zl(annuity(400000, i + 2, 300));
+  $('#cb-dep').textContent = zl(10000 * Math.max(0, i - 0.75) / 100 * 0.81);
+}
+function gRender() {
+  const t = G.t, pi = G.pi[t], g = G.g[t], u = G.u[t];
+  $('#cb-pi').textContent = pc(pi); $('#cb-g').textContent = pc(g); $('#cb-u').textContent = pc(u);
+  const d = Math.abs(pi - 2.5);
+  setStat($('#cb-st-pi'), d <= 1 ? 'good' : d <= 3 ? 'warn' : 'bad');
+  setStat($('#cb-st-g'), g < 0 ? 'bad' : g < 1.5 ? 'warn' : 'good');
+  setStat($('#cb-st-u'), u > 8 ? 'bad' : u > 6 ? 'warn' : 'good');
+  $('#cb-score').textContent = G.score;
+  $('#cb-round').textContent = G.done ? 'Koniec gry' : `Decyzja ${t + 1} z ${ROUNDS}`;
+  gEffects();
+  const labels = []; for (let k = 0; k <= ROUNDS; k++) labels.push(k === 0 ? 'start' : k % 2 ? '' : 'rok ' + k / 2);
+  const pad = (arr) => labels.map((_, k) => arr[k] ?? NaN);
+  chart($('#ch-cb'), {
+    labels,
+    tipLabel: (k) => k === 0 ? 'Start' : `${k % 2 ? 'I' : 'II'} półrocze ${Math.ceil(k / 2)}. roku`,
+    band: [1.5, 3.5], yMin: -2, yFmt: (v) => NF0.format(v) + '%',
+    series: [
+      { name: 'Inflacja', color: '--bad', data: pad(G.pi), dots: true, fmt: (v) => pc(v) },
+      { name: 'Twoja stopa procentowa', color: '--accent', data: pad(G.i), dots: true, fmt: (v) => pc(v, 2) },
+      { name: 'Wzrost PKB', color: '--s2', data: pad(G.g), dash: true, fmt: (v) => pc(v) }
+    ]
+  });
+}
+$('#cb-rate').addEventListener('input', gEffects);
+$('#cb-go').addEventListener('click', gStep);
+$('#cb-reset').addEventListener('click', gReset);
+
+/* ================= PROCENT SKŁADANY ================= */
+// f = ile razy w roku dopisuje się odsetki (365, 12, 4, 1; 0 = dopiero na koniec)
+// mode = 'cap': podatek przy każdej kapitalizacji, 'end': raz, przy wypłacie
+function grow(P0, m, r, years, tax, f = 12, mode = 'cap') {
+  const T = tax && mode === 'cap' ? 0.81 : 1;
+  const per = f >= 12 ? 0 : f > 0 ? 12 / f : Infinity;
+  const mf = f >= 12 ? Math.pow(1 + r / f, f / 12) - 1 : 0;
+  let bal = P0, pend = 0, paid = P0; const B = [P0], W = [P0];
+  for (let mo = 1; mo <= years * 12; mo++) {
+    bal += m; paid += m;
+    if (f >= 12) bal += bal * mf * T;
+    else {
+      pend += bal * r / 12;                                   // odsetki naliczone, jeszcze niedopisane
+      if (per !== Infinity && mo % per === 0) { bal += pend * T; pend = 0; }
+    }
+    if (mo % 12 === 0) { B.push(bal + pend * T); W.push(paid); }
+  }
+  bal += pend * T;
+  if (tax && mode === 'end') bal = paid + Math.max(0, bal - paid) * 0.81;
+  B[B.length - 1] = bal;
+  return { bal, paid, B, W };
+}
+const CAPS = [[365, 'Codzienna'], [12, 'Miesięczna'], [4, 'Kwartalna'], [1, 'Roczna'], [0, 'Brak (odsetki na koniec)']];
+function updSav() {
+  const P0 = val('sv-start'), m = val('sv-month'), r = val('sv-rate') / 100, n = val('sv-years'), inf = val('sv-inf') / 100, tax = $('#sv-tax').checked;
+  const f = +$('#sv-cap').value, mode = $('#sv-taxmode').value;
+  $('#sv-taxmode-row').hidden = !tax;
+  const res = grow(P0, m, r, n, tax, f, mode);
+  const R = res.B.map((v, y) => v / Math.pow(1 + inf, y));
+  $('#sv-paid').textContent = zl(res.paid);
+  $('#sv-int').textContent = zl(res.bal - res.paid);
+  $('#sv-bal').textContent = zl(res.bal);
+  $('#sv-bal-s').textContent = tax ? 'po podatku' : 'bez podatku';
+  $('#sv-real').textContent = zl(R[n]);
+  setStat($('#sv-real').parentElement, R[n] < res.paid ? 'bad' : null);
+  const labels = res.B.map((_, y) => y === 0 ? 'start' : y + ' ' + (n > 12 ? 'l.' : lat(y)));
+  chart($('#ch-sv'), {
+    labels, yFmt: (v) => zlShort(v) + ' zł', tipLabel: (k) => k === 0 ? 'start' : `po ${k} ${lat(k)}`,
+    series: [
+      { name: 'Masz na koncie', color: '--accent', data: res.B, fill: true, fmt: zl },
+      { name: 'Suma twoich wpłat', color: '--s2', data: res.W, fmt: zl },
+      { name: 'Realnie, w dzisiejszych zł', color: '--muted', data: R, dash: true, fmt: zl }
+    ]
+  });
+  const mm = m || 100;
+  const a = grow(0, mm, r, 44, tax, f, mode), b = grow(0, mm, r, 34, tax, f, mode);
+  $('#sv-early').innerHTML = `Odkładasz ${zl(mm)} miesięcznie na ${pc(r * 100, 2)} aż do 60. urodzin. Start w wieku <b>16 lat</b>: na koniec ${zl(a.bal)} (wpłacisz ${zl(a.paid)}). Start w wieku <b>26 lat</b>: ${zl(b.bal)} (wpłacisz ${zl(b.paid)}). Dziesięć lat różnicy kosztuje <b>${zl(a.bal - b.bal)}</b>, choć wpłaty różnią się tylko o ${zl(a.paid - b.paid)}.`;
+  updCap(P0, m, r, n, tax, f, mode);
+}
+function updCap(P0, m, r, n, tax, fSel, mode) {
+  const runs = CAPS.map(([f, name]) => ({ f, name, res: grow(P0, m, r, n, tax, f, mode) }));
+  const none = runs[runs.length - 1].res.bal;
+  const eff = (f) => f > 0 ? Math.pow(1 + r / f, f) - 1 : Math.pow(1 + r * n, 1 / n) - 1;
+  $('#cap-tbl').innerHTML = runs.map(({ f, name, res }) => {
+    const sel = f === fSel;
+    const e = pc(eff(f) * 100, 2) + (f === 0 ? ` <span class="pill warn">średnio przez ${n} ${lat(n)}</span>` : '');
+    return `<tr${sel ? ' style="font-weight:700"' : ''}><td>${name}${sel ? ' ← wybrana' : ''}</td><td class="r">${e}</td><td class="r">${zl(res.bal)}</td><td class="r">${f === 0 ? '–' : '+' + zl(res.bal - none)}</td></tr>`;
+  }).join('');
+  const L = runs[0].res.B.map((_, y) => y === 0 ? 'start' : y + ' ' + (n > 12 ? 'l.' : lat(y)));
+  chart($('#ch-cap'), {
+    labels: L, yFmt: (v) => zlShort(v) + ' zł', tipLabel: (k) => k === 0 ? 'start' : `po ${k} ${lat(k)}`,
+    series: [
+      { name: 'Codzienna', color: '--accent', data: runs[0].res.B, fmt: zl },
+      { name: 'Roczna', color: '--s2', data: runs[3].res.B, fmt: zl },
+      { name: 'Brak kapitalizacji', color: '--bad', data: runs[4].res.B, dash: true, fmt: zl },
+      { name: 'Same wpłaty', color: '--muted', data: runs[0].res.W, dash: true, fmt: zl }
+    ]
+  });
+  const d = runs[0].res.bal - runs[1].res.bal;
+  let txt = `Kapitalizacja codzienna i miesięczna różnią się tylko o ${zl(d)}, więc nie daj się nabrać na reklamę „odsetki codziennie!”. Najważniejsze, żeby odsetki w ogóle były dopisywane i dalej zarabiały: bez tego tracisz <b>${zl(runs[1].res.bal - none)}</b>.`;
+  if (tax) {
+    const c = grow(P0, m, r, n, true, fSel || 12, 'cap').bal, e = grow(P0, m, r, n, true, fSel || 12, 'end').bal;
+    txt += ` Moment płacenia podatku też ma znaczenie: podatek pobierany raz na końcu zamiast przy każdej kapitalizacji daje o <b>${zl(e - c)}</b> więcej, bo przez ${n} ${lat(n)} procentuje cała kwota.`;
+  } else {
+    txt += ' Włącz podatek Belki w kalkulatorze, żeby zobaczyć, jak ważne jest, kiedy się go płaci.';
+  }
+  $('#cap-tax').innerHTML = txt;
+}
+$('#lab-sv').addEventListener('input', updSav);
+$('#lab-sv').addEventListener('change', updSav);
+
+/* ================= OBLIGACJE ================= */
+const SCEN = {
+  szok: [5.1, 14.4, 11.4, 3.6, 3.5, 3, 3, 2.5, 2.5, 2.5],
+  spokojnie: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
+  niska: [1.5, 1, 1, 1.5, 1.5, 2, 2, 2, 2, 2]
+};
+function updBond() {
+  const K = val('bd-amt'), sc = $('#bd-scen').value, n = val('bd-years');
+  $('#bd-custom-row').hidden = sc !== 'wlasna';
+  const infl = sc === 'wlasna' ? Array(10).fill(val('bd-custom')) : SCEN[sc];
+  const fixed = val('bd-fixed') / 100, first = val('bd-first') / 100, m = val('bd-margin') / 100;
+  let fx = K, ix = K, pr = K, paidOut = 0;
+  const L = ['start'], F = [K], I = [K], CI = [K], PR = [K], S = [K], rates = [];
+  for (let y = 1; y <= n; y++) {
+    const ri = y === 1 ? first : Math.max(0, infl[y - 2] / 100) + m;
+    rates.push(ri);
+    fx *= 1 + fixed; ix *= 1 + ri; pr *= 1 + infl[y - 1] / 100;
+    paidOut += K * ri * 0.81;                                // COI: odsetki od 100 zł za sztukę, wypłacane i opodatkowane co roku
+    L.push(y + ' ' + (n > 6 ? 'l.' : lat(y))); F.push(fx); I.push(ix); CI.push(K + paidOut); PR.push(pr); S.push(K);
+  }
+  chart($('#ch-bd'), {
+    labels: L, yFmt: (v) => zlShort(v) + ' zł', zero: false,
+    tipLabel: (k) => k === 0 ? 'start' : `po ${k} ${lat(k)} (inflacja w tym roku ${pc(infl[k - 1])}${k > 0 ? ', indeksowana: ' + pc(rates[k - 1] * 100, 2) : ''})`,
+    series: [
+      { name: 'Obligacja stałoprocentowa', color: '--accent', data: F, fmt: zl },
+      { name: 'Indeksowana, odsetki doliczane (jak EDO)', color: '--good', data: I, fmt: zl },
+      { name: 'Indeksowana, odsetki wypłacane (jak COI)', color: '--s4', data: CI, fmt: zl },
+      { name: 'Gotówka w skarpecie', color: '--muted', data: S, fmt: zl },
+      { name: 'Tyle trzeba, by kupić to samo co dziś', color: '--bad', data: PR, dash: true, fmt: zl }
+    ]
+  });
+  const net = (v) => K + Math.max(0, v - K) * 0.81;
+  const nc = K + paidOut;
+  const rows = [['Stała', net(fx)], ['Jak EDO (kapitalizacja)', net(ix)], ['Jak COI (wypłata)', nc], ['Skarpeta', K]];
+  $('#bd-stats').innerHTML = rows.map(([name, v]) => {
+    const real = v * K / pr;
+    const cls = real >= K ? 'good' : 'bad';
+    return `<div class="stat ${cls}"><span class="k">${name}</span><span class="v">${zl(v)}</span><span class="s">po podatku; realnie ${zl(real)} w dzisiejszych zł</span></div>`;
+  }).join('');
+  const nf_ = net(fx), ni = net(ix);
+  const win = Math.abs(nf_ - ni) < K * 0.005 ? 'Obie obligacje dały prawie to samo.' :
+    nf_ > ni ? `Wygrywa obligacja <b>stała</b> (o ${zl(nf_ - ni)}). Inflacja była niższa, niż zakładał jej stały procent.` :
+      `Wygrywa obligacja <b>indeksowana</b> (o ${zl(ni - nf_)}). Gdy inflacja rośnie, jej oprocentowanie rośnie razem z nią.`;
+  const capTxt = n > 1
+    ? ` Ta sama obligacja indeksowana daje <b>${zl(ni - nc)}</b> więcej, gdy odsetki są doliczane (EDO), niż gdy są wypłacane i nie inwestujesz ich dalej (COI). To efekt kapitalizacji: odsetki zarabiają kolejne odsetki, a podatek płacisz dopiero na końcu.`
+    : ' Ustaw okres dłuższy niż rok, żeby zobaczyć różnicę między doliczaniem a wypłacaniem odsetek.';
+  $('#bd-verdict').innerHTML = `${win}${capTxt} Gotówka w skarpecie straciła realnie <b>${pc((1 - K / pr) * 100, 0)}</b> wartości. Indeksowane reagują z rocznym opóźnieniem: oprocentowanie na dany rok zależy od inflacji z roku poprzedniego.`;
+}
+$('#lab-bd').addEventListener('input', updBond);
+$('#lab-bd').addEventListener('change', updBond);
+
+function updSeesaw() {
+  const r = val('ss-rate') / 100, c = 0.05, N = 1000, n = 5;
+  let p = 0; for (let t = 1; t <= n; t++) p += c * N / Math.pow(1 + r, t);
+  p += N / Math.pow(1 + r, n);
+  const ang = clamp((r - c) * 100 * 3.2, -16, 16);
+  $('#ss-g').style.transform = `rotate(${ang}deg)`;
+  $('#ss-tl').textContent = 'Stopy ' + pc(r * 100, r * 100 % 1 ? 2 : 0);
+  $('#ss-tr').textContent = 'Cena ' + zl(p);
+  $('#ss-price').textContent = zl(p);
+  const ch = (p / N - 1) * 100;
+  $('#ss-chg').textContent = (ch >= 0 ? '+' : '') + pc(ch) + ' względem 1000 zł';
+  setStat($('#ss-st'), Math.abs(ch) < 0.5 ? null : ch > 0 ? 'good' : 'bad');
+  $('#ss-why').innerHTML = r > c + 0.0001
+    ? `Nowe obligacje płacą teraz ${pc(r * 100, 2)}, a twoja tylko 5%. Nikt nie zapłaci za nią pełnych 1000 zł, więc jej cena <b>spada</b>. Jeśli jednak poczekasz do wykupu, i tak dostaniesz 1000 zł.`
+    : r < c - 0.0001
+      ? `Nowe obligacje płacą tylko ${pc(r * 100, 2)}, a twoja aż 5%. Twoja jest atrakcyjniejsza, więc ludzie zapłacą za nią <b>więcej</b> niż 1000 zł.`
+      : 'Stopy na rynku są równe oprocentowaniu twojej obligacji, więc jest warta dokładnie tyle, ile jej nominał.';
+}
+$('#ss-rate').addEventListener('input', updSeesaw);
+
+/* ================= AKCJE ================= */
+function mulberry32(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function gauss(R) { let u = 0; while (u === 0) u = R(); return Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * R()); }
+const MK = { mu: 0.07, s: 0.16 }, ID = { mu: 0.01, s: 0.33 }, BANKRUPT = 0.012, DEP = 0.03, PANIC = 0.25;
+const DT = 1 / 12, SDT = Math.sqrt(DT);
+function simulate(R, months, keep) {
+  let one = 1, bask = 1, pan = 1, peak = 1, out = false, alive = true;
+  const A = keep ? [1] : null, B = keep ? [1] : null;
+  const oneDrift = (MK.mu - 0.5 * MK.s * MK.s + ID.mu - 0.5 * ID.s * ID.s) * DT;
+  const idB = ID.s / Math.sqrt(20);
+  const baskDrift = (MK.mu - 0.5 * MK.s * MK.s + ID.mu - 0.5 * idB * idB) * DT;
+  for (let k = 0; k < months; k++) {
+    const zm = MK.s * SDT * gauss(R);
+    if (alive) {
+      one *= Math.exp(oneDrift + zm + ID.s * SDT * gauss(R));
+      if (R() < BANKRUPT * DT) { alive = false; one = 0; }
+    }
+    bask *= Math.exp(baskDrift + zm + idB * SDT * gauss(R));
+    if (!out) { pan = bask; peak = Math.max(peak, bask); if (bask < peak * (1 - PANIC)) out = true; }
+    else pan *= 1 + DEP / 12;
+    if (keep) { A.push(one); B.push(bask); }
+  }
+  return { one, bask, pan, A, B };
+}
+let seed = 20261030;
+function updStocks() {
+  const yrs = val('st-years'), months = yrs * 12, K = 10000;
+  const r = simulate(mulberry32(seed), months, true);
+  const L = [], D = [];
+  for (let k = 0; k <= months; k++) { L.push(k % 12 === 0 ? (k === 0 ? 'start' : (k / 12) + ' l.') : ''); D.push(K * Math.pow(1 + DEP / 12, k)); }
+  chart($('#ch-st'), {
+    labels: L, yFmt: (v) => zlShort(v) + ' zł',
+    tipLabel: (k) => k === 0 ? 'start' : `rok ${Math.floor(k / 12)}, miesiąc ${k % 12 + 1}`,
+    series: [
+      { name: 'Jedna firma', color: '--s2', data: r.A.map((v) => v * K), width: 1.75, fmt: zl },
+      { name: 'Koszyk 20 firm (ETF)', color: '--accent', data: r.B.map((v) => v * K), width: 2.25, fmt: zl },
+      { name: 'Lokata 3%', color: '--muted', data: D, dash: true, fmt: zl }
+    ]
+  });
+  const st = [['Jedna firma', r.one * K], ['Koszyk 20 firm', r.bask * K], ['Lokata 3%', D[months]]];
+  $('#st-stats').innerHTML = st.map(([n, v]) => `<div class="stat ${v >= K ? 'good' : 'bad'}"><span class="k">${n}</span><span class="v">${zl(v)}</span><span class="s">${v >= K ? '+' : ''}${pc((v / K - 1) * 100, 0)}${r.one === 0 && n === 'Jedna firma' ? ', firma zbankrutowała' : ''}</span></div>`).join('');
+}
+// Dywidendy: całkowity zysk koszyka (ceny + dywidendy brutto) dzielimy na wzrost cen i wypłatę dywidendy
+function updDiv() {
+  const yrs = val('dv-years'), months = yrs * 12, d = val('dv-yield') / 100, K = 10000, NET = 0.81;
+  const path = simulate(mulberry32(seed ^ 0x5bd1e995), months, true).B;
+  let V = K, S = K, cash = 0;
+  const L = ['start'], RV = [K], SV = [K], SC = [K];
+  for (let k = 1; k <= months; k++) {
+    const p = (path[k] / path[k - 1]) / (1 + d / 12);       // sam wzrost ceny akcji
+    V *= p; V += V * d / 12 * NET;                          // dywidenda za nowe akcje
+    S *= p; cash += S * d / 12 * NET;                       // dywidenda na konto, wydana
+    L.push(k % 12 === 0 ? (k / 12) + ' l.' : ''); RV.push(V); SV.push(S); SC.push(S + cash);
+  }
+  chart($('#ch-dv'), {
+    labels: L, yFmt: (v) => zlShort(v) + ' zł',
+    tipLabel: (k) => k === 0 ? 'start' : `rok ${Math.floor(k / 12)}, miesiąc ${k % 12 + 1}`,
+    series: [
+      { name: 'Reinwestuję dywidendy', color: '--accent', data: RV, fmt: zl },
+      { name: 'Wydaję: wartość akcji', color: '--s2', data: SV, fmt: zl },
+      { name: 'Wydaję: akcje + suma wydanych dywidend', color: '--s4', data: SC, dash: true, fmt: zl }
+    ]
+  });
+  $('#dv-stats').innerHTML = [
+    ['Reinwestuję', zl(V), `dywidenda w ostatnim roku: ${zl(V * d * NET)}`, 'acc'],
+    ['Wydaję: akcje', zl(S), `dywidenda w ostatnim roku: ${zl(S * d * NET)}`, ''],
+    ['Wydane dywidendy', zl(cash), `łącznie przez ${yrs} ${lat(yrs)}`, '']
+  ].map(([k, v, s, c]) => `<div class="stat ${c}"><span class="k">${k}</span><span class="v">${v}</span><span class="s">${s}</span></div>`).join('');
+  const diff = V - (S + cash);
+  $('#dv-insight').innerHTML = d === 0
+    ? 'Przy zerowej dywidendzie oba wykresy są takie same: cały zysk pochodzi ze wzrostu cen. Przesuń suwak dywidendy w prawo.'
+    : `Wydając dywidendy, dostałeś po drodze ${zl(cash)} i masz akcje warte ${zl(S)}, razem ${zl(S + cash)}. Reinwestując, masz <b>${zl(V)}</b>, czyli o <b>${zl(diff)}</b> więcej. To procent składany: dokupione akcje płacą kolejne dywidendy. Po ${yrs} ${lat(yrs)} reinwestowany portfel wypłaca ${zl(V * d * NET)} dywidendy rocznie, a ten bez reinwestowania ${zl(S * d * NET)}.`;
+}
+$('#dv-years').addEventListener('input', updDiv);
+$('#dv-yield').addEventListener('input', updDiv);
+let mcTimer = null;
+function runMC() {
+  const yrs = val('st-years'), months = yrs * 12, N = 1000, K = 10000;
+  const R = mulberry32(777 + yrs);
+  const one = [], bask = [], pan = [];
+  for (let s = 0; s < N; s++) { const r = simulate(R, months, false); one.push(r.one); bask.push(r.bask); pan.push(r.pan); }
+  const dep = Math.pow(1 + DEP / 12, months);
+  const q = (arr, p) => arr[Math.min(arr.length - 1, Math.floor(p * arr.length))];
+  const row = (name, arr) => {
+    arr.sort((a, b) => a - b);
+    const loss = arr.filter((v) => v < 1).length / arr.length * 100;
+    return { name, lo: q(arr, 0.05), med: q(arr, 0.5), hi: q(arr, 0.95), loss };
+  };
+  const rows = [row('Jedna firma', one), row('Koszyk 20 firm (ETF)', bask), row('Koszyk + panika po spadku', pan),
+    { name: 'Lokata 3%', lo: dep, med: dep, hi: dep, loss: 0 }];
+  $('#mc-body').innerHTML = rows.map((r) => `<tr><td>${r.name}</td><td class="r">${zl(r.lo * K)}</td><td class="r"><b>${zl(r.med * K)}</b></td><td class="r">${zl(r.hi * K)}</td><td class="r">${pc(r.loss, 0)}<div class="meter"><i style="width:${r.loss}%"></i></div></td></tr>`).join('');
+  const b = rows[1], o = rows[0], p = rows[2];
+  $('#mc-insight').innerHTML = `Przy horyzoncie ${yrs} ${lat(yrs)} koszyk firm kończy na minusie w <b>${pc(b.loss, 0)}</b> przypadków, a jedna firma w <b>${pc(o.loss, 0)}</b>. ` +
+    (p.med < b.med ? `Panika kosztuje: typowy wynik spada z ${zl(b.med * K)} do ${zl(p.med * K)}. ` : '') +
+    'Sprawdź, jak zmienia się szansa na stratę, gdy wydłużysz horyzont do 20–30 lat albo skrócisz go do roku.';
+}
+$('#st-years').addEventListener('input', () => { updStocks(); clearTimeout(mcTimer); mcTimer = setTimeout(runMC, 180); });
+$('#st-roll').addEventListener('click', () => { seed = (Math.random() * 2 ** 31) | 0; updStocks(); updDiv(); });
+
+/* ================= KREDYTY ================= */
+const PRESETS = {
+  dom: { amt: 400000, n: 300, rate: 7.5, fee: 0, type: 'rowne', inc: 9000 },
+  auto: { amt: 40000, n: 48, rate: 11, fee: 4, type: 'rowne', inc: 6000 },
+  tel: { amt: 3000, n: 20, rate: 0, fee: 0, type: 'rowne', inc: 4000 },
+  chwil: { amt: 2000, n: 6, rate: 18, fee: 20, type: 'rowne', inc: 3500 }
+};
+function schedule(K, n, ratePct, type) {
+  const r = ratePct / 100 / 12; let bal = K; const rows = [];
+  const ann = annuity(K, ratePct, n);
+  for (let k = 0; k < n; k++) {
+    const int = bal * r;
+    const cap = type === 'rowne' ? ann - int : K / n;
+    bal -= cap; rows.push({ pay: cap + int, int, cap });
+  }
+  return rows;
+}
+function rrso(net, pays) {
+  const pv = (x) => pays.reduce((s, p, k) => s + p / Math.pow(1 + x, k + 1), 0);
+  if (pv(0) <= net + 1e-9) return 0;
+  let lo = 0, hi = 1;
+  while (pv(hi) > net && hi < 64) hi *= 2;
+  for (let it = 0; it < 80; it++) { const mid = (lo + hi) / 2; if (pv(mid) > net) lo = mid; else hi = mid; }
+  return Math.pow(1 + (lo + hi) / 2, 12) - 1;
+}
+let KR = null;
+function updLoan() {
+  let K = parseFloat($('#kr-amt').value);
+  if (!Number.isFinite(K) || K < 100) K = 100;
+  const n = val('kr-n'), rate = val('kr-rate'), fee = val('kr-fee') / 100, type = $('#kr-type').value, inc = val('kr-inc');
+  const rows = schedule(K, n, rate, type);
+  const interest = rows.reduce((s, r) => s + r.int, 0);
+  const feeZl = K * fee;
+  const R = rrso(K - feeZl, rows.map((r) => r.pay));
+  const first = rows[0].pay, last = rows[n - 1].pay;
+  KR = { K, n, rate, type, inc, first };
+  $('#kr-rata-k').textContent = type === 'rowne' ? 'Rata miesięczna' : 'Pierwsza rata';
+  $('#kr-rata').textContent = zl2(first);
+  $('#kr-rata-s').textContent = type === 'rowne' ? `${n} równych rat` : `ostatnia: ${zl2(last)}`;
+  $('#kr-int').textContent = zl(interest);
+  $('#kr-total').textContent = zl(K + interest + feeZl);
+  $('#kr-total-s').textContent = feeZl > 0 ? `w tym prowizja ${zl(feeZl)}` : `pożyczasz ${zl(K)}`;
+  $('#kr-rrso').textContent = R > 10 ? 'ponad 1000%' : pc(R * 100, 2);
+  setStat($('#kr-rrso-st'), R * 100 > rate + 3 ? 'bad' : R * 100 > rate + 0.5 ? 'warn' : null);
+  const dti = first / inc * 100;
+  $('#kr-dti').textContent = pc(dti, 0);
+  $('#kr-dti-s').textContent = dti <= 30 ? 'bezpiecznie' : dti <= 45 ? 'na granicy' : 'za dużo';
+  setStat($('#kr-dti-st'), dti <= 30 ? 'good' : dti <= 45 ? 'warn' : 'bad');
+  const L = rows.map((_, k) => { const m = k + 1; return n > 36 ? (m % 12 === 0 ? m / 12 + ' l.' : '') : String(m); });
+  chart($('#ch-kr'), {
+    labels: L, yFmt: (v) => zlShort(v) + ' zł', tipLabel: (k) => `rata nr ${k + 1}`,
+    series: [
+      { name: 'Część kapitałowa (spłacasz dług)', color: '--accent', data: rows.map((r) => r.cap), fill: true, fmt: zl2 },
+      { name: 'Część odsetkowa (płacisz bankowi)', color: '--bad', data: rows.map((r) => r.int), fill: true, fmt: zl2 }
+    ]
+  });
+  updShock();
+}
+function updShock() {
+  if (!KR) return;
+  const up = val('sh-up');
+  const now = KR.first, nw = schedule(KR.K, KR.n, KR.rate + up, KR.type)[0].pay;
+  $('#sh-now').textContent = zl2(now);
+  $('#sh-new').textContent = zl2(nw);
+  $('#sh-diff').textContent = `+${zl(nw - now)} miesięcznie (+${pc((nw / now - 1) * 100, 0)})`;
+  const dti = nw / KR.inc * 100;
+  $('#sh-dti').textContent = pc(dti, 0);
+  setStat($('#sh-dti-st'), dti <= 30 ? 'good' : dti <= 45 ? 'warn' : 'bad');
+  $('#sh-insight').innerHTML = `Przez rok to dodatkowe <b>${zl((nw - now) * 12)}</b>. ` +
+    (KR.n >= 120 ? 'Przy długich kredytach nawet mała zmiana stóp mocno zmienia ratę, bo odsetki liczy się od dużej kwoty przez wiele lat.' : 'Przy krótkich i małych pożyczkach zmiana stóp ma mniejsze znaczenie niż prowizje i opłaty.');
+}
+$('#lab-kr').addEventListener('input', updLoan);
+$('#lab-kr').addEventListener('change', updLoan);
+$('#sh-up').addEventListener('input', updShock);
+$('#kr-presets').addEventListener('click', (e) => {
+  const b = e.target.closest('button[data-p]'); if (!b) return;
+  const p = PRESETS[b.dataset.p];
+  $$('#kr-presets button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+  $('#kr-amt').value = p.amt; setVal('kr-n', p.n); setVal('kr-rate', p.rate); setVal('kr-fee', p.fee); setVal('kr-inc', p.inc);
+  $('#kr-type').value = p.type;
+  updLoan();
+});
+
+/* ================= QUIZ ================= */
+const QUIZ = [
+  ['Masz 1000 zł w szufladzie. Przez rok inflacja wynosi 10%. Ile realnie warte są twoje pieniądze po roku?',
+    ['1100 zł', 'Około 909 zł', '1000 zł', 'Dokładnie 900 zł'], 1,
+    'Za rok to, co dziś kosztuje 1000 zł, będzie kosztować 1100 zł. Twoje 1000 zł kupi więc 1000 ÷ 1,1 ≈ 909 zł dzisiejszych zakupów.'],
+  ['Inflacja jest dużo powyżej celu. Co zwykle robi bank centralny?',
+    ['Podnosi stopy procentowe', 'Obniża stopy procentowe', 'Zakazuje sklepom podwyżek', 'Drukuje więcej pieniędzy'], 0,
+    'Wyższe stopy sprawiają, że kredyty drożeją, a oszczędzanie się opłaca. Ludzie mniej wydają, więc ceny rosną wolniej.'],
+  ['Kupujesz obligację skarbową. Co tak naprawdę robisz?',
+    ['Kupujesz kawałek firmy', 'Pożyczasz pieniądze państwu', 'Bierzesz kredyt', 'Zakładasz konto w NBP'], 1,
+    'Obligacja to dług. Państwo pożycza od ciebie pieniądze i oddaje je z odsetkami w ustalonym terminie.'],
+  ['Stopy procentowe na rynku rosną. Co dzieje się z ceną starej obligacji o stałym oprocentowaniu?',
+    ['Rośnie', 'Spada', 'Nie zmienia się', 'Obligacja przestaje istnieć'], 1,
+    'Nowe obligacje płacą więcej, więc stara, niżej oprocentowana jest mniej atrakcyjna. Kupujący zapłacą za nią mniej. To działa jak huśtawka.'],
+  ['Masz jedną akcję spółki. Co to oznacza?',
+    ['Pożyczyłeś firmie pieniądze', 'Jesteś współwłaścicielem firmy', 'Firma musi ci wypłacać pensję', 'Masz gwarancję zysku'], 1,
+    'Akcja to udział w firmie. Możesz zarobić na wzroście ceny i dywidendach, ale nikt nie gwarantuje zysku.'],
+  ['Na czym polega dywersyfikacja?',
+    ['Na kupowaniu tylko najlepszej firmy', 'Na rozłożeniu pieniędzy na wiele różnych inwestycji', 'Na częstym kupowaniu i sprzedawaniu', 'Na trzymaniu pieniędzy w gotówce'], 1,
+    'Gdy masz wiele firm, bankructwo jednej nie zniszczy całego portfela. Fundusze ETF ułatwiają to jedną transakcją.'],
+  ['Która liczba najlepiej pokazuje całkowity koszt kredytu i pozwala porównać oferty?',
+    ['Oprocentowanie nominalne', 'Liczba rat', 'RRSO', 'Wysokość pierwszej raty'], 2,
+    'RRSO uwzględnia nie tylko odsetki, ale też prowizje i inne opłaty. Oferta „0%” może mieć wysokie RRSO.'],
+  ['Masz kredyt ze zmiennym oprocentowaniem. NBP podnosi stopy. Co dzieje się z twoją ratą?',
+    ['Rośnie', 'Spada', 'Nie zmienia się', 'Kredyt jest umarzany'], 0,
+    'Oprocentowanie zmienne to wskaźnik rynkowy + marża banku. Gdy stopy NBP rosną, rośnie wskaźnik, a z nim twoja rata.'],
+  ['Kiedy obligacja indeksowana inflacją wypada najlepiej w porównaniu ze stałoprocentową?',
+    ['Gdy inflacja niespodziewanie mocno rośnie', 'Gdy inflacja spada do zera', 'Gdy ceny są stałe', 'Nigdy'], 0,
+    'Jej oprocentowanie to inflacja + marża, więc rośnie razem z cenami. Obligacja stała płaci tyle samo bez względu na inflację.'],
+  ['Czym jest procent składany?',
+    ['Opłatą za prowadzenie konta', 'Naliczaniem odsetek także od wcześniej zarobionych odsetek', 'Podatkiem od zysków', 'Karą za spóźnioną ratę'], 1,
+    'Odsetki dopisane do kapitału same zaczynają zarabiać. Dlatego oszczędności rosną jak kula śnieżna, im dłużej czekasz.'],
+  ['Dwie lokaty mają oprocentowanie 6% w skali roku. Pierwsza dopisuje odsetki co miesiąc, druga raz w roku. Która da więcej po roku?',
+    ['Ta z kapitalizacją miesięczną', 'Ta z kapitalizacją roczną', 'Obie tyle samo', 'Nie da się tego policzyć'], 0,
+    'Odsetki dopisane w styczniu zarabiają już w lutym. Przy kapitalizacji miesięcznej 6% nominalnie daje około 6,17% efektywnie.'],
+  ['Co daje reinwestowanie dywidend?',
+    ['Nic, dywidendy są zbyt małe, żeby miały znaczenie', 'Za dywidendy kupujesz kolejne akcje, które też płacą dywidendy, więc zysk rośnie jak kula śnieżna', 'Nie musisz płacić podatku od dywidend', 'Masz gwarancję, że cena akcji wzrośnie'], 1,
+    'To procent składany w wersji giełdowej. Po kilkudziesięciu latach reinwestowane dywidendy mogą odpowiadać za dużą część całego zysku z akcji.'],
+  ['Ile wynosi w Polsce podatek od zysków z lokat, obligacji i akcji (tzw. podatek Belki)?',
+    ['5%', '12%', '19%', '23%'], 2,
+    'To 19% od zysku. Można go legalnie uniknąć, oszczędzając w ramach kont emerytalnych IKE.'],
+  ['Kredyt w ratach malejących w porównaniu z ratami równymi (ta sama kwota, okres i oprocentowanie):',
+    ['Ma niższe pierwsze raty', 'Kosztuje łącznie mniej odsetek', 'Kosztuje łącznie więcej odsetek', 'Nie różni się niczym'], 1,
+    'W ratach malejących szybciej spłacasz kapitał, więc odsetki liczone są od coraz mniejszej kwoty. Za to pierwsze raty są wyższe.']
+];
+let qOk = 0, qDone = 0;
+function renderQuiz() {
+  qOk = 0; qDone = 0;
+  $('#qz-list').innerHTML = QUIZ.map(([q, opts], qi) =>
+    `<div class="q" data-q="${qi}"><h3>${qi + 1}. ${q}</h3><div class="opts">${opts.map((o, oi) => `<button type="button" data-o="${oi}">${o}</button>`).join('')}</div><p class="why" hidden></p></div>`).join('');
+  updScore();
+}
+function updScore() { $('#qz-score').textContent = `Wynik: ${qOk} / ${qDone}` + (qDone === QUIZ.length ? ` · ${qOk >= 12 ? 'Mistrz finansów!' : qOk >= 9 ? 'Dobra robota!' : 'Wróć do lekcji i spróbuj jeszcze raz.'}` : ''); }
+$('#qz-list').addEventListener('click', (e) => {
+  const b = e.target.closest('button[data-o]'); if (!b) return;
+  const card = b.closest('.q'); if (card.dataset.answered) return;
+  const qi = +card.dataset.q, oi = +b.dataset.o, good = QUIZ[qi][2];
+  card.dataset.answered = '1'; qDone++;
+  $$('button', card).forEach((x) => { x.disabled = true; x.style.opacity = 1; });
+  card.querySelector(`button[data-o="${good}"]`).classList.add('ok');
+  if (oi === good) qOk++; else b.classList.add('no');
+  const why = card.querySelector('.why');
+  why.innerHTML = `<b>${oi === good ? 'Dobrze!' : 'Nie tym razem.'}</b> ${QUIZ[qi][3]}`; why.hidden = false;
+  updScore();
+});
+$('#qz-reset').addEventListener('click', () => { renderQuiz(); window.scrollTo(0, 0); });
+
+/* ================= nawigacja ================= */
+const VIEWS = ['start', 'inflacja', 'stopy', 'oszczedzanie', 'obligacje', 'akcje', 'kredyty', 'quiz'];
+function route() {
+  const h = location.hash.slice(1);
+  const v = VIEWS.includes(h) ? h : 'start';
+  $$('section.view').forEach((s) => { s.hidden = s.id !== 'v-' + v; });
+  $$('nav.tabs a').forEach((a) => {
+    if (a.getAttribute('href') === '#' + v) { a.setAttribute('aria-current', 'page'); a.scrollIntoView({ block: 'nearest', inline: 'nearest' }); }
+    else a.removeAttribute('aria-current');
+  });
+  window.scrollTo(0, 0);
+  requestAnimationFrame(redrawAll);
+}
+window.addEventListener('hashchange', route);
+
+/* ================= start ================= */
+updHero(); updInf(); drawHist(); gReset(); updSav(); updBond(); updSeesaw(); updStocks(); updDiv(); runMC(); updLoan(); renderQuiz();
+route();
+})();
+</script>
+</body>
+</html>
