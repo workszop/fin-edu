@@ -441,6 +441,18 @@ details.more > :not(summary) { margin: 10px 14px; font-size: var(--body-sm); }
 .snow-note { grid-column: 1 / -1; background: var(--yellow-soft); color: var(--yellow-ink); }
 .snow-note:empty { display: none; }
 
+/* ===== m-picker ===== */
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chips .chip { padding: 6px 14px; }
+.picker-bar { height: 18px; }
+.picker-bar > span { background: var(--green); }
+.picker-scale { display: flex; justify-content: space-between; margin-top: -6px; font-family: var(--font-mono); font-size: var(--overline); color: var(--ink-2); }
+.mini .readout > [data-part="rate"] { grid-column: 1 / -1; display: flex; align-items: center; gap: 8px; }
+.mini .readout > [data-part="bond"] { grid-column: 1; }
+[data-part="rate"] > .ic { display: none; }
+#m-picker[data-kind="fixed"] .k-fixed, #m-picker[data-kind="variable"] .k-variable, #m-picker[data-kind="indexed"] .k-indexed, #m-picker[data-kind="family"] .k-family { display: inline-block; }
+.tile.wide { grid-column: 1 / -1; }
+
 /* ===== kontrolki ===== */
 .controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr)); gap: 14px 22px; }
 .ctl { display: grid; grid-template-columns: 1fr auto; align-items: baseline; gap: 4px 8px; min-width: 0; }
@@ -969,41 +981,46 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
     <div class="split">
       <div class="explain">
         <section>
-          <h3><i data-lucide="scroll-text" class="ic" aria-hidden="true"></i>Co to jest?</h3>
-          <p><strong>Obligacja</strong> to papier dłużny. Kupując ją, pożyczasz pieniądze emitentowi, a on obiecuje oddać je w określonym dniu z odsetkami. Gdy emitentem jest Skarb Państwa, mówimy o <strong>obligacjach skarbowych</strong>. To jedna z najbezpieczniejszych form oszczędzania w Polsce.</p>
+          <div class="row-head"><span class="badge"><i data-lucide="scroll-text" class="ic" aria-hidden="true"></i></span><h3>Co to jest?</h3></div>
+          <p><strong>Obligacja</strong> to dług: pożyczasz pieniądze emitentowi, a on oddaje je z odsetkami.</p>
+          <p>Gdy emitentem jest Skarb Państwa, to <strong>obligacje skarbowe</strong>: jedna z najbezpieczniejszych form oszczędzania w Polsce.</p>
+          <ol class="chain">
+            <li class="link">Pożyczasz państwu 100 zł.</li>
+            <li class="link">Co roku naliczają się odsetki.</li>
+            <li class="link">Na koniec państwo oddaje pożyczone pieniądze.</li>
+          </ol>
         </section>
         <section>
-          <h3><i data-lucide="landmark" class="ic" aria-hidden="true"></i>Obligacje oszczędnościowe (detaliczne)</h3>
-          <p>Kosztują 100 zł za sztukę i są przeznaczone dla zwykłych ludzi. Najważniejsze rodzaje:</p>
-          <div class="tbl-wrap">
-            <table>
-              <thead><tr><th>Symbol</th><th>Okres</th><th>Oprocentowanie</th></tr></thead>
-              <tbody>
-                <tr><td><b>OTS</b></td><td>3 miesiące</td><td>stałe</td></tr>
-                <tr><td><b>ROR</b></td><td>1 rok</td><td>zmienne, zależy od stopy NBP</td></tr>
-                <tr><td><b>DOR</b></td><td>2 lata</td><td>zmienne, stopa NBP + marża</td></tr>
-                <tr><td><b>TOS</b></td><td>3 lata</td><td>stałe</td></tr>
-                <tr><td><b>COI</b></td><td>4 lata</td><td>1. rok stałe, potem inflacja + marża</td></tr>
-                <tr><td><b>EDO</b></td><td>10 lat</td><td>1. rok stałe, potem inflacja + marża</td></tr>
-                <tr><td><b>ROS, ROD</b></td><td>6 i 12 lat</td><td>rodzinne, dla rodzin z programem 800+</td></tr>
-              </tbody>
-            </table>
+          <div class="row-head"><span class="badge"><i data-lucide="layers" class="ic" aria-hidden="true"></i></span><h3>Rodzaje obligacji</h3></div>
+          <div class="mini" id="m-picker" data-bond="TOS" data-months="36" data-kind="fixed">
+            <p class="mini-note">Obligacja kosztuje 100 zł. Wybierz rodzaj.</p>
+            <div class="chips" role="group" aria-label="Rodzaj obligacji">
+              <button class="chip" type="button" data-bond="OTS" data-months="3" aria-pressed="false">OTS</button>
+              <button class="chip" type="button" data-bond="ROR" data-months="12" aria-pressed="false">ROR</button>
+              <button class="chip" type="button" data-bond="DOR" data-months="24" aria-pressed="false">DOR</button>
+              <button class="chip" type="button" data-bond="TOS" data-months="36" aria-pressed="true">TOS</button>
+              <button class="chip" type="button" data-bond="COI" data-months="48" aria-pressed="false">COI</button>
+              <button class="chip" type="button" data-bond="EDO" data-months="120" aria-pressed="false">EDO</button>
+              <button class="chip" type="button" data-bond="ROS" data-months="72" aria-pressed="false">ROS</button>
+              <button class="chip" type="button" data-bond="ROD" data-months="144" aria-pressed="false">ROD</button>
+            </div>
+            <div class="bar picker-bar" aria-hidden="true"><span></span></div>
+            <div class="picker-scale" aria-hidden="true"><span>0</span><span>12 lat</span></div>
+            <output class="readout" id="picker-out" aria-live="polite">
+              <span data-part="bond"></span>
+              <span data-part="term"></span>
+              <span data-part="rate"><i data-lucide="lock" class="ic k-fixed" aria-hidden="true"></i><i data-lucide="waves" class="ic k-variable" aria-hidden="true"></i><i data-lucide="flame" class="ic k-indexed" aria-hidden="true"></i><i data-lucide="users" class="ic k-family" aria-hidden="true"></i><span class="rate-t"></span></span>
+            </output>
           </div>
-          <p>Aktualne oprocentowanie zmienia się co miesiąc. Sprawdzisz je na stronie <a href="https://www.obligacjeskarbowe.pl" target="_blank" rel="noopener">obligacjeskarbowe.pl</a>. Jeśli nie masz 18 lat, konto założysz z pomocą rodzica.</p>
         </section>
         <section>
-          <h3><i data-lucide="triangle-alert" class="ic" aria-hidden="true"></i>Na co uważać?</h3>
-          <ul>
-            <li><strong>Wcześniejszy wykup</strong> jest możliwy, ale kosztuje niewielką opłatę, potrącaną z odsetek.</li>
-            <li>Od zysku płacisz <strong>podatek Belki</strong> (19%), chyba że kupujesz w ramach konta IKE.</li>
-            <li>Obligacje <strong>stałoprocentowe</strong> wygrywają, gdy inflacja spada. <strong>Indeksowane</strong> chronią, gdy inflacja niespodziewanie rośnie.</li>
-            <li><strong>Kapitalizacja czy wypłata?</strong> W EDO (i TOS) odsetki są co roku doliczane do obligacji i dalej procentują, a podatek płacisz raz, przy wykupie. W COI dostajesz odsetki co roku na konto, a podatek pobierany jest od każdej wypłaty. COI daje regularny dochód, EDO w długim terminie zarabia więcej.</li>
-          </ul>
+          <div class="row-head"><span class="badge"><i data-lucide="coins" class="ic" aria-hidden="true"></i></span><h3>Jak płacą odsetki?</h3></div>
+          <div class="tiles">
+            <div class="tile"><span class="badge"><i data-lucide="piggy-bank" class="ic" aria-hidden="true"></i></span><h4>EDO</h4><p>Odsetki doliczają się co roku i procentują dalej. Podatek płacisz raz, przy wykupie. Tak samo działa TOS.</p></div>
+            <div class="tile"><span class="badge"><i data-lucide="banknote" class="ic" aria-hidden="true"></i></span><h4>COI</h4><p>Odsetki dostajesz co roku na konto, a podatek pobiera się od każdej wypłaty.</p></div>
+            <div class="tile wide"><span class="badge"><i data-lucide="scale" class="ic" aria-hidden="true"></i></span><h4>Stała czy indeksowana?</h4><p>Indeksowana płaci inflację + marżę, więc wygrywa, gdy inflacja rośnie. Stała wygrywa, gdy inflacja spada.</p></div>
+          </div>
         </section>
-        <div class="fact">
-          <span class="tag"><i data-lucide="search" class="ic" aria-hidden="true"></i>Dla dociekliwych</span>
-          <p>Istnieją też obligacje <strong>rynkowe</strong>, którymi handluje się na giełdzie. Ich cena codziennie się zmienia i zależy od stóp procentowych. Sprawdź to na huśtawce obok.</p>
-        </div>
       </div>
       <div class="labs">
         <div class="lab" id="lab-bd">
@@ -1031,7 +1048,32 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
           <p class="insight" id="bd-verdict"></p>
           </div>
         </div>
-
+      </div>
+    </div>
+    </div>
+    <div class="band">
+    <div class="split">
+      <div class="explain">
+        <div class="fact">
+          <span class="tag"><i data-lucide="search" class="ic" aria-hidden="true"></i>Dla dociekliwych</span>
+          <p>Obligacjami <strong>rynkowymi</strong> handluje się na giełdzie. Ich cena zmienia się codziennie i zależy od stóp procentowych.</p>
+          <p>Jak na huśtawce obok: stopy w górę, cena w dół.</p>
+        </div>
+        <section>
+          <div class="row-head"><span class="badge"><i data-lucide="triangle-alert" class="ic" aria-hidden="true"></i></span><h3>Na co uważać?</h3></div>
+          <ul>
+            <li><strong>Wcześniejszy wykup</strong> kosztuje niewielką opłatę, potrącaną z odsetek.</li>
+            <li>Od zysku płacisz <strong>podatek Belki</strong> (19%), chyba że kupujesz w ramach konta <strong>IKE</strong>.</li>
+          </ul>
+        </section>
+        <details class="more">
+          <summary>Więcej</summary>
+          <p><strong>Aktualne oprocentowanie.</strong> Zmienia się co miesiąc. Sprawdzisz je na stronie <a href="https://www.obligacjeskarbowe.pl" target="_blank" rel="noopener">obligacjeskarbowe.pl</a>.</p>
+          <p><strong>Konto dla niepełnoletnich.</strong> Jeśli nie masz 18 lat, konto założysz z pomocą rodzica.</p>
+          <p><strong>COI czy EDO.</strong> COI daje regularny dochód, a EDO w długim terminie zarabia więcej.</p>
+        </details>
+      </div>
+      <div class="labs">
         <div class="lab" id="lab-ss">
           <div class="lab-head"><span class="badge"><i data-lucide="flask-conical" class="ic" aria-hidden="true"></i></span><h3>Huśtawka: stopy procentowe a cena obligacji</h3></div>
           <div class="lab-body">
@@ -1664,6 +1706,37 @@ mini('m-snow', (el) => {
   });
   reset.addEventListener('click', () => { year = 0; render(); });
   render();
+});
+
+/* ----- mini: rodzaje obligacji, skala pasków 144 mies. = 100% ----- */
+const BOND_SCALE_MONTHS = 144;
+const BOND_INFO = {
+  OTS: { kind: 'fixed', text: 'stałe' },
+  ROR: { kind: 'variable', text: 'zmienne, zależy od stopy NBP' },
+  DOR: { kind: 'variable', text: 'zmienne, stopa NBP + marża' },
+  TOS: { kind: 'fixed', text: 'stałe' },
+  COI: { kind: 'indexed', text: '1. rok stałe, potem inflacja + marża' },
+  EDO: { kind: 'indexed', text: '1. rok stałe, potem inflacja + marża' },
+  ROS: { kind: 'family', text: 'rodzinne, dla rodzin z programem 800+' },
+  ROD: { kind: 'family', text: 'rodzinne, dla rodzin z programem 800+' }
+};
+mini('m-picker', (el) => {
+  const chips = $$('button[data-bond]', el), bar = $('.picker-bar > span', el);
+  const cells = { bond: $('[data-part="bond"]', el), term: $('[data-part="term"]', el), rate: $('.rate-t', el) };
+  const termText = (m) => m < 12 ? m + ' mies.' : (m / 12) + ' ' + lat(m / 12) + ' (' + m + ' mies.)';
+  const pick = (chip) => {
+    const sym = chip.dataset.bond, m = +chip.dataset.months, info = BOND_INFO[sym];
+    el.dataset.bond = sym;
+    el.dataset.months = m;
+    el.dataset.kind = info.kind;
+    chips.forEach((c) => c.setAttribute('aria-pressed', String(c === chip)));
+    bar.style.setProperty('--w', (m / BOND_SCALE_MONTHS * 100).toFixed(2) + '%');
+    cells.bond.innerHTML = 'Obligacja <b>' + sym + '</b>';
+    cells.term.innerHTML = 'Okres <b>' + termText(m) + '</b>';
+    cells.rate.textContent = 'Oprocentowanie: ' + info.text;
+  };
+  chips.forEach((c) => c.addEventListener('click', () => pick(c)));
+  pick(chips.find((c) => c.dataset.bond === 'TOS'));
 });
 
 /* ================= STOPY: gra ================= */
