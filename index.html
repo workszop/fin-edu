@@ -425,7 +425,6 @@ details.more > :not(summary) { margin: 10px 14px; font-size: var(--body-sm); }
 #m-real[data-verdict="zero"]    { --say: var(--paper-2);    --say-ink: var(--ink); }
 
 /* ===== m-snow ===== */
-.explain.wide .tiles.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .snow-bar { display: flex; height: 22px; }
 .snow-bar > span { flex: none; width: var(--w, 0%); transition: width .2s ease; }
 .snow-bar > span + span { box-shadow: -1px 0 0 var(--paper); }
@@ -544,7 +543,7 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
   kbd.keys { display: none; }
   .band { padding-top: 28px; padding-bottom: 32px; }
   .split { grid-template-columns: minmax(0, 1fr); }
-  .explain.wide .tiles, .explain.wide .tiles.two, .pair { grid-template-columns: minmax(0, 1fr); }
+  .explain.wide .tiles, .pair { grid-template-columns: minmax(0, 1fr); }
   .demo-body { grid-template-columns: minmax(0, 1fr); }
   .lab-head, .card-head { padding: 12px 16px; }
   .lab-body { padding: 16px; }
@@ -869,6 +868,13 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
             </output>
           </div>
         </section>
+        <section>
+          <div class="row-head"><span class="badge"><i data-lucide="triangle-alert" class="ic" aria-hidden="true"></i></span><h3>Dwa haczyki</h3></div>
+          <div class="tiles stack">
+            <div class="tile"><span class="badge"><i data-lucide="receipt" class="ic" aria-hidden="true"></i></span><h4>Podatek Belki</h4><p>Od zysków z lokat, obligacji i akcji państwo pobiera 19%.</p></div>
+            <div class="tile"><span class="badge"><i data-lucide="flame" class="ic" aria-hidden="true"></i></span><h4>Inflacja</h4><p>Liczy się, co możesz kupić. Lokata na 4% przy inflacji 5% realnie traci.</p></div>
+          </div>
+                </section>
       </div>
       <div class="labs">
         <div class="lab" id="lab-sv">
@@ -920,6 +926,16 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
           <div class="formula">efektywne = (1 + stopa ÷ k)<sup>k</sup> − 1<br>k = ile razy w roku dopisuje się odsetki</div>
           <p>6% z kapitalizacją miesięczną to około 6,17% rocznie.</p>
         </section>
+          <div class="fact">
+            <span class="tag"><i data-lucide="lightbulb" class="ic" aria-hidden="true"></i>Ciekawostka</span>
+            <p>Działa też w drugą stronę: niespłacony dług na karcie kredytowej rośnie szybciej, bo oprocentowanie jest wysokie.</p>
+          </div>
+          <details class="more">
+            <summary>Więcej</summary>
+            <p><strong>Kiedy płacisz podatek.</strong> Na lokacie bank pobiera go przy każdym dopisaniu odsetek. W obligacjach EDO dopiero przy wykupie, więc do końca procentuje cała kwota, także ta, z której zapłacisz podatek.</p>
+            <p><strong>Reguła 72.</strong> Podziel 72 przez oprocentowanie, a dowiesz się, po ilu latach pieniądze się podwoją. Przy 6% to około 12 lat.</p>
+            <p><strong>Częściej znaczy szybciej.</strong> Im częściej odsetki trafiają na konto, tym szybciej same zaczynają zarabiać. Różnica rośnie razem z oprocentowaniem i liczbą lat.</p>
+          </details>
       </div>
       <div class="labs">
         <div class="lab" id="lab-cap">
@@ -939,29 +955,6 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
         </div>
       </div>
     </div>
-    </div>
-    <div class="band">
-      <div class="explain wide">
-        <section>
-          <div class="row-head"><span class="badge"><i data-lucide="triangle-alert" class="ic" aria-hidden="true"></i></span><h3>Dwa haczyki</h3></div>
-          <div class="tiles two">
-            <div class="tile"><span class="badge"><i data-lucide="receipt" class="ic" aria-hidden="true"></i></span><h4>Podatek Belki</h4><p>Od zysków z lokat, obligacji i akcji państwo pobiera 19%.</p></div>
-            <div class="tile"><span class="badge"><i data-lucide="flame" class="ic" aria-hidden="true"></i></span><h4>Inflacja</h4><p>Liczy się, co możesz kupić. Lokata na 4% przy inflacji 5% realnie traci.</p></div>
-          </div>
-        </section>
-        <div class="pair">
-          <div class="fact">
-            <span class="tag"><i data-lucide="lightbulb" class="ic" aria-hidden="true"></i>Ciekawostka</span>
-            <p>Działa też w drugą stronę: niespłacony dług na karcie kredytowej rośnie szybciej, bo oprocentowanie jest wysokie.</p>
-          </div>
-          <details class="more">
-            <summary>Więcej</summary>
-            <p><strong>Kiedy płacisz podatek.</strong> Na lokacie bank pobiera go przy każdym dopisaniu odsetek. W obligacjach EDO dopiero przy wykupie, więc do końca procentuje cała kwota, także ta, z której zapłacisz podatek.</p>
-            <p><strong>Reguła 72.</strong> Podziel 72 przez oprocentowanie, a dowiesz się, po ilu latach pieniądze się podwoją. Przy 6% to około 12 lat.</p>
-            <p><strong>Częściej znaczy szybciej.</strong> Im częściej odsetki trafiają na konto, tym szybciej same zaczynają zarabiać. Różnica rośnie razem z oprocentowaniem i liczbą lat.</p>
-          </details>
-        </div>
-      </div>
     </div>
     <div class="next"><a href="#obligacje">Dalej: obligacje skarbowe →</a></div>
 </section>
