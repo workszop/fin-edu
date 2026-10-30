@@ -656,18 +656,15 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
         </section>
         <div class="fact">
           <span class="tag"><i data-lucide="chart-line" class="ic" aria-hidden="true"></i>Prawdziwe dane</span>
-          <p>W 2022 roku średnia inflacja w Polsce wyniosła 14,4%.</p>
+          <p>W 2022 roku średnia inflacja w Polsce wyniosła 14,4%, najwięcej od ponad 25 lat.</p>
         </div>
         <details class="more">
           <summary>Więcej</summary>
+          <p><strong>Cel NBP.</strong> Niewielka inflacja jest normalna. Narodowy Bank Polski ma cel: 2,5% rocznie, z tolerancją ±1 punkt procentowy.</p>
+          <p><strong>Deflacja</strong>, czyli spadek cen, bywa gorsza od lekkiej inflacji: ludzie odkładają zakupy na później, firmy sprzedają mniej i zwalniają pracowników. W 2015 i 2016 roku ceny w Polsce lekko spadały.</p>
           <p><strong>Reguła 70.</strong> Podziel 70 przez inflację, a dowiesz się, po ilu latach pieniądze stracą połowę wartości. Przy 7% to około 10 lat.</p>
           <p><strong>Spirala oczekiwań.</strong> Jeśli wszyscy spodziewają się podwyżek, sklepy podnoszą ceny „na zapas”, a pracownicy żądają wyższych pensji. Tak powstaje spirala.</p>
-          <p><strong>Deflacja.</strong> Gorsze od lekkiej inflacji bywa jej przeciwieństwo: gdy ceny spadają, ludzie odkładają zakupy na później, firmy sprzedają mniej i zwalniają pracowników. W 2015 i 2016 roku ceny w Polsce lekko spadały.</p>
-          <p><strong>Cel NBP.</strong> Niewielka inflacja jest normalna. Narodowy Bank Polski ma cel: 2,5% rocznie, z tolerancją ±1 punkt procentowy.</p>
           <p><strong>Koszyk GUS.</strong> Gdy GUS podaje „inflacja 5%”, znaczy to, że typowy koszyk zakupów (jedzenie, mieszkanie, transport, rozrywka) kosztuje o 5% więcej niż rok wcześniej.</p>
-          <p><strong>Siła nabywcza pieniądza.</strong> Ekonomiści mówią, że spada siła nabywcza, gdy za 100 zł kupisz mniej rzeczy niż rok temu.</p>
-          <p><strong>Koszty.</strong> Oprócz prądu, surowców i pensji produkcję drożą też ceny paliwa.</p>
-          <p><strong>Rok 2022.</strong> Inflacja 14,4% to najwyżej od ponad 25 lat.</p>
         </details>
       </div>
 
@@ -1460,8 +1457,8 @@ mini('m-pizza', (el) => {
 /* ----- mini: strefy inflacji, skala od -2% do 15% ----- */
 const SCALE = { min: -2, max: 15 };
 const ZONES = [
-  { id: 'deflacja', test: (v) => v < 0, name: 'Deflacja', say: 'Ceny spadają, ludzie odkładają zakupy, a firmy sprzedają mniej i zwalniają.' },
-  { id: 'ponizej', test: (v) => v < 1.5, name: 'Poniżej celu', say: 'Ceny rosną bardzo wolno, a stąd już blisko do deflacji.' },
+  { id: 'deflacja', test: (v) => v < 0, name: 'Deflacja', say: 'Ceny spadają, ludzie odkładają zakupy, a firmy sprzedają mniej i zwalniają pracowników.' },
+  { id: 'ponizej', test: (v) => v < 1.5, name: 'Poniżej celu', say: 'Ceny rosną bardzo wolno, a to już blisko deflacji.' },
   { id: 'cel', test: (v) => v <= 3.5, name: 'Cel NBP', say: 'Ceny rosną spokojnie: NBP celuje w 2,5% rocznie, z tolerancją ±1 punkt procentowy.' },
   { id: 'wysoko', test: () => true, name: 'Wysoko', say: 'Ceny rosną szybko, a pieniądze wyraźnie tracą siłę nabywczą.' }
 ];
