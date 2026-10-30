@@ -1,8 +1,8 @@
 # Kasa bez tajemnic
 
-Interaktywna aplikacja webowa dla nastolatków, która tłumaczy podstawy finansów i pozwala na eksperymenty.
+Interaktywna aplikacja webowa, która tłumaczy podstawy finansów i pozwala na eksperymenty.
 
-Otwórz `index.html` w przeglądarce. Nie wymaga instalacji ani serwera (czcionki ładują się z Google Fonts, bez internetu użyte zostaną czcionki systemowe).
+Otwórz `index.html` w przeglądarce. Nie wymaga instalacji ani serwera (czcionki ładują się z Google Fonts, a ikony z jsDelivr; bez internetu użyte zostaną czcionki systemowe, a aplikacja działa dalej bez ikon).
 
 ## Lekcje i laboratoria
 

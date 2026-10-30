@@ -7,195 +7,463 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap">
 <style>
-/* Układ: „zeszyt + laboratorium” — po lewej czytasz wyjaśnienie, po prawej eksperymentujesz w panelu LAB z żółtą naklejką. */
+  @keyframes boot-reveal { to { visibility: visible; } }
+  html:not(.app-ready) body { visibility: hidden; animation: boot-reveal 0s 4s forwards; }
+  @media print { html:not(.app-ready) body { visibility: visible; animation: none; } }
+</style>
+<noscript><style>html:not(.app-ready) body { visibility: visible; animation: none; }</style></noscript>
+<script src="https://cdn.jsdelivr.net/npm/lucide@1.57.0/dist/umd/lucide.min.js" integrity="sha384-Qp5jsYqEgOGiWD8YMQ6yXIycASOePxr9mmbt+Ua0Wu1IScYxo0Pxf7o3Kx6NWJID" crossorigin="anonymous" async></script>
+<style>
+/* ============================================================
+   edulab - Colors & Type foundation
+   Fonts (Outfit, IBM Plex Sans, Roboto Mono) load from Google Fonts
+   via the <link> tags in tokens/head.html - paste that into <head>.
+   No @import here: it chains requests and blocks rendering.
+   ============================================================ */
+
 :root {
-  --paper: #EEF2EF;
-  --surface: #FFFFFF;
-  --ink: #12201A;
-  --muted: #56675F;
-  --line: #D3DCD6;
-  --accent: #2443E8;
-  --accent-soft: #E3E8FF;
-  --on-accent: #FFFFFF;
-  --sticker: #FFC93C;
-  --on-sticker: #1C1600;
-  --good: #11855A;
-  --bad: #CC3A2B;
-  --warn: #B86B00;
-  --s2: #E07A12;
-  --s4: #8B45D1;
-  --font-display: "Bricolage Grotesque", "Trebuchet MS", system-ui, sans-serif;
-  --font-body: "Atkinson Hyperlegible", "Segoe UI", system-ui, sans-serif;
-  --font-data: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
-  --radius: 14px;
+  /* ---- Brand fonts ---- */
+  --font-display: 'Outfit', 'IBM Plex Sans', system-ui, sans-serif;
+  --font-sans:    'IBM Plex Sans', system-ui, -apple-system, sans-serif;
+  --font-mono:    'Roboto Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* ============================================================
+     RAW COLOR TOKENS
+     ============================================================ */
+
+  /* Paper - page background is white; the stone steps are bands / wells.
+     Warm neutral grey (no yellow cast) so yellow and the colour blocks stay the
+     loudest thing on the page. Stone v2 (2026-10-10) replaced the cream sand
+     (#FBF7E6 / #F5EDCB), which at 1.07:1 on white did not read as a surface. */
+  --paper:    #FFFFFF;   /* page background (white)                       */
+  --paper-2:  #F5F3F0;   /* stone band: alternating sections, card heads   */
+  --paper-3:  #EAE6E0;   /* deepest stone: wells, table heads, bar tracks  */
+  --surface:  #FFFFFF;   /* cards & sheets                                */
+
+  /* Ink - warm near-black text & lines */
+  --ink:      #1C1917;   /* primary text                                    */
+  --ink-2:    #44403C;   /* secondary text, 10.3:1 on white                 */
+  --ink-3:    #625B53;   /* muted / placeholder: >= 4.5:1 on every paper step */
+  --line:     #E0DBD3;   /* hairline: dividers, table rows, card heads      */
+  --line-2:   #C9C2B7;   /* stronger: card contours, section rules          */
+  --line-strong: #857C69;/* control boundaries (inputs, ghost buttons,
+                            answer options): >= 3:1 on paper steps (WCAG 1.4.11) */
+
+  /* ---- Brand: Yellow main · Blue + Green secondary · Red danger ----
+     Plain saturated colours. The base colour (--blue) is for large fills,
+     illustrations and large text (>= 24px, or 19px bold). "-soft" is the
+     solid fill for chips and panels that carry small text: it is the
+     AA shade (= "-600"), so its "-ink" (white; dark ink on yellow) reaches
+     4.5:1. A colour used AS text goes only on white and uses "-600".
+     Never colour-on-colour (no green text on green).
+     Gate: python3 scripts/check-contrast.py */
+
+  /* Yellow - primary (buttons, progress, values on dark panels) */
+  --yellow:      #FFD500;
+  --yellow-600:  #F0C800;  /* hover / press          */
+  --yellow-soft: #FFD500;  /* chip / panel fill      */
+  --yellow-ink:  #1C1917;  /* text on yellow         */
+
+  /* Blue - secondary (panels, chips, correct / selected state) */
+  --blue:      #1E8FC2;
+  --blue-600:  #177AA8;
+  --blue-soft: #177AA8;   /* = blue-600, white text 4.8:1 */
+  --blue-ink:  #FFFFFF;
+
+  /* Green - secondary support (chips, success) */
+  --green:      #00A651;
+  --green-600:  #078342;  /* hover / press, AA text shade */
+  --green-soft: #078342;  /* = green-600, white text 4.9:1 */
+  --green-ink:  #FFFFFF;
+
+  /* Red - danger / important / wrong (use sparingly) */
+  --red:      #E5322D;
+  --red-600:  #C92823;
+  --red-soft: #C92823;   /* = red-600, white text 5.5:1 */
+  --red-ink:  #FFFFFF;
+
+  /* Grape - 5th category tone (colour-coded groups), from the play palette */
+  --grape:      #7A5AC2;
+  --grape-soft: #7A5AC2;  /* white text 5.2:1 */
+  --grape-ink:  #FFFFFF;
+
+  /* Legacy role aliases - older edulab apps use these names */
+  --marigold: var(--yellow); --marigold-600: var(--yellow-600); --marigold-soft: var(--yellow-soft); --marigold-ink: var(--yellow-ink);
+  --teal:     var(--blue);   --teal-600:     var(--blue-600);   --teal-soft:     var(--blue-soft);   --teal-ink:     var(--blue-ink);
+  --sky:      var(--green);                                     --sky-soft:      var(--green-soft);  --sky-ink:      var(--green-ink);
+  --coral:    var(--red);    --coral-600:    var(--red-600);    --coral-soft:    var(--red-soft);    --coral-ink:    var(--red-ink);
+
+  /* Play palette - subject/category colours in the kids app */
+  --play-sun:    #FFD500;
+  --play-grass:  #00A651;
+  --play-berry:  #C6478B;
+  --play-grape:  #7A5AC2;
+  --play-sky:    #1E8FC2;
+  --play-coral:  #E5322D;
+
+  /* ---- Semantic ---- */
+  --success:      #00A651;  --success-soft: #078342;  --success-ink: #FFFFFF;
+  --warning:      #FFD500;  --warning-soft: #FFD500;  --warning-ink: #1C1917;
+  --danger:       #E5322D;  --danger-soft:  #C92823;  --danger-ink:  #FFFFFF;
+  --info:         #1E8FC2;  --info-soft:    #177AA8;  --info-ink:    #FFFFFF;
+
+  /* ---- Functional aliases ---- */
+  --bg:        var(--paper);
+  --fg:        var(--ink);
+  --fg-muted:  var(--ink-2);
+  --primary:   var(--yellow);
+  --on-primary:#1C1917;      /* dark text on yellow */
+  /* White gap + ink band: >= 3:1 on paper, sand, yellow and every chip fill.
+     Pair with `outline: 3px solid transparent` so forced-colours mode still shows focus. */
+  --focus-ring: 0 0 0 2px var(--paper), 0 0 0 5px var(--ink);
+  /* Range-slider track */
+  --track: color-mix(in srgb, var(--ink) 24%, transparent);
+
+  /* ============================================================
+     SPACING  (4pt base)
+     ============================================================ */
+  --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px; --sp-4: 16px;
+  --sp-5: 20px; --sp-6: 24px; --sp-8: 32px; --sp-10: 40px;
+  --sp-12: 48px; --sp-16: 64px; --sp-20: 80px; --sp-24: 96px;
+
+  /* ---- Radii (friendly, generous) ---- */
+  --r-xs: 6px; --r-sm: 10px; --r-md: 14px; --r-lg: 20px; --r-xl: 28px; --r-pill: 999px;
+
+  /* ---- Elevation - warm, low, soft ---- */
+  --shadow-sm: 0 1px 2px rgba(33,30,26,.10), 0 2px 6px rgba(33,30,26,.06);
+  --shadow-md: 0 6px 18px rgba(33,30,26,.12), 0 1px 3px rgba(33,30,26,.08);
+  --shadow-lg: 0 16px 40px rgba(33,30,26,.12), 0 3px 8px rgba(33,30,26,.06);
+  --shadow-primary:  0 8px 22px color-mix(in srgb, var(--yellow) 30%, transparent);
+  --shadow-marigold: var(--shadow-primary);   /* legacy alias */
+
+  /* ============================================================
+     TYPE SCALE (semantic sizes)
+     ============================================================ */
+  --display-font:  clamp(48px, 6vw, 72px);
+  --h1: 44px; --h2: 33px; --h3: 25px; --h4: 19px;
+  --body-lg: 18px; --body: 16px; --body-sm: 14px;
+  --caption: 13px; --overline: 12px;
 }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    --paper: #0E1512; --surface: #16201B; --ink: #E6EEE9; --muted: #98A9A0; --line: #2A3832;
-    --accent: #8197FF; --accent-soft: #1F2747; --on-accent: #0B1030; --sticker: #FFC93C; --on-sticker: #1C1600;
-    --good: #3FC88D; --bad: #FF7B69; --warn: #F2A93B; --s2: #F59A45; --s4: #C390FF;
-    color-scheme: dark;
-  }
+
+/* ============================================================
+   SEMANTIC ELEMENT STYLES
+   Apply via element selectors or .edu-prose wrapper.
+   Element defaults are wrapped in :where(.edu) (zero specificity) so any
+   single class wins: <p class="edu-overline">, <p class="edu-small">,
+   <h1 class="app-title"> keep their own font/size instead of the element default.
+   ============================================================ */
+
+.edu-display, :where(.edu) h1.display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--display-font);
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+  color: var(--ink);
 }
-:root[data-theme="dark"] {
-  --paper: #0E1512; --surface: #16201B; --ink: #E6EEE9; --muted: #98A9A0; --line: #2A3832;
-  --accent: #8197FF; --accent-soft: #1F2747; --on-accent: #0B1030; --sticker: #FFC93C; --on-sticker: #1C1600;
-  --good: #3FC88D; --bad: #FF7B69; --warn: #F2A93B; --s2: #F59A45; --s4: #C390FF;
-  color-scheme: dark;
+:where(.edu) h1, .edu-h1 {
+  font-family: var(--font-display);
+  font-weight: 700; font-size: var(--h1);
+  line-height: 1.06; letter-spacing: -0.02em; color: var(--ink);
 }
+:where(.edu) h2, .edu-h2 {
+  font-family: var(--font-display);
+  font-weight: 700; font-size: var(--h2);
+  line-height: 1.12; letter-spacing: -0.015em; color: var(--ink);
+}
+:where(.edu) h3, .edu-h3 {
+  font-family: var(--font-display);
+  font-weight: 700; font-size: var(--h3);
+  line-height: 1.2; letter-spacing: -0.01em; color: var(--ink);
+}
+:where(.edu) h4, .edu-h4 {
+  font-family: var(--font-sans);
+  font-weight: 700; font-size: var(--h4);
+  line-height: 1.3; color: var(--ink);
+}
+:where(.edu) p, .edu-p, .edu-body {
+  font-family: var(--font-sans);
+  font-weight: 400; font-size: var(--body);
+  line-height: 1.6; color: var(--ink-2);
+}
+.edu-body-lg { font-family: var(--font-sans); font-size: var(--body-lg); line-height: 1.6; color: var(--ink-2); }
+.edu-small  { font-family: var(--font-sans); font-size: var(--body-sm); line-height: 1.5; color: var(--ink-2); }
+.edu-caption{ font-family: var(--font-sans); font-size: var(--caption); line-height: 1.45; color: var(--ink-3); }
+
+/* Overline - mono, tracked; functional labels only (never above page/section titles) */
+.edu-overline {
+  font-family: var(--font-mono);
+  font-weight: 500; font-size: var(--overline);
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--ink);
+}
+:where(.edu) code, .edu-mono {
+  font-family: var(--font-mono);
+  font-size: 0.92em; color: var(--ink);
+  background: var(--paper-3); padding: 0.12em 0.4em; border-radius: var(--r-xs);
+}
+
+/* Solid colour blocks (callouts, stat cards, chips): set background: var(--X-soft) and
+   color: var(--X-ink) on the block, add .edu-block, and every heading/paragraph inside
+   inherits that text colour instead of the default ink. */
+.edu-block, .edu-block h1, .edu-block h2, .edu-block h3, .edu-block h4, .edu-block p,
+.edu-block li, .edu-block small { color: inherit; }
+
+body.edu { background: var(--paper); color: var(--ink); font-family: var(--font-sans); }
+
+/* ===== aliasy dla logiki wykresów (cssv) i układ warsztatowy ===== */
+:root {
+  --accent: var(--blue-600); --good: var(--green-600); --bad: var(--red-600); --warn: var(--ink-2); --s2: var(--ink); --s4: var(--grape); --muted: var(--ink-3);
+  --gutter: clamp(16px, 4vw, 72px);
+  --head-h: 87px;
+  color-scheme: light;
+}
+
+/* ===== baza ===== */
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
 html { -webkit-text-size-adjust: 100%; }
-body {
-  margin: 0; background: var(--paper); color: var(--ink);
-  font-family: var(--font-body); font-size: 1.0625rem; line-height: 1.6;
-}
-body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
-.wrap { max-width: 1240px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
-h1, h2, h3, h4 { font-family: var(--font-display); line-height: 1.1; text-wrap: balance; margin: 0; }
+body { margin: 0; font-size: var(--body); line-height: 1.6; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 60; background: var(--paper); }
+h1, h2, h3, h4 { margin: 0; text-wrap: balance; }
 p { margin: 0; }
-a { color: var(--accent); }
-:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; border-radius: 6px; }
+a { color: var(--ink); text-underline-offset: 2px; }
+:focus-visible { outline: 3px solid transparent; outline-offset: 2px; box-shadow: var(--focus-ring); }
 .num { font-variant-numeric: tabular-nums; }
+.edu-header-inner, .lesson-head, .band, .next, footer {
+  padding-left: max(var(--gutter), env(safe-area-inset-left, 0px));
+  padding-right: max(var(--gutter), env(safe-area-inset-right, 0px));
+}
 
-/* ---------- nagłówek ---------- */
-header.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--paper); border-bottom: 1px solid var(--line); }
-header.top .wrap { display: flex; align-items: center; gap: 16px; padding-block: 10px; }
-.brand { font-family: var(--font-display); font-weight: 800; font-size: 1.2rem; text-decoration: none; color: var(--ink); white-space: nowrap; display: flex; align-items: center; gap: 8px; }
-.brand .coin { width: 26px; height: 26px; border-radius: 50%; background: var(--sticker); color: var(--on-sticker); display: grid; place-items: center; font-size: .8rem; font-weight: 800; }
-nav.tabs { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; min-width: 0; padding-block: 2px; }
+/* ===== ikony, badge i tony ===== */
+.ic { display: inline-block; width: 1.1em; height: 1.1em; vertical-align: -.18em; flex: none; }
+h3 > .ic, .tag > .ic { margin-right: .35em; }
+.tone-grape  { --tone: var(--grape-soft);  --tone-ink: var(--grape-ink); }
+.tone-blue   { --tone: var(--blue-soft);   --tone-ink: var(--blue-ink); }
+.tone-yellow { --tone: var(--yellow-soft); --tone-ink: var(--yellow-ink); }
+.tone-green  { --tone: var(--green-soft);  --tone-ink: var(--green-ink); }
+.tone-ink    { --tone: var(--ink);         --tone-ink: var(--yellow); }
+.badge { flex: none; width: 34px; height: 34px; border-radius: var(--r-sm); display: inline-grid; place-items: center; background: var(--tone, var(--ink)); color: var(--tone-ink, var(--yellow)); }
+.badge .ic { width: 18px; height: 18px; display: block; }
+.badge-lg { width: 46px; height: 46px; border-radius: var(--r-md); }
+.badge-lg .ic { width: 24px; height: 24px; }
+
+/* ===== nagłówek ===== */
+.edu-header { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 50; width: 100%; background: var(--paper); border-bottom: 1px solid var(--line-2); }
+.edu-header-inner { display: flex; align-items: center; gap: 12px 20px; padding-top: 8px; padding-bottom: 8px; }
+.edu-brand { display: flex; align-items: center; gap: 0; text-decoration: none; color: var(--ink); border-radius: var(--r-sm); flex: none; }
+.edu-logo { width: 64px; height: 64px; display: block; margin-left: -12px; margin-right: -6px; } /* znak ma przezroczysty margines: wyrównanie do lewej krawędzi treści */
+.edu-wordmark { font-family: var(--font-display); font-weight: 700; font-size: 22px; letter-spacing: -.02em; color: var(--ink); }
+nav.tabs { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; min-width: 0; padding: 6px; }
 nav.tabs::-webkit-scrollbar { display: none; }
-nav.tabs a { flex: none; text-decoration: none; color: var(--muted); font-size: .92rem; padding: 6px 12px; border-radius: 999px; border: 1px solid transparent; white-space: nowrap; }
-nav.tabs a:hover { color: var(--ink); border-color: var(--line); }
-nav.tabs a[aria-current="page"] { background: var(--ink); color: var(--paper); }
+nav.tabs a { flex: none; text-decoration: none; color: var(--ink-2); font-size: var(--body-sm); padding: 8px 12px; border-radius: var(--r-pill); white-space: nowrap; transition: background-color .15s; }
+nav.tabs a:hover { background: var(--paper-2); }
+nav.tabs a[aria-current="page"] { background: var(--yellow); color: var(--yellow-ink); font-weight: 600; }
+.progress { height: 6px; background: var(--ink); }
+.progress > i { display: block; height: 100%; width: 0; background: var(--yellow); transition: width .25s ease; }
 
-/* ---------- start ---------- */
-.hero { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 40px; align-items: center; padding-block: 48px 32px; }
-.hero h1 { font-size: clamp(2.3rem, 5.5vw, 4.2rem); font-weight: 800; letter-spacing: -.02em; }
-.hero h1 em { font-style: normal; background: var(--sticker); color: var(--on-sticker); padding: 0 .15em; border-radius: 6px; }
-.hero .lead { margin-top: 18px; font-size: 1.18rem; color: var(--muted); max-width: 34rem; }
-.demo { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; display: grid; gap: 14px; position: relative; }
-.demo .big { font-family: var(--font-display); font-weight: 800; font-size: 3rem; line-height: 1; }
-.demo .note { color: var(--muted); font-size: .95rem; }
-.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; padding-block: 8px 24px; }
-.card { display: grid; gap: 8px; align-content: start; text-decoration: none; color: var(--ink); background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; transition: transform .15s, border-color .15s; }
-.card:hover { transform: translateY(-2px); border-color: var(--accent); }
-.card .ord { font-family: var(--font-data); font-size: .75rem; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
-.card h3 { font-size: 1.4rem; }
-.card p { color: var(--muted); font-size: .97rem; }
-.quizband { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between; background: var(--ink); color: var(--paper); border-radius: var(--radius); padding: 22px 24px; margin-bottom: 40px; }
-.quizband h3 { font-size: 1.5rem; }
-.quizband p { opacity: .8; }
-.quizband .cta { background: var(--sticker); color: var(--on-sticker); text-decoration: none; font-weight: 700; padding: 10px 20px; border-radius: 999px; }
+/* ===== nagłówek strony i pasma ===== */
+.lesson-head { padding-top: 40px; padding-bottom: 32px; display: grid; gap: 14px; border-bottom: 1px solid var(--line-2); }
+.lesson-title { display: flex; align-items: center; gap: 14px; min-width: 0; }
+.app-title { font-family: var(--font-display); font-weight: 800; font-size: clamp(2.3rem, 5vw, 3.3rem); letter-spacing: -.025em; line-height: 1.05; color: var(--ink); margin: 0; min-width: 0; }
+.lead { font-size: 1.15rem; line-height: 1.6; color: var(--ink-2); }
+.band { padding-top: 36px; padding-bottom: 44px; border-top: 1px solid var(--line); }
+.lesson-head + .band { border-top: none; }
+.band:nth-child(odd of .band) { background: var(--paper-2); }
+.band:nth-child(even of .band) { background: var(--paper); }
+.split { display: grid; grid-template-columns: minmax(22rem, 30rem) 1fr; gap: clamp(24px, 3vw, 44px); align-items: start; }
+.next { display: flex; justify-content: flex-end; padding-top: 24px; padding-bottom: 48px; border-top: 1px solid var(--line); }
+.next a { display: inline-block; font-family: var(--font-display); font-weight: 600; text-decoration: none; background: var(--yellow); color: var(--on-primary); padding: 12px 22px; border-radius: var(--r-pill); transition: background-color .15s; }
+.next a:hover { background: var(--yellow-600); }
 
-/* ---------- lekcja ---------- */
-.lesson-head { padding-block: 36px 20px; display: grid; gap: 10px; max-width: 48rem; }
-.eyebrow { font-family: var(--font-data); font-size: .78rem; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); }
-.lesson-head h2 { font-size: clamp(2rem, 4.5vw, 3.2rem); font-weight: 800; letter-spacing: -.015em; }
-.lesson-head .lead { font-size: 1.15rem; color: var(--muted); }
-.split { display: grid; grid-template-columns: minmax(0, 27rem) minmax(0, 1fr); gap: 32px; align-items: start; padding-bottom: 32px; }
-.explain { display: grid; gap: 22px; }
-.explain section { display: grid; gap: 8px; }
-.explain h3 { font-size: 1.25rem; }
-.explain ul, .explain ol { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; }
-.explain strong { font-weight: 700; }
-.fact { border: 2px dashed var(--sticker); border-radius: var(--radius); padding: 14px 16px; display: grid; gap: 6px; }
-.fact .tag { font-family: var(--font-data); font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--warn); }
-.formula { font-family: var(--font-data); font-size: .92rem; background: var(--accent-soft); border-radius: 8px; padding: 10px 12px; overflow-x: auto; }
-.labs { display: grid; gap: 28px; min-width: 0; }
-.lab { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px 22px 22px; display: grid; gap: 18px; position: relative; min-width: 0; }
-.lab::before { content: "LAB"; position: absolute; top: -12px; left: 18px; background: var(--sticker); color: var(--on-sticker); font-family: var(--font-data); font-weight: 500; font-size: .72rem; letter-spacing: .14em; padding: 3px 10px; border-radius: 4px; transform: rotate(-2deg); }
-.lab h3 { font-size: 1.35rem; }
-.lab .task { color: var(--muted); font-size: .98rem; margin-top: 4px; }
-.controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px 22px; }
-.ctl { display: grid; grid-template-columns: 1fr auto; align-items: baseline; gap: 2px 8px; }
-.ctl label { font-size: .93rem; color: var(--muted); }
-.ctl output, .ctl .val { font-family: var(--font-data); font-weight: 500; font-size: .95rem; font-variant-numeric: tabular-nums; }
+/* ===== karty ===== */
+.lab, .demo, .card, .q { background: var(--surface); border: 1px solid var(--line-2); border-radius: var(--r-lg); box-shadow: var(--shadow-sm); overflow: hidden; min-width: 0; }
+.lab-head, .card-head { display: flex; align-items: center; gap: 12px; padding: 14px 22px; background: var(--paper-2); border-bottom: 1px solid var(--line); }
+.lab-head h3, .card-head h3 { font-size: var(--h4); line-height: 1.3; min-width: 0; }
+.lab-body { display: grid; gap: 18px; padding: 20px 22px; min-width: 0; }
+.lab-body > * { min-width: 0; }
+.labs { display: grid; gap: 24px; min-width: 0; }
+.task { color: var(--ink-2); }
+
+/* ===== start ===== */
+.demo-body { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px clamp(24px, 4vw, 56px); padding: 20px 22px 24px; align-items: start; }
+.demo-col { display: grid; gap: 12px; min-width: 0; }
+.demo .big { font-family: var(--font-display); font-weight: 800; font-size: 3rem; line-height: 1; color: var(--ink); }
+.demo .note { color: var(--ink-3); font-size: var(--body-sm); }
+.cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+.card { display: flex; flex-direction: column; text-decoration: none; color: var(--ink); transition: border-color .15s; }
+.card:hover { border-color: var(--line-strong); }
+.card-body { padding: 16px 22px 20px; }
+.quizband { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between; background: var(--ink); color: var(--paper); border-radius: var(--r-xl); padding: 24px 28px; margin-top: 20px; }
+.quizband h3 { font-size: var(--h3); }
+.quizband .ic { color: var(--yellow); }
+.quizband .cta { background: var(--yellow); color: var(--on-primary); text-decoration: none; font-family: var(--font-display); font-weight: 600; padding: 12px 22px; border-radius: var(--r-pill); transition: background-color .15s; }
+.quizband .cta:hover { background: var(--yellow-600); }
+
+/* ===== wyjaśnienia ===== */
+.explain { display: grid; gap: 24px; min-width: 0; }
+.explain section { display: grid; gap: 10px; min-width: 0; }
+.explain h3 { font-size: var(--h4); line-height: 1.3; }
+.explain ul, .explain ol { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; color: var(--ink-2); }
+.explain strong { font-weight: 700; color: var(--ink); }
+.fact { background: var(--yellow-soft); color: var(--yellow-ink); border-radius: var(--r-md); padding: 14px 16px; display: grid; gap: 6px; }
+.fact p, .fact strong { color: inherit; }
+.fact a { color: inherit; }
+.tag { font-family: var(--font-mono); font-weight: 500; font-size: var(--overline); letter-spacing: .1em; text-transform: uppercase; }
+.formula { font-family: var(--font-mono); font-size: var(--body-sm); color: var(--ink); background: var(--surface); border: 1px solid var(--line-2); border-radius: var(--r-sm); padding: 10px 12px; overflow-x: auto; }
+.insight { background: var(--blue-soft); color: var(--blue-ink); border-radius: var(--r-md); padding: 14px 16px; }
+.insight b { font-weight: 700; }
+.insight a { color: inherit; }
+.event { background: var(--paper-2); color: var(--ink); border: 1px solid var(--line-2); border-radius: var(--r-sm); padding: 10px 14px; }
+
+/* ===== klocki ===== */
+/* <div class="tiles"><div class="tile"><span class="badge"><i data-lucide="users" class="ic" aria-hidden="true"></i></span><h4>Nazwa</h4><p>Do 20 słów.</p></div></div> */
+.tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(11rem, 100%), 1fr)); gap: 10px; }
+.tile { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 8px 10px; background: var(--surface); border: 1px solid var(--line-2); border-radius: var(--r-md); padding: 12px 14px; }
+.tile h4 { font-family: var(--font-display); font-size: var(--body); line-height: 1.25; }
+.tile p { grid-column: 1 / -1; font-size: var(--body-sm); line-height: 1.45; }
+/* <ol class="chain"><li class="link">Krok</li></ol>: strzałka między ogniwami pochodzi z CSS. */
+.chain { list-style: none; margin: 0; padding: 0; display: grid; gap: 24px; }
+.explain ol.chain { padding-left: 0; gap: 24px; }
+.link { position: relative; background: var(--surface); color: var(--ink); border: 1px solid var(--line-2); border-radius: var(--r-sm); padding: 10px 14px; font-size: var(--body-sm); line-height: 1.45; }
+.link:not(:last-child)::after { content: "↓"; position: absolute; top: 100%; left: 50%; transform: translateX(-50%); line-height: 24px; font-family: var(--font-mono); font-weight: 500; color: var(--ink-2); }
+/* <div class="mini" id="m-x" data-wynik="13.02">...<output aria-live="polite"></output></div>: etykieta „Zobacz” pochodzi z CSS. */
+.mini { background: var(--surface); border: 1px solid var(--line-2); border-radius: var(--r-md); padding: 0 14px 14px; display: grid; gap: 10px; overflow: hidden; min-width: 0; }
+.mini::before { content: "Zobacz"; display: block; margin: 0 -14px; padding: 6px 14px; background: var(--paper-3); color: var(--ink); font-family: var(--font-mono); font-weight: 500; font-size: var(--overline); letter-spacing: .1em; text-transform: uppercase; }
+.mini output { font-family: var(--font-mono); font-weight: 500; color: var(--ink); font-variant-numeric: tabular-nums; }
+/* <div class="units"><span class="unit"></span><span class="unit off"></span><span class="unit" style="--fill:40%"></span></div> */
+.units { display: flex; flex-wrap: wrap; gap: 6px; }
+.unit { width: 24px; height: 24px; border-radius: var(--r-xs); border: 1px solid var(--line-strong); background: linear-gradient(90deg, var(--unit, var(--tone, var(--ink))) var(--fill, 100%), var(--surface) 0); }
+.unit.off { background: var(--surface); }
+details.more { background: var(--surface); border: 1px solid var(--line-2); border-radius: var(--r-md); min-width: 0; }
+details.more > summary { display: flex; justify-content: space-between; gap: 10px; cursor: pointer; list-style: none; padding: 8px 14px; font-family: var(--font-display); font-weight: 600; color: var(--ink); border-radius: var(--r-md); }
+details.more > summary::-webkit-details-marker { display: none; }
+details.more > summary::after { content: "+"; font-family: var(--font-mono); }
+details.more[open] > summary { border-bottom: 1px dashed var(--line-2); border-radius: var(--r-md) var(--r-md) 0 0; }
+details.more[open] > summary::after { content: "−"; }
+details.more > :not(summary) { margin: 10px 14px; font-size: var(--body-sm); }
+
+/* ===== kontrolki ===== */
+.controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr)); gap: 14px 22px; }
+.ctl { display: grid; grid-template-columns: 1fr auto; align-items: baseline; gap: 4px 8px; min-width: 0; }
+.ctl label { font-family: var(--font-mono); font-weight: 500; font-size: var(--overline); letter-spacing: .08em; text-transform: uppercase; color: var(--ink); }
+.ctl output, .ctl .val { font-family: var(--font-mono); font-weight: 500; font-size: var(--body-sm); color: var(--ink); font-variant-numeric: tabular-nums; }
 .ctl input[type=range], .ctl select, .ctl input[type=number] { grid-column: 1 / -1; width: 100%; }
-input[type=range] { accent-color: var(--accent); height: 28px; margin: 0; }
-select, input[type=number] { font: inherit; font-size: .95rem; color: var(--ink); background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: 7px 10px; }
-.check { display: flex; gap: 8px; align-items: center; font-size: .93rem; color: var(--muted); }
-.check input { accent-color: var(--accent); width: 18px; height: 18px; }
+input[type=range] { -webkit-appearance: none; appearance: none; background: transparent; height: 28px; margin: 0; border-radius: var(--r-pill); cursor: pointer; }
+input[type=range]::-webkit-slider-runnable-track { height: 8px; background: var(--track); border-radius: var(--r-pill); }
+input[type=range]::-moz-range-track { height: 8px; background: var(--track); border-radius: var(--r-pill); }
+input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; margin-top: -6px; background: var(--surface); border: 2px solid var(--ink); border-radius: 50%; box-shadow: var(--shadow-sm); }
+input[type=range]::-moz-range-thumb { box-sizing: border-box; width: 20px; height: 20px; background: var(--surface); border: 2px solid var(--ink); border-radius: 50%; box-shadow: var(--shadow-sm); }
+select, input[type=number] { font: inherit; font-size: var(--body-sm); color: var(--ink); background: var(--surface); border: 1px solid var(--line-strong); border-radius: var(--r-sm); padding: 8px 10px; }
+.check { display: flex; gap: 8px; align-items: center; font-size: var(--body-sm); color: var(--ink); }
+.check input { accent-color: var(--ink); width: 18px; height: 18px; flex: none; }
 .btns { display: flex; flex-wrap: wrap; gap: 8px; }
-button { font: inherit; font-size: .95rem; cursor: pointer; border-radius: 999px; padding: 9px 16px; border: 1px solid var(--line); background: var(--paper); color: var(--ink); }
-button:hover { border-color: var(--ink); }
-button.primary { background: var(--accent); color: var(--on-accent); border-color: var(--accent); font-weight: 700; }
-button.primary:hover { filter: brightness(1.08); }
+button { font-family: var(--font-display); font-weight: 600; font-size: var(--body-sm); cursor: pointer; border-radius: var(--r-pill); padding: 9px 18px; border: 1px solid var(--line-strong); background: transparent; color: var(--ink); transition: background-color .15s; }
+button:hover { background: var(--paper-2); }
+button.primary { background: var(--yellow); color: var(--on-primary); border-color: var(--yellow); box-shadow: var(--shadow-primary); }
+button.primary:hover { background: var(--yellow-600); border-color: var(--yellow-600); }
 button:disabled { opacity: .45; cursor: not-allowed; }
-button.chip[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
-.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
-.stat { border-top: 2px solid var(--line); padding-top: 8px; display: grid; gap: 2px; align-content: start; }
-.stat .k { font-family: var(--font-data); font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
-.stat .v { font-family: var(--font-display); font-weight: 700; font-size: 1.6rem; line-height: 1.15; font-variant-numeric: tabular-nums; }
-.stat .s { font-size: .85rem; color: var(--muted); }
-.stat.good { border-color: var(--good); } .stat.good .v { color: var(--good); }
-.stat.bad { border-color: var(--bad); } .stat.bad .v { color: var(--bad); }
-.stat.warn { border-color: var(--warn); } .stat.warn .v { color: var(--warn); }
-.stat.acc { border-color: var(--accent); }
+button.chip[aria-pressed="true"] { background: var(--yellow); color: var(--yellow-ink); border-color: var(--yellow); }
+
+/* ===== wyniki ===== */
+.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(150px, 100%), 1fr)); gap: 10px; }
+.stat { background: var(--surface); color: var(--ink); border: 1px solid var(--line-2); border-radius: var(--r-md); padding: 12px 14px; display: grid; gap: 2px; align-content: start; min-width: 0; }
+.stat .k { font-family: var(--font-mono); font-weight: 500; font-size: var(--overline); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2); }
+.stat .v { font-family: var(--font-display); font-weight: 700; font-size: 1.6rem; line-height: 1.15; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
+.stat .s { font-size: var(--caption); line-height: 1.4; color: var(--ink-2); }
+.stat.good { background: var(--green-soft); color: var(--green-ink); border-color: var(--green-soft); }
+.stat.bad { background: var(--red-soft); color: var(--red-ink); border-color: var(--red-soft); }
+.stat.warn { background: var(--yellow-soft); color: var(--yellow-ink); border-color: var(--yellow-soft); }
+.stat.acc { background: var(--blue-soft); color: var(--blue-ink); border-color: var(--blue-soft); }
+.stat.good .k, .stat.good .s, .stat.bad .k, .stat.bad .s, .stat.warn .k, .stat.warn .s, .stat.acc .k, .stat.acc .s { color: inherit; }
 .chart { position: relative; height: 270px; min-width: 0; }
 .chart canvas { width: 100%; height: 100%; display: block; }
 .chart.tall { height: 320px; }
-.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: .85rem; color: var(--muted); }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 16px; font-size: var(--body-sm); color: var(--ink-2); }
+.legend:empty { display: none; }
 .legend span { display: inline-flex; align-items: center; gap: 6px; }
-.legend i { width: 14px; height: 3px; border-radius: 2px; display: inline-block; }
+.legend i { width: 14px; height: 3px; border-radius: 2px; display: inline-block; flex: none; }
 .legend i.dash { background-image: linear-gradient(90deg, currentColor 60%, transparent 0) !important; background-size: 5px 3px; }
-.tip { position: absolute; pointer-events: none; background: var(--ink); color: var(--paper); font-family: var(--font-data); font-size: .76rem; line-height: 1.45; padding: 6px 9px; border-radius: 6px; white-space: nowrap; z-index: 2; }
-.insight { background: var(--accent-soft); border-radius: 10px; padding: 12px 14px; font-size: .98rem; }
-.insight b { font-weight: 700; }
-.tbl-wrap { overflow-x: auto; }
-table { border-collapse: collapse; width: 100%; font-size: .93rem; }
-th, td { text-align: left; padding: 7px 10px 7px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
-th { font-family: var(--font-data); font-size: .72rem; letter-spacing: .06em; text-transform: uppercase; color: var(--muted); font-weight: 500; }
-td.r, th.r { text-align: right; font-variant-numeric: tabular-nums; }
-.meter { height: 8px; border-radius: 4px; background: var(--line); min-width: 60px; overflow: hidden; margin-top: 6px; }
-.meter > i { display: block; height: 100%; background: var(--bad); }
-.pill { display: inline-block; font-family: var(--font-data); font-size: .72rem; padding: 2px 8px; border-radius: 999px; border: 1px solid currentColor; }
-.pill.good { color: var(--good); } .pill.bad { color: var(--bad); } .pill.warn { color: var(--warn); }
-.event { border-left: 4px solid var(--sticker); padding: 8px 12px; background: var(--paper); border-radius: 0 8px 8px 0; font-size: .97rem; }
-.next { display: flex; justify-content: flex-end; padding-bottom: 48px; }
-.next a { font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; text-decoration: none; color: var(--ink); border-bottom: 3px solid var(--sticker); }
+.tip { position: absolute; pointer-events: none; background: var(--surface); color: var(--ink); border: 1px solid var(--line-2); box-shadow: var(--shadow-md); font-family: var(--font-mono); font-size: var(--caption); line-height: 1.45; padding: 6px 9px; border-radius: var(--r-xs); white-space: nowrap; max-width: 100%; z-index: 2; }
+.tbl-wrap { overflow-x: auto; border: 1px solid var(--line-2); border-radius: var(--r-md); background: var(--surface); min-width: 0; }
+table { border-collapse: collapse; width: 100%; font-size: var(--body-sm); background: var(--surface); }
+th, td { text-align: left; padding: 10px 12px; vertical-align: top; }
+th { background: var(--paper-3); border-bottom: 1px solid var(--line-2); font-family: var(--font-mono); font-weight: 500; font-size: var(--overline); letter-spacing: .06em; text-transform: uppercase; color: var(--ink); }
+td { border-bottom: 1px solid var(--line); color: var(--ink-2); }
+tbody tr:nth-child(even) td { background: var(--paper-2); }
+tbody tr:last-child td { border-bottom: none; }
+td:first-child { color: var(--ink); font-weight: 600; }
+td b { color: var(--ink); }
+td.r, th.r { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.meter { height: 8px; border-radius: var(--r-pill); background: var(--paper-3); min-width: 60px; overflow: hidden; margin-top: 6px; }
+.meter > i { display: block; height: 100%; background: var(--red-soft); }
+.pill { display: inline-block; font-family: var(--font-mono); font-weight: 500; font-size: var(--overline); padding: 2px 8px; border-radius: var(--r-pill); background: var(--paper-3); color: var(--ink); }
+.pill.good { background: var(--green-soft); color: var(--green-ink); }
+.pill.bad { background: var(--red-soft); color: var(--red-ink); }
+.pill.warn { background: var(--yellow-soft); color: var(--yellow-ink); }
 .seesaw svg { width: 100%; max-width: 420px; height: auto; display: block; margin: 0 auto; }
 .seesaw .plank { fill: var(--ink); }
-.seesaw .base { fill: var(--muted); }
-.seesaw .boxL { fill: var(--accent); } .seesaw .boxR { fill: var(--s2); }
-.seesaw text { fill: var(--on-accent); font-family: var(--font-data); font-size: 12px; font-weight: 500; }
+.seesaw .base { fill: var(--ink-3); }
+.seesaw .boxL { fill: var(--blue-soft); } .seesaw .boxR { fill: var(--ink); }
+.seesaw text { fill: var(--paper); font-family: var(--font-mono); font-size: 12px; font-weight: 500; }
 .seesaw .lbl { fill: var(--ink); font-size: 13px; }
 .seesaw g.rot { transition: transform .35s ease; transform-origin: 160px 104px; }
 
-/* ---------- quiz ---------- */
-.quiz { display: grid; gap: 16px; max-width: 46rem; padding-bottom: 40px; }
-.q { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 20px; display: grid; gap: 12px; }
-.q h3 { font-size: 1.15rem; font-family: var(--font-body); font-weight: 700; line-height: 1.4; }
+/* ===== quiz ===== */
+.quiz { display: grid; gap: 16px; min-width: 0; }
+#qz-list { grid-template-columns: repeat(auto-fill, minmax(min(28rem, 100%), 1fr)); align-items: start; }
+.q { padding: 0 20px 20px; display: grid; gap: 14px; }
+.q h3 { margin: 0 -20px; padding: 14px 20px; background: var(--paper-2); border-bottom: 1px solid var(--line); font-family: var(--font-sans); font-size: var(--body); font-weight: 700; line-height: 1.4; }
 .q .opts { display: grid; gap: 8px; }
-.q .opts button { text-align: left; border-radius: 10px; }
-.q .opts button.ok { background: var(--good); color: var(--surface); border-color: var(--good); }
-.q .opts button.no { background: var(--bad); color: var(--surface); border-color: var(--bad); }
-.q .why { font-size: .97rem; color: var(--muted); }
-.score { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 64px); z-index: 1; justify-self: start; background: var(--sticker); color: var(--on-sticker); font-family: var(--font-data); font-weight: 500; padding: 6px 14px; border-radius: 999px; }
+.q .opts button { text-align: left; font-family: var(--font-sans); font-weight: 400; border-radius: var(--r-md); padding: 12px 14px; background: var(--surface); }
+.q .opts button:hover:not(:disabled) { background: var(--paper-2); }
+.q .opts button:disabled { cursor: default; }
+.q .opts button.ok { background: var(--green-soft); color: var(--green-ink); border-color: var(--green-soft); }
+.q .opts button.no { background: var(--red-soft); color: var(--red-ink); border-color: var(--red-soft); }
+.q .why { font-size: var(--body-sm); color: var(--ink-2); }
+.q .why b { color: var(--green-600); }
+.q:has(.opts .no) .why b { color: var(--red-600); }
+.score { position: sticky; top: calc(env(safe-area-inset-top, 0px) + var(--head-h) + 8px); z-index: 1; justify-self: start; background: var(--yellow); color: var(--yellow-ink); font-family: var(--font-mono); font-weight: 500; font-size: var(--body-sm); padding: 6px 14px; border-radius: var(--r-pill); box-shadow: var(--shadow-sm); }
 
-footer { border-top: 1px solid var(--line); padding-block: 22px 32px; color: var(--muted); font-size: .9rem; }
+footer { border-top: 1px solid var(--line-2); padding-top: 22px; padding-bottom: 32px; }
+footer p { color: var(--ink-3); font-size: var(--body-sm); }
 
-@media (max-width: 960px) {
-  .split { grid-template-columns: minmax(0, 1fr); }
-  .hero { grid-template-columns: minmax(0, 1fr); padding-block: 32px 20px; gap: 24px; }
+/* ===== responsywność ===== */
+@media (max-width: 1100px) {
+  .split { grid-template-columns: 22rem 1fr; }
 }
-@media (max-width: 560px) {
-  header.top .wrap { flex-direction: column; align-items: stretch; gap: 6px; }
-  .lab { padding: 24px 16px 18px; }
+@media (max-width: 768px) {
+  :root { --head-h: 105px; }
+  .edu-header-inner { flex-wrap: wrap; gap: 0 8px; padding-top: 2px; padding-bottom: 2px; }
+  .edu-logo { width: 44px; height: 44px; margin-left: -8px; margin-right: -4px; }
+  nav.tabs { flex: 1 1 100%; margin: 0 -6px; }
+  .lesson-head { padding-top: 28px; padding-bottom: 24px; }
+  .lesson-title { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .cards { grid-template-columns: minmax(0, 1fr); }
+  .band { padding-top: 28px; padding-bottom: 32px; }
+  .split { grid-template-columns: minmax(0, 1fr); }
+  .demo-body { grid-template-columns: minmax(0, 1fr); }
+  .lab-head, .card-head { padding: 12px 16px; }
+  .lab-body { padding: 16px; }
+  .demo-body { padding: 16px; }
+  .card-body { padding: 14px 16px 16px; }
   .chart { height: 230px; }
+  .tip { white-space: normal; }
+  .next { justify-content: stretch; padding-bottom: 36px; }
+  .next a { text-align: center; width: 100%; }
 }
 @media (prefers-reduced-motion: reduce) {
-  * { transition: none !important; }
+  * { transition: none !important; scroll-behavior: auto !important; }
 }
 </style>
 </head>
-<body>
+<body class="edu">
 
-<header class="top">
-  <div class="wrap">
-    <a class="brand" href="#start"><span class="coin">zł</span>Kasa bez tajemnic</a>
+<header class="edu-header">
+  <div class="edu-header-inner">
+    <a class="edu-brand" href="#start"><img class="edu-logo" alt="" src="data:image/png;base64,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"><span class="edu-wordmark">edulab</span></a>
     <nav class="tabs" aria-label="Lekcje">
       <a href="#start">Start</a>
       <a href="#inflacja">Inflacja</a>
@@ -207,61 +475,66 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 32px; color: var
       <a href="#quiz">Quiz</a>
     </nav>
   </div>
+  <div class="progress" id="lesson-progress" role="progressbar" aria-label="Postęp w lekcjach" aria-valuemin="0" aria-valuemax="7" aria-valuenow="0"><i></i></div>
 </header>
 
 <main>
 
 <!-- ================= START ================= -->
 <section class="view" id="v-start">
-  <div class="wrap">
-    <div class="hero">
-      <div>
-        <h1>Jak naprawdę działają <em>pieniądze</em></h1>
-        <p class="lead">Sześć krótkich lekcji i laboratoria, w których sam ustawiasz stopy procentowe, kupujesz obligacje, inwestujesz w akcje i bierzesz kredyt. Wszystko na niby, więc możesz śmiało eksperymentować.</p>
-      </div>
-      <div class="demo" aria-live="polite">
-        <div class="eyebrow">Szybki eksperyment</div>
-        <p>Chowasz <b>100 zł</b> do szuflady. Ceny rosną co roku o:</p>
-        <div class="ctl"><label for="h-inf">Inflacja rocznie</label><output id="h-inf-o"></output>
-          <input type="range" id="h-inf" min="0" max="15" step="0.5" value="5" data-out="pct"></div>
-        <p>Za 10 lat kupisz za nie tyle, co dziś za</p>
-        <div class="big num" id="h-val">61 zł</div>
-        <p class="note">Banknot się nie zmieni. Zmienią się ceny. Dlaczego tak jest i jak się przed tym bronić, dowiesz się w lekcji 1.</p>
+  <div class="lesson-head">
+    <h1 class="app-title">Kasa bez tajemnic</h1>
+    <p class="lead">Jak naprawdę działają pieniądze. Sześć krótkich lekcji i laboratoria, w których sam ustawiasz stopy procentowe, kupujesz obligacje, inwestujesz w akcje i bierzesz kredyt. To symulacje, więc możesz śmiało eksperymentować.</p>
+  </div>
+  <div class="band">
+    <div class="demo tone-yellow">
+      <div class="lab-head"><span class="badge"><i data-lucide="flask-conical" class="ic" aria-hidden="true"></i></span><h3>Szybki eksperyment</h3></div>
+      <div class="demo-body">
+        <div class="demo-col">
+          <p>Chowasz <b>100 zł</b> do szuflady. Ceny rosną co roku o:</p>
+          <div class="ctl"><label for="h-inf">Inflacja rocznie</label><output id="h-inf-o"></output>
+            <input type="range" id="h-inf" min="0" max="15" step="0.5" value="5" data-out="pct"></div>
+        </div>
+        <div class="demo-col">
+          <p>Za 10 lat kupisz za nie tyle, co dziś za</p>
+          <div class="big num" id="h-val" aria-live="polite">61 zł</div>
+          <p class="note">Banknot się nie zmieni. Zmienią się ceny. Dlaczego tak jest i jak się przed tym bronić, dowiesz się w lekcji o inflacji.</p>
+        </div>
       </div>
     </div>
-
+  </div>
+  <div class="band">
     <div class="cards">
-      <a class="card" href="#inflacja"><span class="ord">Lekcja 1</span><h3>Inflacja</h3><p>Dlaczego pizza drożeje i co dzieje się z pieniędzmi w skarpecie.</p></a>
-      <a class="card" href="#stopy"><span class="ord">Lekcja 2</span><h3>Stopy procentowe</h3><p>Zostań prezesem banku centralnego i spróbuj zbić inflację bez recesji.</p></a>
-      <a class="card" href="#oszczedzanie"><span class="ord">Lekcja 3</span><h3>Procent składany</h3><p>Odsetki od odsetek, czyli dlaczego warto zacząć oszczędzać w wieku 16 lat.</p></a>
-      <a class="card" href="#obligacje"><span class="ord">Lekcja 4</span><h3>Obligacje skarbowe</h3><p>Pożyczasz pieniądze państwu. Stałe czy indeksowane inflacją?</p></a>
-      <a class="card" href="#akcje"><span class="ord">Lekcja 5</span><h3>Akcje</h3><p>Kawałek firmy, ryzyko i 1000 możliwych przyszłości twoich pieniędzy.</p></a>
-      <a class="card" href="#kredyty"><span class="ord">Lekcja 6</span><h3>Kredyty</h3><p>Ile naprawdę kosztuje pożyczka, czym jest RRSO i dlaczego raty rosną.</p></a>
+      <a class="card tone-grape" href="#inflacja"><div class="card-head"><span class="badge"><i data-lucide="shopping-basket" class="ic" aria-hidden="true"></i></span><h3>Inflacja</h3></div><p class="card-body">Dlaczego pizza drożeje i co dzieje się z pieniędzmi w skarpecie.</p></a>
+      <a class="card tone-blue" href="#stopy"><div class="card-head"><span class="badge"><i data-lucide="percent" class="ic" aria-hidden="true"></i></span><h3>Stopy procentowe</h3></div><p class="card-body">Zostań prezesem banku centralnego i spróbuj zbić inflację bez recesji.</p></a>
+      <a class="card tone-yellow" href="#oszczedzanie"><div class="card-head"><span class="badge"><i data-lucide="sprout" class="ic" aria-hidden="true"></i></span><h3>Procent składany</h3></div><p class="card-body">Odsetki od odsetek, czyli dlaczego warto zacząć oszczędzać jak najwcześniej.</p></a>
+      <a class="card tone-green" href="#obligacje"><div class="card-head"><span class="badge"><i data-lucide="landmark" class="ic" aria-hidden="true"></i></span><h3>Obligacje skarbowe</h3></div><p class="card-body">Pożyczasz pieniądze państwu. Stałe czy indeksowane inflacją?</p></a>
+      <a class="card tone-ink" href="#akcje"><div class="card-head"><span class="badge"><i data-lucide="chart-candlestick" class="ic" aria-hidden="true"></i></span><h3>Akcje</h3></div><p class="card-body">Kawałek firmy, ryzyko i 1000 możliwych przyszłości twoich pieniędzy.</p></a>
+      <a class="card tone-grape" href="#kredyty"><div class="card-head"><span class="badge"><i data-lucide="credit-card" class="ic" aria-hidden="true"></i></span><h3>Kredyty</h3></div><p class="card-body">Ile naprawdę kosztuje pożyczka, czym jest RRSO i dlaczego raty rosną.</p></a>
     </div>
-    <div class="quizband">
-      <div><h3>Sprawdź się w quizie</h3><p>14 pytań, każde z wyjaśnieniem. Najlepiej po przejściu lekcji.</p></div>
+    <div class="quizband edu-block">
+      <div><h3><i data-lucide="trophy" class="ic" aria-hidden="true"></i>Sprawdź się w quizie</h3><p>14 pytań, każde z wyjaśnieniem. Najlepiej po przejściu lekcji.</p></div>
       <a class="cta" href="#quiz">Do quizu</a>
     </div>
   </div>
 </section>
 
 <!-- ================= INFLACJA ================= -->
-<section class="view" id="v-inflacja" hidden>
-  <div class="wrap">
+<section class="view tone-grape" id="v-inflacja" hidden>
     <div class="lesson-head">
-      <span class="eyebrow">Lekcja 1 z 6</span>
-      <h2>Inflacja: dlaczego wszystko drożeje</h2>
+      <div class="lesson-title"><span class="badge badge-lg"><i data-lucide="shopping-basket" class="ic" aria-hidden="true"></i></span><h1 class="app-title">Inflacja: dlaczego wszystko drożeje</h1></div>
       <p class="lead">Pieniądz ma wartość tylko dlatego, że coś za niego kupisz. Gdy ceny rosną, ten sam banknot kupuje mniej.</p>
     </div>
+    <div class="band">
     <div class="split">
       <div class="explain">
         <section>
-          <h3>Co to jest?</h3>
+          <h3><i data-lucide="shopping-basket" class="ic" aria-hidden="true"></i>Co to jest?</h3>
           <p><strong>Inflacja</strong> to tempo, w jakim rosną ceny ogółem. Gdy GUS podaje „inflacja 5%”, znaczy to, że typowy koszyk zakupów (jedzenie, mieszkanie, transport, rozrywka) kosztuje o 5% więcej niż rok wcześniej.</p>
           <p>Ekonomiści mówią wtedy, że spada <strong>siła nabywcza pieniądza</strong>: za 100 zł kupisz mniej rzeczy niż rok temu.</p>
         </section>
         <section>
-          <h3>Skąd się bierze?</h3>
+          <h3><i data-lucide="factory" class="ic" aria-hidden="true"></i>Skąd się bierze?</h3>
           <ul>
             <li><strong>Popyt:</strong> ludzie chcą kupić więcej, niż firmy są w stanie wyprodukować, więc firmy podnoszą ceny.</li>
             <li><strong>Koszty:</strong> drożeje prąd, paliwo, surowce albo pensje, więc produkcja kosztuje więcej.</li>
@@ -269,23 +542,25 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 32px; color: var
           </ul>
         </section>
         <section>
-          <h3>Czy inflacja zawsze jest zła?</h3>
+          <h3><i data-lucide="target" class="ic" aria-hidden="true"></i>Czy inflacja zawsze jest zła?</h3>
           <p>Niewielka inflacja jest normalna. Narodowy Bank Polski ma cel: <strong>2,5% rocznie, z tolerancją ±1 punkt procentowy</strong>. Gorsze od lekkiej inflacji bywa jej przeciwieństwo, czyli <strong>deflacja</strong>: gdy ceny spadają, ludzie odkładają zakupy na później, firmy sprzedają mniej i zwalniają pracowników.</p>
         </section>
         <section>
-          <h3>Policz sam</h3>
+          <h3><i data-lucide="calculator" class="ic" aria-hidden="true"></i>Policz sam</h3>
           <div class="formula">wartość realna = kwota ÷ (1 + inflacja)<sup>lata</sup></div>
           <p>Reguła 70: podziel 70 przez inflację, a dowiesz się, po ilu latach pieniądze stracą połowę wartości. Przy 7% to około 10 lat.</p>
         </section>
         <div class="fact">
-          <span class="tag">Prawdziwe dane</span>
+          <span class="tag"><i data-lucide="chart-line" class="ic" aria-hidden="true"></i>Prawdziwe dane</span>
           <p>W 2022 roku średnia inflacja w Polsce wyniosła 14,4%. Tak wysoko nie było od ponad 25 lat. Jeszcze w 2015 i 2016 roku ceny lekko spadały.</p>
         </div>
       </div>
 
       <div class="labs">
         <div class="lab" id="lab-inf">
-          <div><h3>Wehikuł czasu dla twojego portfela</h3><p class="task">Ustaw inflację i liczbę lat. Zobacz, ile będą kosztować rzeczy, które kupujesz, i ile będą warte pieniądze trzymane w gotówce.</p></div>
+          <div class="lab-head"><span class="badge"><i data-lucide="flask-conical" class="ic" aria-hidden="true"></i></span><h3>Wehikuł czasu dla twojego portfela</h3></div>
+          <div class="lab-body">
+          <p class="task">Ustaw inflację i liczbę lat. Zobacz, ile będą kosztować rzeczy, które kupujesz, i ile będą warte pieniądze trzymane w gotówce.</p>
           <div class="controls">
             <div class="ctl"><label for="inf-rate">Inflacja rocznie</label><output id="inf-rate-o"></output><input type="range" id="inf-rate" min="0" max="25" step="0.5" value="6" data-out="pct"></div>
             <div class="ctl"><label for="inf-years">Ile lat do przodu</label><output id="inf-years-o"></output><input type="range" id="inf-years" min="1" max="30" step="1" value="10" data-out="yrs"></div>
@@ -304,36 +579,39 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 32px; color: var
               <tbody id="inf-basket"></tbody>
             </table>
           </div>
+          </div>
         </div>
 
         <div class="lab" id="lab-hist">
-          <div><h3>Inflacja w Polsce 2015–2024</h3><p class="task">Średnioroczna inflacja CPI według GUS. Zielony pas to cel NBP (1,5–3,5%). Najedź na słupek, żeby zobaczyć wartość.</p></div>
+          <div class="lab-head"><span class="badge"><i data-lucide="flask-conical" class="ic" aria-hidden="true"></i></span><h3>Inflacja w Polsce 2015–2024</h3></div>
+          <div class="lab-body">
+          <p class="task">Średnioroczna inflacja CPI według GUS. Zielony pas to cel NBP (1,5–3,5%). Najedź na słupek, żeby zobaczyć wartość.</p>
           <div class="chart"><canvas id="ch-hist" aria-label="Wykres słupkowy inflacji w Polsce w latach 2015-2024"></canvas></div>
           <p class="insight" id="hist-insight"></p>
+          </div>
         </div>
       </div>
     </div>
+    </div>
     <div class="next"><a href="#stopy">Dalej: stopy procentowe →</a></div>
-  </div>
 </section>
 
 <!-- ================= STOPY ================= -->
-<section class="view" id="v-stopy" hidden>
-  <div class="wrap">
+<section class="view tone-blue" id="v-stopy" hidden>
     <div class="lesson-head">
-      <span class="eyebrow">Lekcja 2 z 6</span>
-      <h2>Stopa procentowa, czyli cena pieniądza</h2>
+      <div class="lesson-title"><span class="badge badge-lg"><i data-lucide="percent" class="ic" aria-hidden="true"></i></span><h1 class="app-title">Stopa procentowa, czyli cena pieniądza</h1></div>
       <p class="lead">Bank centralny nie ustala cen w sklepach. Ma jednak jedno potężne narzędzie: decyduje, ile kosztuje pożyczanie pieniędzy.</p>
     </div>
+    <div class="band">
     <div class="split">
       <div class="explain">
         <section>
-          <h3>Co to jest?</h3>
+          <h3><i data-lucide="percent" class="ic" aria-hidden="true"></i>Co to jest?</h3>
           <p><strong>Stopa procentowa</strong> mówi, ile procent rocznie płacisz za pożyczone pieniądze albo ile dostajesz, gdy to ty pożyczasz (np. bankowi na lokacie).</p>
           <p>W Polsce <strong>Rada Polityki Pieniężnej</strong> przy NBP ustala <strong>stopę referencyjną</strong>, czyli podstawową stopę procentową. Od niej zależą oprocentowanie lokat i kredytów oraz wskaźniki rynkowe, takie jak WIBOR (stopniowo zastępowany nowym wskaźnikiem).</p>
         </section>
         <section>
-          <h3>Jak to działa?</h3>
+          <h3><i data-lucide="list-checks" class="ic" aria-hidden="true"></i>Jak to działa?</h3>
           <ol>
             <li>RPP <strong>podnosi</strong> stopy.</li>
             <li>Kredyty drożeją, a lokaty dają więcej.</li>
@@ -344,19 +622,21 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 32px; color: var
           <p>Obniżka stóp działa odwrotnie: pobudza gospodarkę, ale może podbić inflację.</p>
         </section>
         <section>
-          <h3>Stopa realna</h3>
+          <h3><i data-lucide="scale" class="ic" aria-hidden="true"></i>Stopa realna</h3>
           <div class="formula">stopa realna ≈ stopa procentowa − inflacja</div>
           <p>Jeśli lokata daje 5%, a inflacja wynosi 8%, to realnie tracisz około 3% rocznie. Żeby skutecznie hamować inflację, stopy zwykle muszą być <strong>wyższe</strong> od niej.</p>
         </section>
         <div class="fact">
-          <span class="tag">Prawdziwa historia</span>
+          <span class="tag"><i data-lucide="history" class="ic" aria-hidden="true"></i>Prawdziwa historia</span>
           <p>Jesienią 2021 roku stopa referencyjna NBP wynosiła zaledwie 0,1%. Rok później, we wrześniu 2022, było to już 6,75%. Raty kredytów wielu rodzin wzrosły wtedy o kilkadziesiąt procent.</p>
         </div>
       </div>
 
       <div class="labs">
         <div class="lab" id="lab-cb">
-          <div><h3>Gra: zostań prezesem banku centralnego</h3><p class="task">Inflacja wynosi 11%, a cel to 2,5%. Co pół roku ustalasz stopę procentową. Zbij inflację do celu, ale uważaj: zbyt wysokie stopy wpędzą gospodarkę w recesję. Masz 10 decyzji.</p></div>
+          <div class="lab-head"><span class="badge"><i data-lucide="flask-conical" class="ic" aria-hidden="true"></i></span><h3>Gra: zostań prezesem banku centralnego</h3></div>
+          <div class="lab-body">
+          <p class="task">Inflacja wynosi 11%, a cel to 2,5%. Co pół roku ustalasz stopę procentową. Zbij inflację do celu, ale uważaj: zbyt wysokie stopy wpędzą gospodarkę w recesję. Masz 10 decyzji.</p>
           <div class="stats">
             <div class="stat" id="cb-st-pi"><span class="k">Inflacja</span><span class="v" id="cb-pi">–</span><span class="s">cel: 2,5% ±1</span></div>
             <div class="stat" id="cb-st-g"><span class="k">Wzrost PKB</span><span class="v" id="cb-g">–</span><span class="s">poniżej 0 = recesja</span></div>
@@ -379,55 +659,57 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 32px; color: var
           <div class="legend"></div>
           <div class="chart tall"><canvas id="ch-cb" aria-label="Wykres inflacji, stopy procentowej i wzrostu PKB w grze"></canvas></div>
           <p class="insight" id="cb-verdict" hidden></p>
+          </div>
         </div>
       </div>
     </div>
+    </div>
     <div class="next"><a href="#oszczedzanie">Dalej: procent składany →</a></div>
-  </div>
 </section>
 
 <!-- ================= OSZCZĘDZANIE ================= -->
-<section class="view" id="v-oszczedzanie" hidden>
-  <div class="wrap">
+<section class="view tone-yellow" id="v-oszczedzanie" hidden>
     <div class="lesson-head">
-      <span class="eyebrow">Lekcja 3 z 6</span>
-      <h2>Procent składany: odsetki od odsetek</h2>
+      <div class="lesson-title"><span class="badge badge-lg"><i data-lucide="sprout" class="ic" aria-hidden="true"></i></span><h1 class="app-title">Procent składany: odsetki od odsetek</h1></div>
       <p class="lead">Najsilniejszy sprzymierzeniec oszczędzającego to czas. Im wcześniej zaczniesz, tym więcej pracy wykonają za ciebie odsetki.</p>
     </div>
+    <div class="band">
     <div class="split">
       <div class="explain">
         <section>
-          <h3>Co to jest?</h3>
+          <h3><i data-lucide="sprout" class="ic" aria-hidden="true"></i>Co to jest?</h3>
           <p>Wpłacasz 1000 zł na lokatę z oprocentowaniem 5%. Po roku masz 1050 zł. W drugim roku odsetki liczą się już od 1050 zł, a nie od 1000 zł. To jest <strong>procent składany</strong>, czyli <strong>kapitalizacja odsetek</strong>.</p>
           <div class="formula">kwota końcowa = kwota × (1 + stopa)<sup>lata</sup></div>
         </section>
         <section>
-          <h3>Dlaczego to ważne?</h3>
+          <h3><i data-lucide="hourglass" class="ic" aria-hidden="true"></i>Dlaczego to ważne?</h3>
           <p>Na początku różnica jest mała. Po 20–30 latach odsetki potrafią być większe niż wszystko, co wpłaciłeś. Wykres rośnie coraz szybciej, jak kula śnieżna.</p>
           <p>Reguła 72: podziel 72 przez oprocentowanie, a dowiesz się, po ilu latach pieniądze się podwoją. Przy 6% to około 12 lat.</p>
         </section>
         <section>
-          <h3>Jak często dopisywane są odsetki?</h3>
+          <h3><i data-lucide="repeat" class="ic" aria-hidden="true"></i>Jak często dopisywane są odsetki?</h3>
           <p>Bank może dopisywać odsetki codziennie, co miesiąc, co kwartał, raz w roku albo dopiero na koniec lokaty. To jest <strong>częstotliwość kapitalizacji</strong>. Im częściej odsetki trafiają na konto, tym szybciej same zaczynają zarabiać.</p>
           <p>Dlatego oprócz oprocentowania z reklamy (<strong>nominalnego</strong>) liczy się oprocentowanie <strong>efektywne</strong>, czyli ile naprawdę zarobisz w ciągu roku.</p>
           <div class="formula">efektywne = (1 + stopa ÷ k)<sup>k</sup> − 1<br>k = ile razy w roku dopisuje się odsetki</div>
           <p>Przykład: 6% z kapitalizacją miesięczną to naprawdę około 6,17% rocznie. Różnica rośnie razem z oprocentowaniem i liczbą lat.</p>
         </section>
         <section>
-          <h3>Dwa haczyki</h3>
+          <h3><i data-lucide="triangle-alert" class="ic" aria-hidden="true"></i>Dwa haczyki</h3>
           <ul>
             <li><strong>Podatek Belki:</strong> od zysków z lokat, obligacji i akcji państwo pobiera 19%. Na lokacie bank pobiera go przy każdym dopisaniu odsetek, a w obligacjach EDO dopiero przy wykupie. To drugie jest korzystniejsze: do końca procentuje cała kwota, łącznie z „przyszłym podatkiem”.</li>
             <li><strong>Inflacja:</strong> liczy się nie to, ile złotych masz, ale co możesz za nie kupić. Lokata na 4% przy inflacji 5% realnie traci.</li>
           </ul>
         </section>
         <div class="fact">
-          <span class="tag">Ciekawostka</span>
+          <span class="tag"><i data-lucide="lightbulb" class="ic" aria-hidden="true"></i>Ciekawostka</span>
           <p>Procent składany działa też w drugą stronę. Niespłacony dług na karcie kredytowej rośnie w ten sam sposób, tylko dużo szybciej, bo oprocentowanie jest wysokie.</p>
         </div>
       </div>
       <div class="labs">
         <div class="lab" id="lab-sv">
-          <div><h3>Kalkulator kuli śnieżnej</h3><p class="task">Ustaw, ile odkładasz co miesiąc i jak długo. Porównaj, ile wpłacasz ty, a ile dokładają odsetki.</p></div>
+          <div class="lab-head"><span class="badge"><i data-lucide="flask-conical" class="ic" aria-hidden="true"></i></span><h3>Kalkulator kuli śnieżnej</h3></div>
+          <div class="lab-body">
+          <p class="task">Ustaw, ile odkładasz co miesiąc i jak długo. Porównaj, ile wpłacasz ty, a ile dokładają odsetki.</p>
           <div class="controls">
             <div class="ctl"><label for="sv-start">Wpłata na start</label><output id="sv-start-o"></output><input type="range" id="sv-start" min="0" max="10000" step="100" value="500" data-out="zl"></div>
             <div class="ctl"><label for="sv-month">Co miesiąc odkładasz</label><output id="sv-month-o"></output><input type="range" id="sv-month" min="0" max="1000" step="10" value="100" data-out="zl"></div>
@@ -458,10 +740,13 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 32px; color: var
           <div class="legend"></div>
           <div class="chart"><canvas id="ch-sv" aria-label="Wykres oszczędności w czasie"></canvas></div>
           <p class="insight" id="sv-early"></p>
+          </div>
         </div>
 
         <div class="lab" id="lab-cap">
-          <div><h3>Ta sama stopa, różna kapitalizacja</h3><p class="task">Liczby z kalkulatora wyżej, policzone dla każdej częstotliwości dopisywania odsetek. Zmień oprocentowanie albo liczbę lat i zobacz, kiedy różnica robi się duża.</p></div>
+          <div class="lab-head"><span class="badge"><i data-lucide="flask-conical" class="ic" aria-hidden="true"></i></span><h3>Ta sama stopa, różna kapitalizacja</h3></div>
+          <div class="lab-body">
+          <p class="task">Liczby z kalkulatora wyżej, policzone dla każdej częstotliwości dopisywania odsetek. Zmień oprocentowanie albo liczbę lat i zobacz, kiedy różnica robi się duża.</p>
           <div class="tbl-wrap">
             <table>
               <thead><tr><th>Kapitalizacja</th><th class="r">Oprocentowanie efektywne</th><th class="r">Na koniec</th><th class="r">Więcej niż bez kapitalizacji</th></tr></thead>
@@ -471,29 +756,29 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 32px; color: var
           <div class="legend"></div>
           <div class="chart"><canvas id="ch-cap" aria-label="Wykres porównania częstotliwości kapitalizacji"></canvas></div>
           <p class="insight" id="cap-tax"></p>
+          </div>
         </div>
       </div>
     </div>
+    </div>
     <div class="next"><a href="#obligacje">Dalej: obligacje skarbowe →</a></div>
-  </div>
 </section>
 
 <!-- ================= OBLIGACJE ================= -->
-<section class="view" id="v-obligacje" hidden>
-  <div class="wrap">
+<section class="view tone-green" id="v-obligacje" hidden>
     <div class="lesson-head">
-      <span class="eyebrow">Lekcja 4 z 6</span>
-      <h2>Obligacje skarbowe: pożyczasz pieniądze państwu</h2>
+      <div class="lesson-title"><span class="badge badge-lg"><i data-lucide="landmark" class="ic" aria-hidden="true"></i></span><h1 class="app-title">Obligacje skarbowe: pożyczasz pieniądze państwu</h1></div>
       <p class="lead">Państwo potrzebuje pieniędzy na drogi, szpitale czy szkoły. Część pożycza od zwykłych ludzi i oddaje je z odsetkami.</p>
     </div>
+    <div class="band">
     <div class="split">
       <div class="explain">
         <section>
-          <h3>Co to jest?</h3>
+          <h3><i data-lucide="scroll-text" class="ic" aria-hidden="true"></i>Co to jest?</h3>
           <p><strong>Obligacja</strong> to papier dłużny. Kupując ją, pożyczasz pieniądze emitentowi, a on obiecuje oddać je w określonym dniu z odsetkami. Gdy emitentem jest Skarb Państwa, mówimy o <strong>obligacjach skarbowych</strong>. To jedna z najbezpieczniejszych form oszczędzania w Polsce.</p>
         </section>
         <section>
-          <h3>Obligacje oszczędnościowe (detaliczne)</h3>
+          <h3><i data-lucide="landmark" class="ic" aria-hidden="true"></i>Obligacje oszczędnościowe (detaliczne)</h3>
           <p>Kosztują 100 zł za sztukę i są przeznaczone dla zwykłych ludzi. Najważniejsze rodzaje:</p>
           <div class="tbl-wrap">
             <table>
@@ -512,7 +797,7 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 32px; color: var
           <p>Aktualne oprocentowanie zmienia się co miesiąc. Sprawdzisz je na stronie <a href="https://www.obligacjeskarbowe.pl" target="_blank" rel="noopener">obligacjeskarbowe.pl</a>. Jeśli nie masz 18 lat, konto założysz z pomocą rodzica.</p>
         </section>
         <section>
-          <h3>Na co uważać?</h3>
+          <h3><i data-lucide="triangle-alert" class="ic" aria-hidden="true"></i>Na co uważać?</h3>
           <ul>
             <li><strong>Wcześniejszy wykup</strong> jest możliwy, ale kosztuje niewielką opłatę, potrącaną z odsetek.</li>
             <li>Od zysku płacisz <strong>podatek Belki</strong> (19%), chyba że kupujesz w ramach konta IKE.</li>
@@ -521,13 +806,15 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 32px; color: var
           </ul>
         </section>
         <div class="fact">
-          <span class="tag">Dla dociekliwych</span>
+          <span class="tag"><i data-lucide="search" class="ic" aria-hidden="true"></i>Dla dociekliwych</span>
           <p>Istnieją też obligacje <strong>rynkowe</strong>, którymi handluje się na giełdzie. Ich cena codziennie się zmienia i zależy od stóp procentowych. Sprawdź to na huśtawce obok.</p>
         </div>
       </div>
       <div class="labs">
         <div class="lab" id="lab-bd">
-          <div><h3>Stałe czy indeksowane inflacją?</h3><p class="task">Wybierz scenariusz inflacji i sprawdź, która obligacja lepiej ochroni twoje oszczędności. Parametry są przykładowe.</p></div>
+          <div class="lab-head"><span class="badge"><i data-lucide="flask-conical" class="ic" aria-hidden="true"></i></span><h3>Stałe czy indeksowane inflacją?</h3></div>
+          <div class="lab-body">
+          <p class="task">Wybierz scenariusz inflacji i sprawdź, która obligacja lepiej ochroni twoje oszczędności. Parametry są przykładowe.</p>
           <div class="controls">
             <div class="ctl"><label for="bd-amt">Kwota</label><output id="bd-amt-o"></output><input type="range" id="bd-amt" min="1000" max="50000" step="1000" value="10000" data-out="zl"></div>
             <div class="ctl"><label for="bd-scen">Scenariusz inflacji</label><span class="val"></span>
@@ -547,10 +834,13 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 32px; color: var
           <div class="chart"><canvas id="ch-bd" aria-label="Wykres porównania obligacji stałych, indeksowanych i gotówki"></canvas></div>
           <div class="stats" id="bd-stats"></div>
           <p class="insight" id="bd-verdict"></p>
+          </div>
         </div>
 
         <div class="lab" id="lab-ss">
-          <div><h3>Huśtawka: stopy procentowe a cena obligacji</h3><p class="task">Masz obligację rynkową: 1000 zł nominału, 5% odsetek rocznie, 5 lat do wykupu. Zmień stopy na rynku i zobacz, za ile ktoś ją od ciebie odkupi.</p></div>
+          <div class="lab-head"><span class="badge"><i data-lucide="flask-conical" class="ic" aria-hidden="true"></i></span><h3>Huśtawka: stopy procentowe a cena obligacji</h3></div>
+          <div class="lab-body">
+          <p class="task">Masz obligację rynkową: 1000 zł nominału, 5% odsetek rocznie, 5 lat do wykupu. Zmień stopy na rynku i zobacz, za ile ktoś ją od ciebie odkupi.</p>
           <div class="controls">
             <div class="ctl"><label for="ss-rate">Stopy procentowe na rynku</label><output id="ss-rate-o"></output><input type="range" id="ss-rate" min="1" max="10" step="0.25" value="7" data-out="pct2"></div>
           </div>
@@ -571,29 +861,29 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 32px; color: var
             <div class="stat" id="ss-st"><span class="k">Cena twojej obligacji</span><span class="v" id="ss-price">–</span><span class="s" id="ss-chg"></span></div>
           </div>
           <p class="insight" id="ss-why"></p>
+          </div>
         </div>
       </div>
     </div>
+    </div>
     <div class="next"><a href="#akcje">Dalej: akcje →</a></div>
-  </div>
 </section>
 
 <!-- ================= AKCJE ================= -->
-<section class="view" id="v-akcje" hidden>
-  <div class="wrap">
+<section class="view tone-ink" id="v-akcje" hidden>
     <div class="lesson-head">
-      <span class="eyebrow">Lekcja 5 z 6</span>
-      <h2>Akcje: kawałek prawdziwej firmy</h2>
+      <div class="lesson-title"><span class="badge badge-lg"><i data-lucide="chart-candlestick" class="ic" aria-hidden="true"></i></span><h1 class="app-title">Akcje: kawałek prawdziwej firmy</h1></div>
       <p class="lead">Kupując akcję, stajesz się współwłaścicielem firmy. Gdy firmie idzie dobrze, zarabiasz z nią. Gdy idzie źle, tracisz.</p>
     </div>
+    <div class="band">
     <div class="split">
       <div class="explain">
         <section>
-          <h3>Co to jest?</h3>
+          <h3><i data-lucide="chart-pie" class="ic" aria-hidden="true"></i>Co to jest?</h3>
           <p><strong>Akcja</strong> to udział w spółce. Jeśli firma ma milion akcji, a ty kupisz jedną, należy do ciebie jedna milionowa jej części. W Polsce akcjami handluje się na <strong>Giełdzie Papierów Wartościowych w Warszawie</strong>.</p>
         </section>
         <section>
-          <h3>Jak się na nich zarabia?</h3>
+          <h3><i data-lucide="coins" class="ic" aria-hidden="true"></i>Jak się na nich zarabia?</h3>
           <ul>
             <li><strong>Wzrost ceny:</strong> kupujesz taniej, sprzedajesz drożej.</li>
             <li><strong>Dywidenda:</strong> część zysku, którą firma wypłaca akcjonariuszom, zwykle raz w roku. Od dywidendy płacisz 19% podatku.</li>
@@ -601,11 +891,11 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 32px; color: var
           <p>Dywidendę możesz wydać albo <strong>reinwestować</strong>, czyli kupić za nią kolejne akcje. Te nowe akcje też płacą dywidendy, więc działa ten sam procent składany co na lokacie. W długim terminie reinwestowane dywidendy to duża część całego zysku z akcji.</p>
         </section>
         <section>
-          <h3>Dlaczego ceny skaczą?</h3>
+          <h3><i data-lucide="chart-candlestick" class="ic" aria-hidden="true"></i>Dlaczego ceny skaczą?</h3>
           <p>Cena akcji to efekt tego, ile ludzie są gotowi za nią zapłacić. Wpływają na to wyniki firmy, wiadomości, stopy procentowe, a także emocje: strach i chciwość. W krótkim terminie ceny są bardzo nieprzewidywalne. W długim zwykle podążają za zyskami firm.</p>
         </section>
         <section>
-          <h3>Jak zmniejszyć ryzyko?</h3>
+          <h3><i data-lucide="shield" class="ic" aria-hidden="true"></i>Jak zmniejszyć ryzyko?</h3>
           <ul>
             <li><strong>Dywersyfikacja:</strong> nie wkładaj wszystkich jajek do jednego koszyka. Pojedyncza firma może zbankrutować, cała gospodarka raczej nie.</li>
             <li><strong>Fundusze indeksowe (ETF):</strong> jedną transakcją kupujesz kawałek wielu firm naraz, np. całego indeksu WIG20.</li>
@@ -614,17 +904,19 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 32px; color: var
           </ul>
         </section>
         <div class="fact">
-          <span class="tag">Ciekawostka</span>
+          <span class="tag"><i data-lucide="lightbulb" class="ic" aria-hidden="true"></i>Ciekawostka</span>
           <p>Indeks WIG20 pokazuje tylko ceny akcji. Jego „bliźniak” WIG20TR liczy też reinwestowane dywidendy. Po latach różnica między nimi jest bardzo wyraźna.</p>
         </div>
         <div class="fact">
-          <span class="tag">Ważne</span>
+          <span class="tag"><i data-lucide="triangle-alert" class="ic" aria-hidden="true"></i>Ważne</span>
           <p>Akcje to nie loteria, ale też nie lokata. Inwestuj tylko pieniądze, których nie będziesz potrzebować przez wiele lat. Rachunek maklerski przed 18. rokiem życia zakłada się razem z rodzicem.</p>
         </div>
       </div>
       <div class="labs">
         <div class="lab" id="lab-st">
-          <div><h3>Jedna firma czy cały koszyk?</h3><p class="task">Inwestujesz 10 000 zł. Porównaj akcje jednej firmy, koszyk 20 firm (jak fundusz ETF) i lokatę 3%. Każde losowanie to inna możliwa historia rynku. Wyniki zakładają, że dywidendy są reinwestowane.</p></div>
+          <div class="lab-head"><span class="badge"><i data-lucide="flask-conical" class="ic" aria-hidden="true"></i></span><h3>Jedna firma czy cały koszyk?</h3></div>
+          <div class="lab-body">
+          <p class="task">Inwestujesz 10 000 zł. Porównaj akcje jednej firmy, koszyk 20 firm (jak fundusz ETF) i lokatę 3%. Każde losowanie to inna możliwa historia rynku. Wyniki zakładają, że dywidendy są reinwestowane.</p>
           <div class="controls">
             <div class="ctl"><label for="st-years">Horyzont inwestycji</label><output id="st-years-o"></output><input type="range" id="st-years" min="1" max="30" step="1" value="15" data-out="yrs"></div>
           </div>
@@ -632,10 +924,13 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 32px; color: var
           <div class="legend"></div>
           <div class="chart tall"><canvas id="ch-st" aria-label="Wykres symulacji wartości inwestycji"></canvas></div>
           <div class="stats" id="st-stats"></div>
+          </div>
         </div>
 
         <div class="lab" id="lab-dv">
-          <div><h3>Dywidendy: reinwestować czy wydawać?</h3><p class="task">Masz 10 000 zł w koszyku firm, które co roku wypłacają część zysku. Ta sama historia rynku, dwie decyzje: za dywidendy dokupujesz akcje albo je wydajesz. Dywidendy są już pomniejszone o 19% podatku.</p></div>
+          <div class="lab-head"><span class="badge"><i data-lucide="flask-conical" class="ic" aria-hidden="true"></i></span><h3>Dywidendy: reinwestować czy wydawać?</h3></div>
+          <div class="lab-body">
+          <p class="task">Masz 10 000 zł w koszyku firm, które co roku wypłacają część zysku. Ta sama historia rynku, dwie decyzje: za dywidendy dokupujesz akcje albo je wydajesz. Dywidendy są już pomniejszone o 19% podatku.</p>
           <div class="controls">
             <div class="ctl"><label for="dv-years">Horyzont</label><output id="dv-years-o"></output><input type="range" id="dv-years" min="5" max="40" step="1" value="30" data-out="yrs"></div>
             <div class="ctl"><label for="dv-yield">Stopa dywidendy rocznie</label><output id="dv-yield-o"></output><input type="range" id="dv-yield" min="0" max="6" step="0.25" value="3" data-out="pct2"></div>
@@ -645,10 +940,13 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 32px; color: var
           <div class="stats" id="dv-stats"></div>
           <p class="insight" id="dv-insight"></p>
           <p class="task">Średni zysk rynku w modelu to nadal około 7% rocznie. Im wyższa dywidenda, tym mniejsza część zysku pochodzi ze wzrostu cen akcji.</p>
+          </div>
         </div>
 
         <div class="lab" id="lab-mc">
-          <div><h3>1000 możliwych przyszłości</h3><p class="task">Jedna historia może być szczęśliwa albo pechowa. Komputer sprawdza 1000 różnych przyszłości dla horyzontu z laboratorium wyżej. Ostatni wiersz to inwestor, który w panice sprzedaje koszyk po spadku o 25% i przenosi pieniądze na lokatę.</p></div>
+          <div class="lab-head"><span class="badge"><i data-lucide="flask-conical" class="ic" aria-hidden="true"></i></span><h3>1000 możliwych przyszłości</h3></div>
+          <div class="lab-body">
+          <p class="task">Jedna historia może być szczęśliwa albo pechowa. Komputer sprawdza 1000 różnych przyszłości dla horyzontu z laboratorium wyżej. Ostatni wiersz to inwestor, który w panice sprzedaje koszyk po spadku o 25% i przenosi pieniądze na lokatę.</p>
           <div class="tbl-wrap">
             <table>
               <thead><tr><th>Strategia</th><th class="r">Pechowy wynik<br>(5% najgorszych)</th><th class="r">Typowy wynik<br>(mediana)</th><th class="r">Szczęśliwy wynik<br>(5% najlepszych)</th><th class="r">Szansa na stratę</th></tr></thead>
@@ -657,25 +955,25 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 32px; color: var
           </div>
           <p class="insight" id="mc-insight"></p>
           <p class="task">To uproszczony model: średni zysk rynku około 7% rocznie (wzrost cen + reinwestowane dywidendy) z dużymi wahaniami. Prawdziwy rynek bywa bardziej zaskakujący. Wyniki z przeszłości nie gwarantują przyszłych.</p>
+          </div>
         </div>
       </div>
     </div>
+    </div>
     <div class="next"><a href="#kredyty">Dalej: kredyty →</a></div>
-  </div>
 </section>
 
 <!-- ================= KREDYTY ================= -->
-<section class="view" id="v-kredyty" hidden>
-  <div class="wrap">
+<section class="view tone-grape" id="v-kredyty" hidden>
     <div class="lesson-head">
-      <span class="eyebrow">Lekcja 6 z 6</span>
-      <h2>Kredyty: ile naprawdę kosztuje pożyczka</h2>
+      <div class="lesson-title"><span class="badge badge-lg"><i data-lucide="credit-card" class="ic" aria-hidden="true"></i></span><h1 class="app-title">Kredyty: ile naprawdę kosztuje pożyczka</h1></div>
       <p class="lead">Kredyt pozwala kupić coś dziś i zapłacić później. To „później” zawsze kosztuje więcej, a czasem dużo więcej.</p>
     </div>
+    <div class="band">
     <div class="split">
       <div class="explain">
         <section>
-          <h3>Słowniczek kredytu</h3>
+          <h3><i data-lucide="book-open" class="ic" aria-hidden="true"></i>Słowniczek kredytu</h3>
           <ul>
             <li><strong>Kapitał:</strong> kwota, którą pożyczasz.</li>
             <li><strong>Odsetki:</strong> cena za pożyczenie, liczona od kwoty, którą jeszcze jesteś winien.</li>
@@ -685,11 +983,11 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 32px; color: var
           </ul>
         </section>
         <section>
-          <h3>Raty równe czy malejące?</h3>
+          <h3><i data-lucide="chart-line" class="ic" aria-hidden="true"></i>Raty równe czy malejące?</h3>
           <p>W <strong>ratach równych</strong> co miesiąc płacisz tyle samo, ale na początku prawie cała rata to odsetki. W <strong>ratach malejących</strong> spłacasz co miesiąc tę samą część kapitału, więc pierwsze raty są wyższe, ale łącznie oddajesz mniej.</p>
         </section>
         <section>
-          <h3>Zasady bezpiecznego pożyczania</h3>
+          <h3><i data-lucide="shield" class="ic" aria-hidden="true"></i>Zasady bezpiecznego pożyczania</h3>
           <ul>
             <li>Rata nie powinna przekraczać około <strong>30–40% dochodu</strong>.</li>
             <li>Porównuj <strong>RRSO</strong>, a nie samo oprocentowanie czy hasło „0%”.</li>
@@ -698,13 +996,15 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 32px; color: var
           </ul>
         </section>
         <div class="fact">
-          <span class="tag">Zanim weźmiesz</span>
+          <span class="tag"><i data-lucide="wallet" class="ic" aria-hidden="true"></i>Zanim weźmiesz</span>
           <p>Zadaj sobie pytanie: czy ta rzecz będzie mi służyć dłużej niż będę ją spłacać? Mieszkanie na 25 lat ma sens. Wakacje na raty, spłacane jeszcze przez dwa lata po powrocie, raczej nie.</p>
         </div>
       </div>
       <div class="labs">
         <div class="lab" id="lab-kr">
-          <div><h3>Kalkulator kredytu</h3><p class="task">Wybierz przykład albo wpisz własne liczby. Zwróć uwagę, jak bardzo RRSO różni się od oprocentowania, gdy w grę wchodzi prowizja.</p></div>
+          <div class="lab-head"><span class="badge"><i data-lucide="flask-conical" class="ic" aria-hidden="true"></i></span><h3>Kalkulator kredytu</h3></div>
+          <div class="lab-body">
+          <p class="task">Wybierz przykład albo wpisz własne liczby. Zwróć uwagę, jak bardzo RRSO różni się od oprocentowania, gdy w grę wchodzi prowizja.</p>
           <div class="btns" id="kr-presets">
             <button class="chip" type="button" data-p="dom" aria-pressed="true">Mieszkanie</button>
             <button class="chip" type="button" data-p="auto" aria-pressed="false">Używane auto</button>
@@ -730,10 +1030,13 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 32px; color: var
           <div class="legend"></div>
           <div class="chart"><canvas id="ch-kr" aria-label="Wykres części kapitałowej i odsetkowej raty"></canvas></div>
           <p class="task">Wykres pokazuje, z czego składa się każda rata: ile spłaca dług (kapitał), a ile to zapłata dla banku (odsetki).</p>
+          </div>
         </div>
 
         <div class="lab" id="lab-shock">
-          <div><h3>Test: co jeśli stopy wzrosną?</h3><p class="task">Kredyty na mieszkanie w Polsce mają zwykle zmienne oprocentowanie. Sprawdź, jak zmieni się rata z kalkulatora wyżej, gdy bank centralny podniesie stopy.</p></div>
+          <div class="lab-head"><span class="badge"><i data-lucide="flask-conical" class="ic" aria-hidden="true"></i></span><h3>Test: co jeśli stopy wzrosną?</h3></div>
+          <div class="lab-body">
+          <p class="task">Kredyty na mieszkanie w Polsce mają zwykle zmienne oprocentowanie. Sprawdź, jak zmieni się rata z kalkulatora wyżej, gdy bank centralny podniesie stopy.</p>
           <div class="controls">
             <div class="ctl"><label for="sh-up">Wzrost stóp procentowych</label><output id="sh-up-o"></output><input type="range" id="sh-up" min="0" max="7" step="0.25" value="3" data-out="pp"></div>
           </div>
@@ -743,35 +1046,33 @@ footer { border-top: 1px solid var(--line); padding-block: 22px 32px; color: var
             <div class="stat" id="sh-dti-st"><span class="k">Rata / dochód</span><span class="v" id="sh-dti">–</span></div>
           </div>
           <p class="insight" id="sh-insight"></p>
+          </div>
         </div>
       </div>
     </div>
+    </div>
     <div class="next"><a href="#quiz">Dalej: sprawdź się w quizie →</a></div>
-  </div>
 </section>
 
 <!-- ================= QUIZ ================= -->
 <section class="view" id="v-quiz" hidden>
-  <div class="wrap">
     <div class="lesson-head">
-      <span class="eyebrow">Podsumowanie</span>
-      <h2>Quiz: ile już wiesz?</h2>
+      <div class="lesson-title"><span class="badge badge-lg"><i data-lucide="circle-question-mark" class="ic" aria-hidden="true"></i></span><h1 class="app-title">Quiz: ile już wiesz?</h1></div>
       <p class="lead">Kliknij odpowiedź. Każde pytanie ma krótkie wyjaśnienie, więc nawet błąd czegoś cię nauczy.</p>
     </div>
+    <div class="band">
     <div class="quiz">
-      <div class="score num" id="qz-score">Wynik: 0 / 0</div>
+      <div class="score num" id="qz-score" aria-live="polite">Wynik: 0 / 0</div>
       <div id="qz-list" class="quiz"></div>
       <div class="btns"><button type="button" id="qz-reset">Rozwiąż jeszcze raz</button></div>
     </div>
-  </div>
+    </div>
 </section>
 
 </main>
 
 <footer>
-  <div class="wrap">
     <p>Materiał edukacyjny, nie porada inwestycyjna. Symulacje są uproszczone, a parametry przykładowe. Dane o inflacji: GUS (średnioroczny wskaźnik CPI). Aktualne oprocentowanie obligacji sprawdzisz na obligacjeskarbowe.pl, a stopy procentowe na nbp.pl.</p>
-  </div>
 </footer>
 
 <script>
@@ -795,6 +1096,15 @@ function zlShort(v) {
   if (a >= 1e6) return NF1.format(v / 1e6) + ' mln';
   if (a >= 1e4) return NF0.format(v / 1e3) + ' tys.';
   return NF0.format(v);
+}
+/* Ikony to ozdoba: bez sieci (brak window.lucide) nic się nie dzieje, a dema liczą dalej. */
+function icons(root = document) { if (window.lucide) window.lucide.createIcons({ root }); }
+/* Mini demo: init(el) podpina zdarzenia i robi pierwszy render elementu .mini. */
+function mini(id, init) {
+  const el = document.getElementById(id);
+  if (!el) { console.error('mini: brak elementu #' + id); return; }
+  init(el);
+  icons(el);
 }
 
 const FMT = {
@@ -882,7 +1192,7 @@ function draw(cv) {
   const ctx = cv.getContext('2d');
   ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   ctx.clearRect(0, 0, w, h);
-  const fontData = cssv('--font-data');
+  const fontData = cssv('--font-mono');
   const C = { line: cssv('--line'), muted: cssv('--muted'), ink: cssv('--ink'), good: cssv('--good'), surface: cssv('--surface') };
   const n = o.labels.length;
   let vals = o.series.flatMap((s) => s.data).filter(Number.isFinite);
@@ -1504,8 +1814,9 @@ let qOk = 0, qDone = 0;
 function renderQuiz() {
   qOk = 0; qDone = 0;
   $('#qz-list').innerHTML = QUIZ.map(([q, opts], qi) =>
-    `<div class="q" data-q="${qi}"><h3>${qi + 1}. ${q}</h3><div class="opts">${opts.map((o, oi) => `<button type="button" data-o="${oi}">${o}</button>`).join('')}</div><p class="why" hidden></p></div>`).join('');
+    `<div class="q" data-q="${qi}"><h3><i data-lucide="circle-question-mark" class="ic" aria-hidden="true"></i>${qi + 1}. ${q}</h3><div class="opts">${opts.map((o, oi) => `<button type="button" data-o="${oi}">${o}</button>`).join('')}</div><p class="why" hidden></p></div>`).join('');
   updScore();
+  icons($('#qz-list'));
 }
 function updScore() { $('#qz-score').textContent = `Wynik: ${qOk} / ${qDone}` + (qDone === QUIZ.length ? ` · ${qOk >= 12 ? 'Mistrz finansów!' : qOk >= 9 ? 'Dobra robota!' : 'Wróć do lekcji i spróbuj jeszcze raz.'}` : ''); }
 $('#qz-list').addEventListener('click', (e) => {
@@ -1528,6 +1839,11 @@ function route() {
   const h = location.hash.slice(1);
   const v = VIEWS.includes(h) ? h : 'start';
   $$('section.view').forEach((s) => { s.hidden = s.id !== 'v-' + v; });
+  $('main').dataset.view = v;
+  const bar = $('#lesson-progress'), step = VIEWS.indexOf(v);
+  bar.setAttribute('aria-valuenow', step);
+  bar.setAttribute('aria-valuemax', VIEWS.length - 1);
+  bar.firstElementChild.style.width = (step / (VIEWS.length - 1) * 100) + '%';
   $$('nav.tabs a').forEach((a) => {
     if (a.getAttribute('href') === '#' + v) { a.setAttribute('aria-current', 'page'); a.scrollIntoView({ block: 'nearest', inline: 'nearest' }); }
     else a.removeAttribute('aria-current');
@@ -1540,6 +1856,16 @@ window.addEventListener('hashchange', route);
 /* ================= start ================= */
 updHero(); updInf(); drawHist(); gReset(); updSav(); updBond(); updSeesaw(); updStocks(); updDiv(); runMC(); updLoan(); renderQuiz();
 route();
+addEventListener('load', () => icons());
+icons();
+
+/* ================= odsłonięcie po pierwszym renderze ================= */
+const FONT_WAIT_MS = 1500;
+const BRAND_FONTS = ['400 1em Outfit', '700 1em Outfit', '400 1em "IBM Plex Sans"', '600 1em "IBM Plex Sans"', '400 1em "Roboto Mono"'];
+Promise.race([
+  Promise.all(BRAND_FONTS.map((f) => document.fonts.load(f).catch(() => null))),
+  new Promise((r) => setTimeout(r, FONT_WAIT_MS))
+]).then(() => document.documentElement.classList.add('app-ready'));
 })();
 </script>
 </body>
