@@ -354,7 +354,6 @@ details.more > :not(summary) { margin: 10px 14px; font-size: var(--body-sm); }
 #v-kredyty .tiles { gap: 8px; }
 #v-kredyty .tiles .tile { padding: 9px 14px; }
 #v-kredyty .mini { gap: 8px; }
-#v-kredyty .explain section > p + p { margin-top: -8px; }
 #v-kredyty .mini .readout#rata-out > span { display: flex; align-items: baseline; gap: 8px; padding: 6px 12px; }
 .tiles.stack .badge { grid-row: 1 / span 2; }
 .tiles.stack .tile p { grid-column: 2; }
@@ -410,7 +409,7 @@ details.more > :not(summary) { margin: 10px 14px; font-size: var(--body-sm); }
 .link.on { background: var(--tone); color: var(--tone-ink); border-color: var(--tone); }
 .link .ic { vertical-align: -.15em; }
 #m-chain[data-dir="down"] .dir-up, #m-chain:not([data-dir="down"]) .dir-down { display: none; }
-#m-chain button[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.mini .btns button[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 
 /* ===== dolny pas lekcji 2 ===== */
 .explain.wide .tiles { grid-template-columns: repeat(3, minmax(0, 1fr)); }
@@ -485,7 +484,6 @@ details.more > :not(summary) { margin: 10px 14px; font-size: var(--body-sm); }
 .rint::before, .rleg > span::before { content: ""; width: 12px; height: 12px; border-radius: var(--r-xs); border: 1px solid var(--line-strong); background: var(--red); flex: none; }
 .rleg { display: flex; flex-wrap: wrap; gap: 6px 16px; }
 .rleg > [data-k="kapital"]::before { background: var(--blue); }
-#m-rata .btns button[aria-pressed="true"] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
 .mini .readout#rata-out, .mini .readout#zero-out { grid-template-columns: minmax(0, 1fr); }
 .mini .readout:empty { display: none; }
 .mini .readout#zero-out { display: block; background: var(--paper-2); border-radius: var(--r-sm); padding: 8px 12px; }
@@ -546,8 +544,6 @@ td.r, th.r { text-align: right; font-variant-numeric: tabular-nums; white-space:
 .meter { height: 8px; border-radius: var(--r-pill); background: var(--paper-3); min-width: 60px; overflow: hidden; margin-top: 6px; }
 .meter > i { display: block; height: 100%; background: var(--red-soft); }
 .pill { display: inline-block; font-family: var(--font-mono); font-weight: 500; font-size: var(--overline); padding: 2px 8px; border-radius: var(--r-pill); background: var(--paper-3); color: var(--ink); }
-.pill.good { background: var(--green-soft); color: var(--green-ink); }
-.pill.bad { background: var(--red-soft); color: var(--red-ink); }
 .pill.warn { background: var(--yellow-soft); color: var(--yellow-ink); }
 .seesaw svg { width: 100%; max-width: 420px; height: auto; display: block; margin: 0 auto; }
 .seesaw .plank { fill: var(--ink); }
@@ -634,7 +630,7 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
 <section class="view" id="v-start">
   <div class="lesson-head">
     <h1 class="app-title">Finanse bez tajemnic</h1>
-    <p class="lead">Jak naprawdę działają pieniądze. Sześć krótkich lekcji i laboratoria, w których sam ustawiasz stopy procentowe, kupujesz obligacje, inwestujesz w akcje i bierzesz kredyt. To symulacje, więc możesz śmiało eksperymentować.</p>
+    <p class="lead">Jak naprawdę działają pieniądze. Sześć krótkich lekcji i laboratoria, w których samodzielnie ustawiasz stopy procentowe, kupujesz obligacje, inwestujesz w akcje i bierzesz kredyt. To symulacje, więc możesz śmiało eksperymentować.</p>
   </div>
   <div class="band">
     <div class="demo tone-yellow">
@@ -793,7 +789,7 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
           <div class="row-head"><span class="badge"><i data-lucide="list-checks" class="ic" aria-hidden="true"></i></span><h3>Jak to działa?</h3></div>
           <div class="mini" id="m-chain" data-dir="" data-step="0">
             <div class="btns">
-              <button class="primary" type="button" data-dir="up" aria-pressed="false">Podnieś</button>
+              <button type="button" data-dir="up" aria-pressed="false">Podnieś</button>
               <button type="button" data-dir="down" aria-pressed="false">Obniż</button>
             </div>
             <ol class="chain">
@@ -982,7 +978,7 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
         <details class="more">
           <summary>Więcej</summary>
           <p><strong>Kiedy płacisz podatek.</strong> Na lokacie bank pobiera go przy każdym dopisaniu odsetek. W obligacjach EDO dopiero przy wykupie, więc do końca procentuje cała kwota, także ta, z której zapłacisz podatek.</p>
-          <p><strong>Po latach.</strong> Po 20–30 latach odsetki potrafią być większe niż wszystko, co wpłaciłeś.</p>
+          <p><strong>Po latach.</strong> Po 20–30 latach odsetki potrafią być większe niż wszystkie twoje wpłaty.</p>
           <p><strong>Reguła 72.</strong> Podziel 72 przez oprocentowanie, a dowiesz się, po ilu latach pieniądze się podwoją. Przy 6% to około 12 lat.</p>
           <p><strong>Częściej znaczy szybciej.</strong> Im częściej odsetki trafiają na konto, tym szybciej same zaczynają zarabiać. Różnica rośnie razem z oprocentowaniem i liczbą lat.</p>
         </details>
@@ -1282,7 +1278,7 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
 <section class="view tone-grape" id="v-kredyty" hidden>
     <div class="lesson-head">
       <div class="lesson-title"><span class="badge badge-lg"><i data-lucide="credit-card" class="ic" aria-hidden="true"></i></span><h1 class="app-title">Kredyty: ile naprawdę kosztuje pożyczka</h1></div>
-      <p class="lead">Kredyt pozwala kupić coś dziś i zapłacić później. To „później” zawsze kosztuje więcej, a czasem dużo więcej.</p>
+      <p class="lead">Kredyt pozwala kupić coś dziś i zapłacić później. To „później” prawie zawsze kosztuje więcej, a czasem dużo więcej.</p>
     </div>
     <div class="band">
     <div class="split">
@@ -1299,10 +1295,9 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
         </section>
         <section>
           <div class="row-head"><span class="badge"><i data-lucide="chart-line" class="ic" aria-hidden="true"></i></span><h3>Raty równe czy malejące?</h3></div>
-          <p>W ratach malejących szybciej spłacasz kapitał, więc odsetki naliczają się od coraz mniejszej kwoty i łącznie płacisz mniej,</p>
-          <p>ale pierwsze raty są wyższe.</p>
+          <p>Malejące szybciej spłacają kapitał, więc odsetki naliczają się od coraz mniejszej kwoty: łącznie płacisz mniej, ale pierwsze raty są wyższe.</p>
           <div class="mini" id="m-rata" data-type="rowne" data-rata="" data-odsetki="" data-total="">
-            <p class="mini-note">400 000 zł, 25 lat, 7,5%. Słupek: pierwsza rata roku.</p>
+            <p class="mini-note">400000, 25 lat, 7,5%. Słupek: pierwsza rata roku, w zł.</p>
             <div class="btns"><button type="button" data-type="rowne" aria-pressed="true">Raty równe</button><button type="button" data-type="malejace" aria-pressed="false">Raty malejące</button></div>
             <div class="rbars" role="group" aria-label="Rata nr 1, 109 i 289">
               <div class="rcol"><b class="rnum" data-v="rata"></b><div class="rtrack"><div class="rstack"><span data-part="odsetki"></span><span data-part="kapital"></span></div></div><span class="rlab">Rok 1</span><span class="rint"><span class="sr-only">odsetki </span><span data-v="odsetki"></span></span></div>
@@ -1437,7 +1432,8 @@ const pc = (v, d = 1) => nf(d).format(v) + '%';
 const val = (id) => parseFloat(document.getElementById(id).value);
 const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
 const cssv = (name) => getComputedStyle(document.documentElement).getPropertyValue(name).trim();
-function lat(n) { if (n === 1) return 'rok'; const d = n % 10, t = n % 100; return (d >= 2 && d <= 4 && !(t >= 12 && t <= 14)) ? 'lata' : 'lat'; }
+function plural(n, one, few, many) { if (n === 1) return one; const d = n % 10, t = n % 100; return (d >= 2 && d <= 4 && !(t >= 12 && t <= 14)) ? few : many; }
+function lat(n) { return plural(n, 'rok', 'lata', 'lat'); }
 function zlShort(v) {
   const a = Math.abs(v);
   if (a >= 1e6) return NF1.format(v / 1e6) + ' mln';
@@ -1850,7 +1846,7 @@ mini('m-picker', (el) => {
 
 /* ----- mini: ile masz akcji z 100, dywidenda 1000 zł na całą firmę ----- */
 const SHARE = { total: 100, dividend: 1000, tax: 0.19 };
-function akcji(n) { if (n === 1) return 'akcja'; const d = n % 10, t = n % 100; return (d >= 2 && d <= 4 && !(t >= 12 && t <= 14)) ? 'akcje' : 'akcji'; }
+function akcji(n) { return plural(n, 'akcja', 'akcje', 'akcji'); }
 mini('m-share', (el) => {
   const range = $('#share-n', el), grid = $('.units', el);
   grid.innerHTML = '<span class="unit off"></span>'.repeat(SHARE.total);
@@ -2335,7 +2331,7 @@ mini('m-rata', (el) => {
       $('[data-v="rata"]', c).textContent = Math.round(r.pay);
       $('[data-v="odsetki"]', c).textContent = Math.round(r.int);
     });
-    out.innerHTML = '<span>Odsetki <b>' + zl(total) + '</b></span>';
+    out.innerHTML = '<span>Odsetki razem <b>' + NF0.format(Math.round(total)) + '</b></span>';
   };
   btns.forEach((b) => b.addEventListener('click', () => render(b.dataset.type)));
   render('rowne');
