@@ -1981,20 +1981,19 @@ $('#cb-reset').addEventListener('click', gReset);
 function grow(P0, m, r, years, tax, f = 12, mode = 'cap') {
   const T = tax && mode === 'cap' ? 0.81 : 1;
   const per = f >= 12 ? 0 : f > 0 ? 12 / f : Infinity;
-  const mf = f >= 12 ? Math.pow(1 + r / f, f / 12) - 1 : 0;
+  const mf = f >= 12 ? Math.pow(1 + r * T / f, f / 12) - 1 : 0;  // podatek od każdego dopisania, dalej procentuje kwota netto
+  const net = (v, p) => tax && mode === 'end' ? p + Math.max(0, v - p) * 0.81 : v;  // ile zostaje po wypłacie
   let bal = P0, pend = 0, paid = P0; const B = [P0], W = [P0];
   for (let mo = 1; mo <= years * 12; mo++) {
     bal += m; paid += m;
-    if (f >= 12) bal += bal * mf * T;
+    if (f >= 12) bal += bal * mf;
     else {
       pend += bal * r / 12;                                   // odsetki naliczone, jeszcze niedopisane
       if (per !== Infinity && mo % per === 0) { bal += pend * T; pend = 0; }
     }
-    if (mo % 12 === 0) { B.push(bal + pend * T); W.push(paid); }
+    if (mo % 12 === 0) { B.push(net(bal + pend * T, paid)); W.push(paid); }
   }
-  bal += pend * T;
-  if (tax && mode === 'end') bal = paid + Math.max(0, bal - paid) * 0.81;
-  B[B.length - 1] = bal;
+  bal = net(bal + pend * T, paid);
   return { bal, paid, B, W };
 }
 const CAPS = [[365, 'Codzienna'], [12, 'Miesięczna'], [4, 'Kwartalna'], [1, 'Roczna'], [0, 'Brak (odsetki na koniec)']];
@@ -2004,12 +2003,14 @@ function updSav() {
   $('#sv-taxmode-row').hidden = !tax;
   const res = grow(P0, m, r, n, tax, f, mode);
   const R = res.B.map((v, y) => v / Math.pow(1 + inf, y));
+  let paidReal = P0;                                          // wpłaty w dzisiejszych zł: późniejsze są warte mniej
+  for (let mo = 1; mo <= n * 12; mo++) paidReal += m / Math.pow(1 + inf, mo / 12);
   $('#sv-paid').textContent = zl(res.paid);
   $('#sv-int').textContent = zl(res.bal - res.paid);
   $('#sv-bal').textContent = zl(res.bal);
   $('#sv-bal-s').textContent = tax ? 'po podatku' : 'bez podatku';
   $('#sv-real').textContent = zl(R[n]);
-  setStat($('#sv-real').parentElement, R[n] < res.paid ? 'bad' : null);
+  setStat($('#sv-real').parentElement, R[n] < paidReal ? 'bad' : null);
   const labels = res.B.map((_, y) => y === 0 ? 'start' : y + ' ' + (n > 12 ? 'l.' : lat(y)));
   chart($('#ch-sv'), {
     labels, yFmt: (v) => zlShort(v) + ' zł', tipLabel: (k) => k === 0 ? 'start' : `po ${k} ${lat(k)}`,
