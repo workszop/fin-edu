@@ -119,6 +119,7 @@
      Pair with `outline: 3px solid transparent` so forced-colours mode still shows focus. */
   --focus-ring: 0 0 0 2px var(--paper), 0 0 0 5px var(--ink);
   /* Range-slider track */
+  --ctl-h: 40px;   /* wspólna wysokość suwaka i listy w .ctl */
   --track: color-mix(in srgb, var(--ink) 24%, transparent);
 
   /* ============================================================
@@ -278,7 +279,7 @@ nav.tabs a[aria-current="page"] { background: var(--yellow); color: var(--yellow
 .next a:hover { background: var(--yellow-600); }
 
 /* ===== karty ===== */
-.lab, .demo, .card, .q { background: var(--surface); border: 1px solid var(--line-2); border-radius: var(--r-lg); box-shadow: var(--shadow-sm); overflow: hidden; min-width: 0; }
+.lab, .demo, .card { background: var(--surface); border: 1px solid var(--line-2); border-radius: var(--r-lg); box-shadow: var(--shadow-sm); overflow: hidden; min-width: 0; }
 .lab-head, .card-head { display: flex; align-items: center; gap: 12px; padding: 14px 22px; background: var(--paper-2); border-bottom: 1px solid var(--line); }
 .lab-head h3, .card-head h3 { font-size: var(--h4); line-height: 1.3; min-width: 0; }
 .lab-body { display: grid; gap: 18px; padding: 20px 22px; min-width: 0; }
@@ -295,11 +296,11 @@ nav.tabs a[aria-current="page"] { background: var(--yellow); color: var(--yellow
 .card { display: flex; flex-direction: column; text-decoration: none; color: var(--ink); transition: border-color .15s; }
 .card:hover { border-color: var(--line-strong); }
 .card-body { padding: 16px 22px 20px; }
-.quizband { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between; background: var(--ink); color: var(--paper); border-radius: var(--r-xl); padding: 24px 28px; margin-top: 20px; }
-.quizband h3 { font-size: var(--h3); }
-.quizband .ic { color: var(--yellow); }
-.quizband .cta { background: var(--yellow); color: var(--on-primary); text-decoration: none; font-family: var(--font-display); font-weight: 600; padding: 12px 22px; border-radius: var(--r-pill); transition: background-color .15s; }
-.quizband .cta:hover { background: var(--yellow-600); }
+.ctaband { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; justify-content: space-between; background: var(--ink); color: var(--paper); border-radius: var(--r-xl); padding: 24px 28px; margin-top: 20px; }
+.ctaband h3 { font-size: var(--h3); }
+.ctaband .ic { color: var(--yellow); }
+.ctaband .cta { background: var(--yellow); color: var(--on-primary); text-decoration: none; font-family: var(--font-display); font-weight: 600; padding: 12px 22px; border-radius: var(--r-pill); transition: background-color .15s; }
+.ctaband .cta:hover { background: var(--yellow-600); }
 
 /* ===== wyjaśnienia ===== */
 .explain { display: grid; gap: 24px; min-width: 0; }
@@ -490,10 +491,12 @@ details.more > :not(summary) { margin: 10px 14px; font-size: var(--body-sm); }
 
 /* ===== kontrolki ===== */
 .controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(210px, 100%), 1fr)); gap: 14px 22px; }
-.ctl { display: grid; grid-template-columns: 1fr auto; align-items: baseline; gap: 4px 8px; min-width: 0; }
+/* Etykieta może zawinąć się do 2 linii: wiersz etykiety rośnie (1fr), a kontrolka zawsze siedzi w ostatnim wierszu o stałej wysokości, więc suwaki w jednym rzędzie leżą na jednej linii. */
+.ctl { display: grid; grid-template-columns: 1fr auto; grid-template-rows: 1fr var(--ctl-h); align-items: end; gap: 4px 8px; min-width: 0; }
 .ctl label { font-family: var(--font-mono); font-weight: 500; font-size: var(--overline); letter-spacing: .08em; text-transform: uppercase; color: var(--ink); }
 .ctl output, .ctl .val { font-family: var(--font-mono); font-weight: 500; font-size: var(--body-sm); color: var(--ink); font-variant-numeric: tabular-nums; }
-.ctl input[type=range], .ctl select, .ctl input[type=number] { grid-column: 1 / -1; width: 100%; }
+.ctl input[type=range], .ctl select, .ctl input[type=number] { grid-column: 1 / -1; width: 100%; height: var(--ctl-h); align-self: center; }
+.ctl output, .ctl .val { white-space: nowrap; }
 input[type=range] { -webkit-appearance: none; appearance: none; background: transparent; height: 28px; margin: 0; border-radius: var(--r-pill); cursor: pointer; }
 input[type=range]::-webkit-slider-runnable-track { height: 8px; background: var(--track); border-radius: var(--r-pill); }
 input[type=range]::-moz-range-track { height: 8px; background: var(--track); border-radius: var(--r-pill); }
@@ -605,23 +608,8 @@ input[type=search] { font: inherit; font-size: var(--body); color: var(--ink); b
   .sect-title { font-size: var(--h4); }
 }
 
-/* ===== quiz ===== */
+/* ===== dostępność ===== */
 .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
-.quiz { display: grid; gap: 16px; min-width: 0; }
-#qz-list { grid-template-columns: repeat(auto-fill, minmax(min(28rem, 100%), 1fr)); align-items: start; }
-.q { padding: 0 20px 20px; display: grid; gap: 14px; }
-.q h3 { margin: 0 -20px; padding: 14px 20px; background: var(--paper-2); border-bottom: 1px solid var(--line); font-family: var(--font-sans); font-size: var(--body); font-weight: 700; line-height: 1.4; }
-.q .opts { display: grid; gap: 8px; }
-.q .opts button { text-align: left; font-family: var(--font-sans); font-weight: 400; border-radius: var(--r-md); padding: 12px 14px; background: var(--surface); }
-.q .opts button:hover:not(:disabled) { background: var(--paper-2); }
-.q .opts button:disabled { cursor: default; }
-.q .opts button.ok { background: var(--green-soft); color: var(--green-ink); border-color: var(--green-soft); }
-.q .opts button.no { background: var(--red-soft); color: var(--red-ink); border-color: var(--red-soft); }
-.q .opts button kbd.keys { font-family: var(--font-mono); font-size: var(--body-sm); color: var(--ink-3); background: var(--paper-2); border: 1px solid var(--line-strong); border-radius: var(--r-sm); padding: 0 6px; margin-right: 10px; }
-.q .why { font-size: var(--body-sm); color: var(--ink-2); }
-.q .why b { color: var(--green-600); }
-.q:has(.opts .no) .why b { color: var(--red-600); }
-.score { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 8px); z-index: 1; justify-self: start; background: var(--yellow); color: var(--yellow-ink); font-family: var(--font-mono); font-weight: 500; font-size: var(--body-sm); padding: 6px 14px; border-radius: var(--r-pill); box-shadow: var(--shadow-sm); }
 
 footer { border-top: 1px solid var(--line-2); padding-top: 22px; padding-bottom: 32px; }
 footer p { color: var(--ink-3); font-size: var(--body-sm); }
@@ -637,7 +625,6 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
   .lesson-head { padding-top: 28px; padding-bottom: 24px; }
   .lesson-title { flex-direction: column; align-items: flex-start; gap: 10px; }
   .cards { grid-template-columns: minmax(0, 1fr); }
-  kbd.keys { display: none; }
   .band { padding-top: 28px; padding-bottom: 32px; }
   .split { grid-template-columns: minmax(0, 1fr); }
   .explain.wide .tiles, .pair { grid-template-columns: minmax(0, 1fr); }
@@ -669,7 +656,6 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
       <a href="#obligacje">Obligacje</a>
       <a href="#akcje">Akcje</a>
       <a href="#kredyty">Kredyty</a>
-      <a href="#quiz">Quiz</a>
       <a href="#slownik">Słownik</a>
     </nav>
   </div>
@@ -710,9 +696,9 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
       <a class="card tone-ink" href="#akcje"><div class="card-head"><span class="badge"><i data-lucide="chart-candlestick" class="ic" aria-hidden="true"></i></span><h3>Akcje</h3></div><p class="card-body">Kawałek firmy, ryzyko i 1000 możliwych przyszłości twoich pieniędzy.</p></a>
       <a class="card tone-grape" href="#kredyty"><div class="card-head"><span class="badge"><i data-lucide="credit-card" class="ic" aria-hidden="true"></i></span><h3>Kredyty</h3></div><p class="card-body">Ile naprawdę kosztuje pożyczka, czym jest RRSO i dlaczego raty rosną.</p></a>
     </div>
-    <div class="quizband edu-block">
-      <div><h3><i data-lucide="brain" class="ic" aria-hidden="true"></i>Sprawdź się w quizie</h3><p>14 pytań, każde z wyjaśnieniem. Najlepiej po przejściu lekcji.</p></div>
-      <a class="cta" href="#quiz">Do quizu</a>
+    <div class="ctaband edu-block">
+      <div><h3><i data-lucide="book-open" class="ic" aria-hidden="true"></i>Słownik terminów</h3><p>Kapitalizacja, indeksowanie, RRSO i inne pojęcia z lekcji, wyjaśnione krótko i z przykładami.</p></div>
+      <a class="cta" href="#slownik">Do słownika</a>
     </div>
   </div>
 </section>
@@ -1120,10 +1106,17 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
             <div class="ctl"><label for="bd-amt">Kwota</label><output id="bd-amt-o"></output><input type="range" id="bd-amt" min="1000" max="50000" step="1000" value="10000" data-out="zl"></div>
             <div class="ctl"><label for="bd-scen">Scenariusz inflacji</label><span class="val"></span>
               <select id="bd-scen">
-                <option value="szok">Szok jak w latach 2021–24</option>
-                <option value="spokojnie">Spokojnie: 3% co roku</option>
-                <option value="niska">Niska inflacja: 1–2%</option>
-                <option value="wlasna">Własna, stała inflacja</option>
+                <optgroup label="Na podstawie obecnej inflacji">
+                  <option value="teraz" selected>Obecna inflacja, co roku</option>
+                  <option value="nizej">O 1 pkt proc. niższa niż obecna</option>
+                  <option value="wyzej">O 1 pkt proc. wyższa niż obecna</option>
+                </optgroup>
+                <optgroup label="Scenariusze przykładowe">
+                  <option value="szok">Szok jak w latach 2021–24</option>
+                  <option value="spokojnie">Spokojnie: 3% co roku</option>
+                  <option value="niska">Niska inflacja: 1–2%</option>
+                  <option value="wlasna">Własna, stała inflacja</option>
+                </optgroup>
               </select></div>
             <div class="ctl" id="bd-custom-row" hidden><label for="bd-custom">Twoja inflacja</label><output id="bd-custom-o"></output><input type="range" id="bd-custom" min="0" max="20" step="0.5" value="6" data-out="pct"></div>
             <div class="ctl"><label for="bd-years">Okres</label><output id="bd-years-o"></output><input type="range" id="bd-years" min="1" max="10" step="1" value="10" data-out="yrs"></div>
@@ -1499,23 +1492,7 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
       </div>
     </div>
     </div>
-    <div class="next"><a href="#quiz">Dalej: sprawdź się w quizie →</a></div>
-</section>
-
-<!-- ================= QUIZ ================= -->
-<section class="view" id="v-quiz" hidden>
-    <div class="lesson-head">
-      <div class="lesson-title"><span class="badge badge-lg"><i data-lucide="circle-question-mark" class="ic" aria-hidden="true"></i></span><h1 class="app-title">Quiz: ile już wiesz?</h1></div>
-      <p class="lead">Kliknij odpowiedź. Każde pytanie ma krótkie wyjaśnienie, więc nawet błąd czegoś cię nauczy.</p>
-    </div>
-    <div class="band">
-    <div class="quiz">
-      <div class="score num" id="qz-score" aria-live="polite">Wynik: 0 / 0</div>
-      <div class="sr-only" id="qz-live" aria-live="polite"></div>
-      <div id="qz-list" class="quiz" data-done="0" data-ok="0"></div>
-      <div class="btns"><button type="button" id="qz-reset">Rozwiąż jeszcze raz</button></div>
-    </div>
-    </div>
+    <div class="next"><a href="#slownik">Dalej: słownik terminów →</a></div>
 </section>
 
 <!-- ================= SŁOWNIK ================= -->
@@ -2217,10 +2194,21 @@ const SCEN = {
   spokojnie: [3, 3, 3, 3, 3, 3, 3, 3, 3, 3],
   niska: [1.5, 1, 1, 1.5, 1.5, 2, 2, 2, 2, 2]
 };
+/* Scenariusze z obecnej inflacji (GUS): taka sama, o 1 pkt proc. niższa albo wyższa, stała przez cały okres. */
+const SCEN_SHIFT = { teraz: 0, nizej: -1, wyzej: 1 };
+function curInflation() { return (RATES.data && RATES.data.inflation) || cleanRates(RATES_FALLBACK).inflation; }
+function shiftedInflation(sc) { return Math.round((curInflation().value + SCEN_SHIFT[sc]) * 10) / 10; }
+function labelScen() {
+  const i = curInflation(), sel = $('#bd-scen');
+  $('option[value="teraz"]', sel).textContent = `Obecna: ${pc(i.value)} (GUS, ${i.period.slice(5)}.${i.period.slice(0, 4)})`;
+  $('option[value="nizej"]', sel).textContent = `O 1 pkt proc. niższa: ${pc(shiftedInflation('nizej'))}`;
+  $('option[value="wyzej"]', sel).textContent = `O 1 pkt proc. wyższa: ${pc(shiftedInflation('wyzej'))}`;
+}
 function updBond() {
   const K = val('bd-amt'), sc = $('#bd-scen').value, n = val('bd-years');
   $('#bd-custom-row').hidden = sc !== 'wlasna';
-  const infl = sc === 'wlasna' ? Array(10).fill(val('bd-custom')) : SCEN[sc];
+  const infl = sc === 'wlasna' ? Array(10).fill(val('bd-custom')) : sc in SCEN_SHIFT ? Array(10).fill(shiftedInflation(sc)) : SCEN[sc];
+  const lab = $('#lab-bd'); lab.dataset.scen = sc; lab.dataset.infl = infl[0];
   const fixed = val('bd-fixed') / 100, first = val('bd-first') / 100, m = val('bd-margin') / 100;
   let fx = K, ix = K, pr = K, paidOut = 0;
   const L = ['start'], F = [K], I = [K], CI = [K], PR = [K], S = [K], rates = [];
@@ -2251,9 +2239,13 @@ function updBond() {
     return `<div class="stat ${cls}"><span class="k">${name}</span><span class="v">${zl(v)}</span><span class="s">po podatku; realnie ${zl(real)} w dzisiejszych zł</span></div>`;
   }).join('');
   const nf_ = net(fx), ni = net(ix);
+  const flat = infl.every((x) => x === infl[0]);
+  const why = flat
+    ? (nf_ > ni ? ` Stałe ${pc(fixed * 100, 2)} to więcej niż inflacja ${pc(infl[0])} + marża ${pc(m * 100, 2)}.` : ` Inflacja ${pc(infl[0])} + marża ${pc(m * 100, 2)} to więcej niż stałe ${pc(fixed * 100, 2)}.`)
+    : (nf_ > ni ? ' Inflacja była niższa, niż zakładał jej stały procent.' : ' Gdy inflacja rośnie, jej oprocentowanie rośnie razem z nią.');
   const win = Math.abs(nf_ - ni) < K * 0.005 ? 'Obie obligacje dały prawie to samo.' :
-    nf_ > ni ? `Wygrywa obligacja <b>stała</b> (o ${zl(nf_ - ni)}). Inflacja była niższa, niż zakładał jej stały procent.` :
-      `Wygrywa obligacja <b>indeksowana</b> (o ${zl(ni - nf_)}). Gdy inflacja rośnie, jej oprocentowanie rośnie razem z nią.`;
+    nf_ > ni ? `Wygrywa obligacja <b>stała</b> (o ${zl(nf_ - ni)}).${why}` :
+      `Wygrywa obligacja <b>indeksowana</b> (o ${zl(ni - nf_)}).${why}`;
   const capTxt = n > 1
     ? ` Ta sama obligacja indeksowana daje <b>${zl(ni - nc)}</b> więcej, gdy odsetki są doliczane (EDO), niż gdy są wypłacane i nie inwestujesz ich dalej (COI). To efekt kapitalizacji: odsetki zarabiają kolejne odsetki, a podatek płacisz dopiero na końcu.`
     : ' Ustaw okres dłuższy niż rok, żeby zobaczyć różnicę między doliczaniem a wypłacaniem odsetek.';
@@ -2508,100 +2500,6 @@ mini('m-zero', (el) => {
   render(false);
 });
 
-/* ================= QUIZ ================= */
-const QUIZ = [
-  ['Masz 1000 zł w szufladzie. Przez rok inflacja wynosi 10%. Ile realnie warte są twoje pieniądze po roku?',
-    ['1100 zł', 'Około 909 zł', '1000 zł', 'Dokładnie 900 zł'], 1,
-    'Za rok to, co dziś kosztuje 1000 zł, będzie kosztować 1100 zł. Twoje 1000 zł kupi więc 1000 ÷ 1,1 ≈ 909 zł dzisiejszych zakupów.'],
-  ['Inflacja jest dużo powyżej celu. Co zwykle robi bank centralny?',
-    ['Podnosi stopy procentowe', 'Obniża stopy procentowe', 'Zakazuje sklepom podwyżek', 'Drukuje więcej pieniędzy'], 0,
-    'Wyższe stopy sprawiają, że kredyty drożeją, a oszczędzanie się opłaca. Ludzie mniej wydają, więc ceny rosną wolniej.'],
-  ['Kupujesz obligację skarbową. Co tak naprawdę robisz?',
-    ['Kupujesz kawałek firmy', 'Pożyczasz pieniądze państwu', 'Bierzesz kredyt', 'Zakładasz konto w NBP'], 1,
-    'Obligacja to dług. Państwo pożycza od ciebie pieniądze i oddaje je z odsetkami w ustalonym terminie.'],
-  ['Stopy procentowe na rynku rosną. Co dzieje się z ceną starej obligacji o stałym oprocentowaniu?',
-    ['Rośnie', 'Spada', 'Nie zmienia się', 'Obligacja przestaje istnieć'], 1,
-    'Nowe obligacje płacą więcej, więc stara, niżej oprocentowana jest mniej atrakcyjna. Kupujący zapłacą za nią mniej. To działa jak huśtawka.'],
-  ['Masz jedną akcję spółki. Co to oznacza?',
-    ['Pożyczyłeś firmie pieniądze', 'Jesteś współwłaścicielem firmy', 'Firma musi ci wypłacać pensję', 'Masz gwarancję zysku'], 1,
-    'Akcja to udział w firmie. Możesz zarobić na wzroście ceny i dywidendach, ale nikt nie gwarantuje zysku.'],
-  ['Na czym polega dywersyfikacja?',
-    ['Na kupowaniu tylko najlepszej firmy', 'Na rozłożeniu pieniędzy na wiele różnych inwestycji', 'Na częstym kupowaniu i sprzedawaniu', 'Na trzymaniu pieniędzy w gotówce'], 1,
-    'Gdy masz wiele firm, bankructwo jednej nie zniszczy całego portfela. Fundusze ETF ułatwiają to jedną transakcją.'],
-  ['Która liczba najlepiej pokazuje całkowity koszt kredytu i pozwala porównać oferty?',
-    ['Oprocentowanie nominalne', 'Liczba rat', 'RRSO', 'Wysokość pierwszej raty'], 2,
-    'RRSO uwzględnia nie tylko odsetki, ale też prowizje i inne opłaty. Oferta „0%” może mieć wysokie RRSO.'],
-  ['Masz kredyt ze zmiennym oprocentowaniem. NBP podnosi stopy. Co dzieje się z twoją ratą?',
-    ['Rośnie', 'Spada', 'Nie zmienia się', 'Kredyt jest umarzany'], 0,
-    'Oprocentowanie zmienne to wskaźnik rynkowy + marża banku. Gdy stopy NBP rosną, rośnie wskaźnik, a z nim twoja rata.'],
-  ['Kiedy obligacja indeksowana inflacją wypada najlepiej w porównaniu ze stałoprocentową?',
-    ['Gdy inflacja niespodziewanie mocno rośnie', 'Gdy inflacja spada do zera', 'Gdy ceny są stałe', 'Nigdy'], 0,
-    'Jej oprocentowanie to inflacja + marża, więc rośnie razem z cenami. Obligacja stała płaci tyle samo bez względu na inflację.'],
-  ['Czym jest procent składany?',
-    ['Opłatą za prowadzenie konta', 'Naliczaniem odsetek także od wcześniej zarobionych odsetek', 'Podatkiem od zysków', 'Karą za spóźnioną ratę'], 1,
-    'Odsetki dopisane do kapitału same zaczynają zarabiać. Dlatego oszczędności rosną jak kula śnieżna, im dłużej czekasz.'],
-  ['Dwie lokaty mają oprocentowanie 6% w skali roku. Pierwsza dopisuje odsetki co miesiąc, druga raz w roku. Która da więcej po roku?',
-    ['Ta z kapitalizacją miesięczną', 'Ta z kapitalizacją roczną', 'Obie tyle samo', 'Nie da się tego policzyć'], 0,
-    'Odsetki dopisane w styczniu zarabiają już w lutym. Przy kapitalizacji miesięcznej 6% nominalnie daje około 6,17% efektywnie.'],
-  ['Co daje reinwestowanie dywidend?',
-    ['Nic, dywidendy są zbyt małe, żeby miały znaczenie', 'Za dywidendy kupujesz kolejne akcje, które też płacą dywidendy, więc zysk rośnie jak kula śnieżna', 'Nie musisz płacić podatku od dywidend', 'Masz gwarancję, że cena akcji wzrośnie'], 1,
-    'To procent składany w wersji giełdowej. Po kilkudziesięciu latach reinwestowane dywidendy mogą odpowiadać za dużą część całego zysku z akcji.'],
-  ['Ile wynosi w Polsce podatek od zysków z lokat, obligacji i akcji (tzw. podatek Belki)?',
-    ['5%', '12%', '19%', '23%'], 2,
-    'To 19% od zysku. Można go legalnie uniknąć, oszczędzając w ramach kont emerytalnych IKE.'],
-  ['Kredyt w ratach malejących w porównaniu z ratami równymi (ta sama kwota, okres i oprocentowanie):',
-    ['Ma niższe pierwsze raty', 'Kosztuje łącznie mniej odsetek', 'Kosztuje łącznie więcej odsetek', 'Nie różni się niczym'], 1,
-    'W ratach malejących szybciej spłacasz kapitał, więc odsetki liczone są od coraz mniejszej kwoty. Za to pierwsze raty są wyższe.']
-];
-let qOk = 0, qDone = 0;
-function renderQuiz() {
-  qOk = 0; qDone = 0;
-  $('#qz-list').innerHTML = QUIZ.map(([q, opts], qi) =>
-    `<div class="q" data-q="${qi}"><h3><i data-lucide="circle-question-mark" class="ic" aria-hidden="true"></i>${qi + 1}. ${q}</h3><div class="opts">${opts.map((o, oi) => `<button type="button" data-o="${oi}">${o}</button>`).join('')}</div><p class="why" hidden></p></div>`).join('');
-  $('#qz-live').textContent = '';
-  updScore();
-  markNext();
-  icons($('#qz-list'));
-}
-function markNext() {
-  $$('#qz-list kbd.keys').forEach((k) => k.remove());
-  const next = $('#qz-list .q:not([data-answered])');
-  if (!next) return;
-  $$('button[data-o]', next).forEach((b) => {
-    const k = document.createElement('kbd'); k.className = 'keys'; k.setAttribute('aria-hidden', 'true'); k.textContent = +b.dataset.o + 1;
-    b.insertBefore(k, b.firstChild);
-  });
-}
-function answer(card, oi) {
-  if (card.dataset.answered) return;
-  const b = card.querySelector(`button[data-o="${oi}"]`); if (!b) return;
-  const qi = +card.dataset.q, good = QUIZ[qi][2];
-  card.dataset.answered = '1'; qDone++;
-  $$('kbd.keys', card).forEach((k) => k.remove());
-  $$('button', card).forEach((x) => { x.disabled = true; x.style.opacity = 1; });
-  card.querySelector(`button[data-o="${good}"]`).classList.add('ok');
-  if (oi === good) qOk++; else b.classList.add('no');
-  const why = card.querySelector('.why');
-  why.innerHTML = `<b>${oi === good ? 'Dobrze!' : 'Nie tym razem.'}</b> ${QUIZ[qi][3]}`; why.hidden = false;
-  $('#qz-live').textContent = `Pytanie ${qi + 1}: ${oi === good ? 'dobrze' : 'źle'}`;
-  updScore();
-  markNext();
-}
-function updScore() { $('#qz-list').dataset.done = qDone; $('#qz-list').dataset.ok = qOk; $('#qz-score').textContent = `Wynik: ${qOk} / ${qDone}` + (qDone === QUIZ.length ? ` · ${qOk >= 12 ? 'Mistrz finansów!' : qOk >= 9 ? 'Dobra robota!' : 'Wróć do lekcji i spróbuj jeszcze raz.'}` : ''); }
-$('#qz-list').addEventListener('click', (e) => {
-  const b = e.target.closest('button[data-o]'); if (!b) return;
-  answer(b.closest('.q'), +b.dataset.o);
-});
-document.addEventListener('keydown', (e) => {
-  if (!/^[1-4]$/.test(e.key) || e.ctrlKey || e.metaKey || e.altKey || e.shiftKey) return;
-  if ($('#v-quiz').hidden || e.target.closest('input, select, textarea, [contenteditable]')) return;
-  const next = $('#qz-list .q:not([data-answered])'); if (!next) return;
-  e.preventDefault();
-  answer(next, +e.key - 1);
-  next.scrollIntoView({ block: 'nearest' });
-});
-$('#qz-reset').addEventListener('click', () => { renderQuiz(); window.scrollTo(0, 0); });
-
 /* ================= aktualne dane: data/rates.json (codziennie z GUS, NBP i MF) ================= */
 const RATES_URL = 'data/rates.json';
 const RATES_TIMEOUT_MS = 6000;
@@ -2686,6 +2584,7 @@ function applyRates() {
     ? (d.updated ? `Ostatnia zmiana danych: ${fmtDay(d.updated)}.` : '')
     : `Nie udało się pobrać świeżych danych, pokazujemy zapisane w aplikacji (z ${fmtDay(d.updated || '2026-11-04')}).`;
   document.body.dataset.rates = RATES.origin;
+  labelScen(); updBond();
 }
 async function loadRates() {
   let data = null;
@@ -2734,7 +2633,7 @@ document.addEventListener('keydown', (e) => {
 filterGloss();
 
 /* ================= nawigacja ================= */
-const VIEWS = ['start', 'inflacja', 'stopy', 'oszczedzanie', 'obligacje', 'akcje', 'kredyty', 'quiz'];
+const VIEWS = ['start', 'inflacja', 'stopy', 'oszczedzanie', 'obligacje', 'akcje', 'kredyty'];
 const EXTRA_VIEWS = ['slownik'];            /* poza ścieżką lekcji: nie przesuwa paska postępu */
 function route() {
   const [h, sub] = location.hash.slice(1).split('/');
@@ -2759,7 +2658,7 @@ function route() {
 window.addEventListener('hashchange', route);
 
 /* ================= start ================= */
-updHero(); updInf(); drawHist(); gReset(); updSav(); updBond(); updSeesaw(); updStocks(); updDiv(); runMC(); updLoan(); renderQuiz();
+updHero(); updInf(); drawHist(); gReset(); updSav(); updBond(); updSeesaw(); updStocks(); updDiv(); runMC(); updLoan(); labelScen();
 loadRates();
 route();
 addEventListener('load', () => icons());
