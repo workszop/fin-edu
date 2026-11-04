@@ -1,0 +1,62 @@
+{
+  "inflation": {
+    "value": 4.1,
+    "period": "2026-09",
+    "source": "GUS",
+    "url": "https://stat.gov.pl/obszary-tematyczne/ceny-handel/wskazniki-cen/wskazniki-cen-towarow-i-uslug-konsumpcyjnych-pot-inflacja-/"
+  },
+  "nbp": {
+    "source": "NBP",
+    "url": "https://nbp.pl/polityka-pieniezna/decyzje-rpp/podstawowe-stopy-procentowe-nbp/",
+    "ref": 3.75,
+    "lombard": 4.25,
+    "deposit": 3.25,
+    "since": "2026-03-05"
+  },
+  "bonds": {
+    "offer": "2026-11",
+    "items": {
+      "OTS": {
+        "series": "OTS0227",
+        "rate": 2.0
+      },
+      "ROR": {
+        "series": "ROR1127",
+        "first": 4.0,
+        "margin": 0.0
+      },
+      "DOR": {
+        "series": "DOR1128",
+        "first": 4.15,
+        "margin": 0.15
+      },
+      "TOS": {
+        "series": "TOS1129",
+        "rate": 4.4
+      },
+      "COI": {
+        "series": "COI1130",
+        "first": 4.75,
+        "margin": 1.5
+      },
+      "EDO": {
+        "series": "EDO1136",
+        "first": 5.35,
+        "margin": 2.0
+      },
+      "ROS": {
+        "series": "ROS1132",
+        "first": 5.0,
+        "margin": 2.0
+      },
+      "ROD": {
+        "series": "ROD1138",
+        "first": 5.6,
+        "margin": 2.5
+      }
+    },
+    "source": "Ministerstwo Finansów",
+    "url": "https://www.gov.pl/web/finanse/biezaca-oferta2"
+  },
+  "updated": "2026-11-04"
+}

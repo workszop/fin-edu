@@ -552,6 +552,59 @@ td.r, th.r { text-align: right; font-variant-numeric: tabular-nums; white-space:
 .seesaw .lbl { fill: var(--ink); font-size: 13px; }
 .seesaw g.rot { transition: transform .35s ease; transform-origin: 160px 104px; }
 
+/* ===== aktualne dane (data/rates.json) ===== */
+.live { justify-self: start; display: inline-flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; font-size: var(--body-sm); line-height: 1.4; color: var(--ink-2); background: var(--surface); border: 1px solid var(--line-2); border-radius: var(--r-md); padding: 8px 14px; max-width: 100%; }
+.live b { font-family: var(--font-display); font-weight: 700; color: var(--ink); }
+.live .src { font-family: var(--font-mono); font-size: var(--caption); color: var(--ink-3); }
+.live .src a { color: inherit; }
+.live[data-origin="pending"] { visibility: hidden; }
+.lives { display: flex; flex-wrap: wrap; gap: 8px; }
+
+/* ===== obligacje: tabela wszystkich rodzajów ===== */
+.sect-head { display: grid; gap: 10px; margin-bottom: 18px; max-width: 60rem; }
+.sect-title { font-family: var(--font-display); font-size: var(--h3); line-height: 1.2; letter-spacing: -.01em; color: var(--ink); margin: 0; min-width: 0; }
+.bond-tbl td:first-child { font-family: var(--font-display); font-size: var(--body); white-space: nowrap; }
+.bond-tbl { min-width: 56rem; }
+.bond-tbl th { white-space: normal; }
+.bond-tbl th:nth-child(3), .bond-tbl td:nth-child(3) { width: 22%; }
+.bond-tbl th:nth-child(4), .bond-tbl td:nth-child(4) { width: 34%; }
+.bond-tbl th:nth-child(6), .bond-tbl td:nth-child(6) { width: 9rem; }
+.bond-tbl td .pill { margin-bottom: 4px; }
+.bond-tbl td.now b { display: block; font-family: var(--font-display); font-size: var(--body); }
+.bond-tbl tbody tr[aria-current="true"] td { background: var(--yellow-soft); color: var(--yellow-ink); }
+.bond-tbl tbody tr[aria-current="true"] td b { color: var(--yellow-ink); }
+.pill.cap { background: var(--green-soft); color: var(--green-ink); }
+.pill.pay { background: var(--blue-soft); color: var(--blue-ink); }
+.tbl-note { font-size: var(--caption); color: var(--ink-3); margin-top: 8px; }
+.cap-compare { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; margin-top: 24px; }
+.cap-card { background: var(--surface); border: 1px solid var(--line-2); border-radius: var(--r-md); padding: 16px 18px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+.cap-card.cap { border: 1.5px solid var(--green-600); }
+.cap-card h3 { font-size: var(--h4); line-height: 1.3; }
+.cap-card p { color: var(--ink-2); font-size: var(--body-sm); }
+.cap-card .tbl-wrap { border-color: var(--line); }
+
+/* ===== słownik ===== */
+.gloss-tools { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; margin-bottom: 18px; }
+.gloss-tools label { font-weight: 600; color: var(--ink); }
+input[type=search] { font: inherit; font-size: var(--body); color: var(--ink); background: var(--surface); border: 1px solid var(--line-strong); border-radius: var(--r-pill); padding: 9px 16px; width: min(24rem, 100%); }
+.gloss-count { font-size: var(--body-sm); color: var(--ink-3); }
+.gloss { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(22rem, 100%), 1fr)); gap: 14px; align-items: start; }
+.term { background: var(--surface); border: 1px solid var(--line-2); border-radius: var(--r-md); padding: 16px 18px; display: grid; gap: 8px; min-width: 0; scroll-margin-top: 110px; }
+.term[hidden] { display: none; }
+.term.key { border: 1.5px solid var(--green-600); }
+.term h3 { font-size: var(--h4); line-height: 1.3; }
+.term p { color: var(--ink-2); font-size: var(--body-sm); line-height: 1.5; }
+.term .ex { background: var(--paper-2); border-radius: var(--r-sm); padding: 10px 12px; color: var(--ink); }
+.term .see { font-size: var(--caption); }
+.term .see a { color: var(--ink); }
+.term.hit { box-shadow: var(--focus-ring); }
+.gloss-empty { color: var(--ink-3); }
+.gloss-link { color: inherit; }
+@media (max-width: 768px) {
+  .cap-compare { grid-template-columns: minmax(0, 1fr); }
+  .sect-title { font-size: var(--h4); }
+}
+
 /* ===== quiz ===== */
 .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .quiz { display: grid; gap: 16px; min-width: 0; }
@@ -617,6 +670,7 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
       <a href="#akcje">Akcje</a>
       <a href="#kredyty">Kredyty</a>
       <a href="#quiz">Quiz</a>
+      <a href="#slownik">Słownik</a>
     </nav>
   </div>
   <div class="progress" id="lesson-progress" role="progressbar" aria-label="Postęp w lekcjach" aria-valuemin="0" aria-valuemax="7" aria-valuenow="0"><i></i></div>
@@ -668,6 +722,7 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
     <div class="lesson-head">
       <div class="lesson-title"><span class="badge badge-lg"><i data-lucide="shopping-basket" class="ic" aria-hidden="true"></i></span><h1 class="app-title">Inflacja: dlaczego wszystko drożeje</h1></div>
       <p class="lead">Pieniądz ma wartość tylko dlatego, że coś za niego kupisz. Gdy ceny rosną, ten sam banknot kupuje mniej.</p>
+      <p class="live" id="live-inf" data-origin="pending" aria-live="polite"></p>
     </div>
     <div class="band">
     <div class="split">
@@ -775,6 +830,7 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
     <div class="lesson-head">
       <div class="lesson-title"><span class="badge badge-lg"><i data-lucide="percent" class="ic" aria-hidden="true"></i></span><h1 class="app-title">Stopa procentowa, czyli cena pieniądza</h1></div>
       <p class="lead">Bank centralny nie ustala cen w sklepach. Ma jednak jedno potężne narzędzie: decyduje, ile kosztuje pożyczanie pieniędzy.</p>
+      <p class="live" id="live-nbp" data-origin="pending" aria-live="polite"></p>
     </div>
     <div class="band">
     <div class="split">
@@ -1008,6 +1064,7 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
     <div class="lesson-head">
       <div class="lesson-title"><span class="badge badge-lg"><i data-lucide="landmark" class="ic" aria-hidden="true"></i></span><h1 class="app-title">Obligacje skarbowe: pożyczasz pieniądze państwu</h1></div>
       <p class="lead">Państwo potrzebuje pieniędzy na drogi, szpitale czy szkoły. Część pożycza od zwykłych ludzi i oddaje je z odsetkami.</p>
+      <div class="lives"><p class="live" id="live-inf2" data-origin="pending"></p><p class="live" id="live-nbp2" data-origin="pending"></p></div>
     </div>
     <div class="band">
     <div class="split">
@@ -1070,10 +1127,11 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
               </select></div>
             <div class="ctl" id="bd-custom-row" hidden><label for="bd-custom">Twoja inflacja</label><output id="bd-custom-o"></output><input type="range" id="bd-custom" min="0" max="20" step="0.5" value="6" data-out="pct"></div>
             <div class="ctl"><label for="bd-years">Okres</label><output id="bd-years-o"></output><input type="range" id="bd-years" min="1" max="10" step="1" value="10" data-out="yrs"></div>
-            <div class="ctl"><label for="bd-fixed">Obligacja stała: oprocentowanie</label><output id="bd-fixed-o"></output><input type="range" id="bd-fixed" min="1" max="10" step="0.1" value="5.5" data-out="pct"></div>
-            <div class="ctl"><label for="bd-first">Indeksowana: 1. rok</label><output id="bd-first-o"></output><input type="range" id="bd-first" min="1" max="10" step="0.1" value="5.6" data-out="pct"></div>
+            <div class="ctl"><label for="bd-fixed">Obligacja stała: oprocentowanie</label><output id="bd-fixed-o"></output><input type="range" id="bd-fixed" min="1" max="10" step="0.05" value="5.5" data-out="pct2"></div>
+            <div class="ctl"><label for="bd-first">Indeksowana: 1. rok</label><output id="bd-first-o"></output><input type="range" id="bd-first" min="1" max="10" step="0.05" value="5.6" data-out="pct2"></div>
             <div class="ctl"><label for="bd-margin">Indeksowana: marża ponad inflację</label><output id="bd-margin-o"></output><input type="range" id="bd-margin" min="0" max="3" step="0.25" value="1.5" data-out="pct2"></div>
           </div>
+          <div class="btns"><button type="button" id="bd-offer" disabled>Wstaw dzisiejszą ofertę: TOS i EDO</button></div>
           <div class="legend"></div>
           <div class="chart"><canvas id="ch-bd" aria-label="Wykres porównania obligacji stałych, indeksowanych i gotówki"></canvas></div>
           <div class="stats" id="bd-stats"></div>
@@ -1134,6 +1192,57 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
         </div>
       </div>
     </div>
+    </div>
+    <div class="band" id="bond-all">
+      <div class="sect-head">
+        <div class="row-head"><span class="badge"><i data-lucide="table-2" class="ic" aria-hidden="true"></i></span><h2 class="sect-title">Osiem obligacji detalicznych w jednej tabeli</h2></div>
+        <p class="task">Każda kosztuje 100 zł. Różnią się okresem, sposobem liczenia oprocentowania i tym, co dzieje się z odsetkami: trafiają na twoje konto po drodze albo doliczają się do kapitału i zarabiają dalej. To drugie to <a class="gloss-link" href="#slownik/kapitalizacja">kapitalizacja</a>.</p>
+        <p class="live" id="live-bonds" data-origin="pending" aria-live="polite"></p>
+      </div>
+      <div class="tbl-wrap">
+        <table class="bond-tbl">
+          <thead><tr><th>Obligacja</th><th>Okres</th><th>Oprocentowanie</th><th>Co dzieje się z odsetkami</th><th>Teraz w ofercie</th><th>Opłata za wcześniejszy wykup</th></tr></thead>
+          <tbody>
+            <tr data-bond="OTS"><td>OTS</td><td>3 miesiące</td><td><b>Stałe</b>, znane w dniu zakupu.</td><td><span class="pill">raz, na koniec</span><br>Odsetki dostajesz razem ze 100 zł po 3 miesiącach. Okres odsetkowy jest jeden, więc nie ma czego kapitalizować.</td><td class="now" data-now="OTS">–</td><td>bez opłaty</td></tr>
+            <tr data-bond="ROR"><td>ROR</td><td>1 rok</td><td><b>Zmienne.</b> Pierwszy miesiąc ustalony z góry, potem co miesiąc stopa referencyjna NBP + marża.</td><td><span class="pill pay">co miesiąc na konto</span><br>Bez kapitalizacji. Kapitał cały czas wynosi 100 zł, a odsetki za każdy miesiąc trafiają na konto.</td><td class="now" data-now="ROR">–</td><td>0,50 zł</td></tr>
+            <tr data-bond="DOR"><td>DOR</td><td>2 lata</td><td><b>Zmienne.</b> Jak ROR: stopa referencyjna NBP + marża, ustalane co miesiąc.</td><td><span class="pill pay">co miesiąc na konto</span><br>Bez kapitalizacji, przez 24 miesiące. Dobre, gdy chcesz regularnych, małych wpływów.</td><td class="now" data-now="DOR">–</td><td>0,70 zł</td></tr>
+            <tr data-bond="TOS"><td>TOS</td><td>3 lata</td><td><b>Stałe</b> przez wszystkie 3 lata.</td><td><span class="pill cap">kapitalizacja co roku</span><br>Po każdym roku odsetki doliczają się do kapitału, więc w kolejnym roku procent liczy się od większej kwoty. Wszystko dostajesz przy wykupie.</td><td class="now" data-now="TOS">–</td><td>1,00 zł</td></tr>
+            <tr data-bond="COI"><td>COI</td><td>4 lata</td><td><b>Indeksowane.</b> 1. rok ustalony z góry, potem co roku inflacja + marża.</td><td><span class="pill pay">co rok na konto</span><br>Bez kapitalizacji. Kapitał zostaje na 100 zł, a odsetki są wypłacane po każdym roku. Podatek pobierany jest przy każdej wypłacie.</td><td class="now" data-now="COI">–</td><td>2,00 zł</td></tr>
+            <tr data-bond="EDO"><td>EDO</td><td>10 lat</td><td><b>Indeksowane.</b> 1. rok ustalony z góry, potem co roku inflacja + marża.</td><td><span class="pill cap">kapitalizacja co roku</span><br>Jak w TOS, ale przez 10 lat. Podatek płacisz raz, przy wykupie, więc do końca procentuje także kwota, z której go zapłacisz.</td><td class="now" data-now="EDO">–</td><td>3,00 zł</td></tr>
+            <tr data-bond="ROS"><td>ROS</td><td>6 lat</td><td><b>Indeksowane</b>, jak EDO. Tylko dla rodzin z programem 800+.</td><td><span class="pill cap">kapitalizacja co roku</span><br>Odsetki doliczają się do kapitału co roku, wypłata przy wykupie.</td><td class="now" data-now="ROS">–</td><td>2,00 zł</td></tr>
+            <tr data-bond="ROD"><td>ROD</td><td>12 lat</td><td><b>Indeksowane</b>, jak EDO. Tylko dla rodzin z programem 800+.</td><td><span class="pill cap">kapitalizacja co roku</span><br>Najdłuższa: 12 lat doliczania odsetek, wypłata przy wykupie.</td><td class="now" data-now="ROD">–</td><td>3,00 zł</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="tbl-note">Opłata za wcześniejszy wykup: za każdą obligację, potrącana z odsetek, dla obligacji kupionych od 1 września 2024 r. W indeksowanych, gdy ceny spadają (<a class="gloss-link" href="#slownik/deflacja">deflacja</a>), oprocentowanie nie spada poniżej marży.</p>
+      <div class="cap-compare">
+        <div class="cap-card cap">
+          <div class="row-head"><span class="badge"><i data-lucide="sprout" class="ic" aria-hidden="true"></i></span><h3>Kapitalizacja: TOS, EDO, ROS, ROD</h3></div>
+          <p>1000 zł na 5% rocznie. Odsetki z każdego roku dopisują się do kapitału.</p>
+          <div class="tbl-wrap"><table>
+            <thead><tr><th>Rok</th><th class="r">Kapitał na start</th><th class="r">Odsetki</th><th class="r">Kapitał na koniec</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td class="r">1000,00 zł</td><td class="r">50,00 zł</td><td class="r">1050,00 zł</td></tr>
+              <tr><td>2</td><td class="r">1050,00 zł</td><td class="r">52,50 zł</td><td class="r">1102,50 zł</td></tr>
+              <tr><td>3</td><td class="r">1102,50 zł</td><td class="r">55,13 zł</td><td class="r"><b>1157,63 zł</b></td></tr>
+            </tbody>
+          </table></div>
+          <p>Odsetki rosną co roku, choć oprocentowanie się nie zmienia: to <a class="gloss-link" href="#slownik/procent-skladany">procent składany</a>.</p>
+        </div>
+        <div class="cap-card">
+          <div class="row-head"><span class="badge"><i data-lucide="banknote" class="ic" aria-hidden="true"></i></span><h3>Wypłata odsetek: OTS, ROR, DOR, COI</h3></div>
+          <p>Te same 1000 zł na 5%. Odsetki co roku trafiają na twoje konto.</p>
+          <div class="tbl-wrap"><table>
+            <thead><tr><th>Rok</th><th class="r">Kapitał</th><th class="r">Odsetki na konto</th><th class="r">Razem wypłacone</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td class="r">1000,00 zł</td><td class="r">50,00 zł</td><td class="r">50,00 zł</td></tr>
+              <tr><td>2</td><td class="r">1000,00 zł</td><td class="r">50,00 zł</td><td class="r">100,00 zł</td></tr>
+              <tr><td>3</td><td class="r">1000,00 zł</td><td class="r">50,00 zł</td><td class="r"><b>150,00 zł</b></td></tr>
+            </tbody>
+          </table></div>
+          <p>Po 3 latach masz 1150 zł, o 7,63 zł mniej. Po 10 latach różnica to już 128,89 zł (przed podatkiem). Za to pieniądze z odsetek możesz wydać po drodze.</p>
+        </div>
+      </div>
     </div>
     <div class="next"><a href="#akcje">Dalej: akcje →</a></div>
 </section>
@@ -1409,10 +1518,56 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
     </div>
 </section>
 
+<!-- ================= SŁOWNIK ================= -->
+<section class="view tone-blue" id="v-slownik" hidden>
+    <div class="lesson-head">
+      <div class="lesson-title"><span class="badge badge-lg"><i data-lucide="book-open" class="ic" aria-hidden="true"></i></span><h1 class="app-title">Słownik terminów</h1></div>
+      <p class="lead">Krótko i po ludzku: co znaczą słowa, które pojawiają się w lekcjach. Przy każdym haśle jest link do lekcji, w której możesz je wypróbować.</p>
+    </div>
+    <div class="band">
+      <div class="gloss-tools">
+        <label for="g-q">Szukaj hasła</label>
+        <input type="search" id="g-q" placeholder="np. kapitalizacja" autocomplete="off" aria-describedby="g-count" aria-keyshortcuts="/">
+        <span class="gloss-count" id="g-count" aria-live="polite"></span>
+      </div>
+      <div class="gloss" id="gloss" data-shown="0">
+        <article class="term" id="g-akcja" data-terms="akcja akcje akcjonariusz giełda"><div class="row-head"><span class="badge"><i data-lucide="chart-pie" class="ic" aria-hidden="true"></i></span><h3>Akcja</h3></div><p>Kawałek firmy. Kto ma akcje, jest współwłaścicielem: może dostać część zysku (dywidendę) i zyskać, gdy firma rośnie, ale może też stracić, bo nikt nie gwarantuje wyniku.</p><p class="see"><a href="#akcje">Lekcja: akcje →</a></p></article>
+        <article class="term" id="g-deflacja" data-terms="deflacja spadek cen"><div class="row-head"><span class="badge"><i data-lucide="trending-down" class="ic" aria-hidden="true"></i></span><h3>Deflacja</h3></div><p>Sytuacja odwrotna do inflacji: ceny w sklepach przez dłuższy czas spadają. Brzmi dobrze, ale zwykle oznacza słabą gospodarkę, bo ludzie wstrzymują zakupy, czekając na niższe ceny.</p><p class="see"><a href="#inflacja">Lekcja: inflacja →</a></p></article>
+        <article class="term" id="g-dywersyfikacja" data-terms="dywersyfikacja koszyk ryzyko"><div class="row-head"><span class="badge"><i data-lucide="layers" class="ic" aria-hidden="true"></i></span><h3>Dywersyfikacja</h3></div><p>Rozłożenie pieniędzy na wiele różnych inwestycji, żeby kłopoty jednej firmy nie zabrały wszystkiego. W skrócie: nie wkładaj wszystkich jajek do jednego koszyka.</p><p class="see"><a href="#akcje">Lekcja: akcje →</a></p></article>
+        <article class="term" id="g-dywidenda" data-terms="dywidenda zysk akcje"><div class="row-head"><span class="badge"><i data-lucide="hand-coins" class="ic" aria-hidden="true"></i></span><h3>Dywidenda</h3></div><p>Część zysku firmy, którą wypłaca ona swoim akcjonariuszom. Firma nie musi jej wypłacać, a jej wysokość może się zmieniać z roku na rok. Od dywidendy płacisz podatek Belki.</p><p class="see"><a href="#akcje">Lekcja: akcje →</a></p></article>
+        <article class="term" id="g-emitent" data-terms="emitent skarb państwa wystawca"><div class="row-head"><span class="badge"><i data-lucide="landmark" class="ic" aria-hidden="true"></i></span><h3>Emitent</h3></div><p>Ten, kto wydaje obligacje albo akcje i pozyskuje dzięki nim pieniądze. Emitentem obligacji skarbowych jest Skarb Państwa, a w jego imieniu działa Ministerstwo Finansów.</p><p class="see"><a href="#obligacje">Lekcja: obligacje →</a></p></article>
+        <article class="term" id="g-etf" data-terms="etf fundusz indeksowy indeks wig20"><div class="row-head"><span class="badge"><i data-lucide="package" class="ic" aria-hidden="true"></i></span><h3>ETF (fundusz indeksowy)</h3></div><p>Fundusz notowany na giełdzie, który kupuje wszystkie firmy z danego indeksu, np. WIG20. Jedną transakcją kupujesz kawałek wielu firm naraz, więc ryzyko jest rozłożone.</p><p class="see"><a href="#akcje">Lekcja: akcje →</a></p></article>
+        <article class="term" id="g-ike" data-terms="ike konto emerytalne podatek"><div class="row-head"><span class="badge"><i data-lucide="shield-check" class="ic" aria-hidden="true"></i></span><h3>IKE</h3></div><p>Indywidualne Konto Emerytalne. Możesz na nim trzymać m.in. obligacje skarbowe i akcje. Jeśli wypłacisz pieniądze na emeryturę i spełnisz warunki ustawy, nie zapłacisz od zysku podatku Belki. Roczne wpłaty mają limit.</p><p class="see"><a href="#obligacje">Lekcja: obligacje →</a></p></article>
+        <article class="term key" id="g-indeksowanie" data-terms="indeksowanie indeksowane inflacją inflacja marża coi edo ros rod"><div class="row-head"><span class="badge"><i data-lucide="flame" class="ic" aria-hidden="true"></i></span><h3>Indeksowanie (inflacją)</h3></div><p>Powiązanie oprocentowania z inflacją. W obligacjach COI, EDO, ROS i ROD pierwszy rok ma oprocentowanie ustalone z góry. Na każdy kolejny rok liczy się je na nowo: inflacja z ostatnich 12 miesięcy, ogłoszona przez GUS, plus stała marża.</p><p>Gdy ceny rosną szybciej, rosną też odsetki, więc oszczędności zachowują siłę nabywczą. Gdy ceny spadają, liczy się sama marża. Indeksowanie działa z opóźnieniem: odsetki na dany rok zależą od inflacji sprzed jego początku.</p><p class="ex" id="g-index-live">Przykład: inflacja 4% + marża 2% = 6% oprocentowania w danym roku.</p><p class="see"><a href="#obligacje">Lekcja: obligacje, laboratorium „Stałe czy indeksowane inflacją?” →</a></p></article>
+        <article class="term" id="g-inflacja" data-terms="inflacja cpi ceny gus"><div class="row-head"><span class="badge"><i data-lucide="shopping-basket" class="ic" aria-hidden="true"></i></span><h3>Inflacja</h3></div><p>Wzrost cen w czasie. GUS mierzy ją co miesiąc wskaźnikiem CPI: porównuje ceny koszyka towarów i usług z cenami sprzed roku. Inflacja 5% oznacza, że za ten sam koszyk płacisz o 5% więcej niż rok temu.</p><p class="ex" id="g-inf-live">Bank centralny w Polsce ma cel: 2,5% rocznie.</p><p class="see"><a href="#inflacja">Lekcja: inflacja →</a></p></article>
+        <article class="term key" id="g-kapitalizacja" data-terms="kapitalizacja kapitalizowane doliczanie odsetek procent składany tos edo ros rod"><div class="row-head"><span class="badge"><i data-lucide="sprout" class="ic" aria-hidden="true"></i></span><h3>Kapitalizacja odsetek</h3></div><p>Doliczanie naliczonych odsetek do kapitału. Od tej chwili odsetki same zarabiają kolejne odsetki. Na tym polega procent składany.</p><p>Liczy się, jak często odsetki są doliczane: co rok (obligacje TOS, EDO, ROS i ROD), co miesiąc albo nawet codziennie (niektóre konta oszczędnościowe). Im częściej i im dłużej, tym większa różnica. Gdy odsetki są wypłacane na konto (OTS, ROR, DOR, COI), kapitalizacji nie ma, chyba że sam je ponownie zainwestujesz.</p><p class="ex">1000 zł na 5% z kapitalizacją roczną: po roku 1050 zł, po dwóch 1102,50 zł, po trzech 1157,63 zł. Bez kapitalizacji: 1150 zł.</p><p class="see"><a href="#oszczedzanie">Lekcja: procent składany →</a> · <a href="#obligacje">obligacje →</a></p></article>
+        <article class="term" id="g-marza" data-terms="marża"><div class="row-head"><span class="badge"><i data-lucide="plus" class="ic" aria-hidden="true"></i></span><h3>Marża</h3></div><p>Stały dodatek do zmiennej stopy. W obligacjach indeksowanych to część oprocentowania ponad inflację, a w ROR i DOR ponad stopę NBP. W kredycie marża to zarobek banku doliczany do wskaźnika, np. WIBOR.</p><p class="see"><a href="#obligacje">Lekcja: obligacje →</a></p></article>
+        <article class="term" id="g-nominal" data-terms="nominał wartość nominalna"><div class="row-head"><span class="badge"><i data-lucide="receipt" class="ic" aria-hidden="true"></i></span><h3>Nominał (wartość nominalna)</h3></div><p>Kwota, którą emitent odda przy wykupie obligacji. Obligacja detaliczna ma nominał 100 zł. Cena obligacji rynkowej może być wyższa lub niższa od nominału, ale przy wykupie dostajesz nominał.</p><p class="see"><a href="#obligacje">Lekcja: obligacje →</a></p></article>
+        <article class="term" id="g-obligacja" data-terms="obligacja obligacje dług skarbowe"><div class="row-head"><span class="badge"><i data-lucide="scroll-text" class="ic" aria-hidden="true"></i></span><h3>Obligacja</h3></div><p>Papier dłużny: pożyczasz pieniądze emitentowi, a on obiecuje oddać je w ustalonym terminie z odsetkami. Obligacje skarbowe wydaje państwo i są jedną z najbezpieczniejszych form oszczędzania.</p><p class="see"><a href="#obligacje">Lekcja: obligacje →</a></p></article>
+        <article class="term" id="g-odsetki" data-terms="odsetki procent"><div class="row-head"><span class="badge"><i data-lucide="percent" class="ic" aria-hidden="true"></i></span><h3>Odsetki</h3></div><p>Cena za pożyczenie pieniędzy. Gdy oszczędzasz, to ty je dostajesz, a gdy bierzesz kredyt, ty je płacisz. Ich wysokość zależy od oprocentowania, kwoty i czasu.</p><p class="see"><a href="#stopy">Lekcja: stopy procentowe →</a></p></article>
+        <article class="term" id="g-okres-odsetkowy" data-terms="okres odsetkowy"><div class="row-head"><span class="badge"><i data-lucide="calendar" class="ic" aria-hidden="true"></i></span><h3>Okres odsetkowy</h3></div><p>Czas, za który nalicza się odsetki. W ROR i DOR to miesiąc, w TOS, COI i EDO rok, w OTS całe 3 miesiące. Na koniec okresu odsetki są wypłacane albo doliczane do kapitału.</p><p class="see"><a href="#obligacje">Lekcja: obligacje →</a></p></article>
+        <article class="term" id="g-oprocentowanie-efektywne" data-terms="oprocentowanie efektywne nominalne"><div class="row-head"><span class="badge"><i data-lucide="calculator" class="ic" aria-hidden="true"></i></span><h3>Oprocentowanie nominalne i efektywne</h3></div><p>Nominalne to stopa podana w ofercie, np. 6% rocznie. Efektywne pokazuje, ile naprawdę zarobisz w roku, gdy odsetki są doliczane częściej niż raz w roku. Przy kapitalizacji miesięcznej 6% nominalnie daje ok. 6,17% efektywnie.</p><p class="see"><a href="#oszczedzanie">Lekcja: procent składany →</a></p></article>
+        <article class="term" id="g-oprocentowanie-realne" data-terms="oprocentowanie realne zysk realny inflacja"><div class="row-head"><span class="badge"><i data-lucide="scale" class="ic" aria-hidden="true"></i></span><h3>Oprocentowanie realne</h3></div><p>Zysk po uwzględnieniu inflacji. Lokata na 5% przy inflacji 8% daje realnie stratę: za odsetki i kapitał kupisz mniej niż rok wcześniej.</p><p class="see"><a href="#stopy">Lekcja: stopy procentowe →</a></p></article>
+        <article class="term" id="g-oprocentowanie-stale" data-terms="oprocentowanie stałe stałoprocentowe ots tos"><div class="row-head"><span class="badge"><i data-lucide="lock" class="ic" aria-hidden="true"></i></span><h3>Oprocentowanie stałe</h3></div><p>Ustalone w dniu zakupu na cały okres, np. w obligacjach OTS i TOS. Od razu wiesz, ile zarobisz. Wygrywa, gdy inflacja i stopy spadają, przegrywa, gdy rosną.</p><p class="see"><a href="#obligacje">Lekcja: obligacje →</a></p></article>
+        <article class="term" id="g-oprocentowanie-zmienne" data-terms="oprocentowanie zmienne zmiennoprocentowe ror dor kredyt"><div class="row-head"><span class="badge"><i data-lucide="waves" class="ic" aria-hidden="true"></i></span><h3>Oprocentowanie zmienne</h3></div><p>Zmienia się razem z jakimś wskaźnikiem: stopą NBP (obligacje ROR, DOR), inflacją (COI, EDO) albo WIBOR-em (wiele kredytów). Chroni oszczędzających przed wzrostem stóp, ale dla kredytobiorców oznacza ryzyko wyższych rat.</p><p class="see"><a href="#kredyty">Lekcja: kredyty →</a></p></article>
+        <article class="term" id="g-podatek-belki" data-terms="podatek belki 19% zyski kapitałowe"><div class="row-head"><span class="badge"><i data-lucide="receipt-text" class="ic" aria-hidden="true"></i></span><h3>Podatek Belki</h3></div><p>Podatek 19% od zysków z oszczędzania i inwestowania: odsetek z lokat i obligacji, dywidend i zysków ze sprzedaży akcji. Przy obligacjach skarbowych pobiera go emitent przy wypłacie odsetek albo przy wykupie.</p><p class="see"><a href="#oszczedzanie">Lekcja: procent składany →</a></p></article>
+        <article class="term" id="g-procent-skladany" data-terms="procent składany odsetki od odsetek kapitalizacja"><div class="row-head"><span class="badge"><i data-lucide="trending-up" class="ic" aria-hidden="true"></i></span><h3>Procent składany</h3></div><p>Odsetki od odsetek. Gdy odsetki są doliczane do kapitału (kapitalizacja), w kolejnym okresie zarabiają razem z nim. Efekt rośnie z czasem, dlatego tak dużo daje wczesny start oszczędzania.</p><p class="see"><a href="#oszczedzanie">Lekcja: procent składany →</a></p></article>
+        <article class="term" id="g-raty" data-terms="raty równe malejące kredyt rata"><div class="row-head"><span class="badge"><i data-lucide="list-ordered" class="ic" aria-hidden="true"></i></span><h3>Raty równe i malejące</h3></div><p>Raty równe są co miesiąc takie same (przy niezmienionym oprocentowaniu), ale na początku spłacasz głównie odsetki. W ratach malejących kapitał spłacasz równymi częściami, więc pierwsze raty są wyższe, a cały kredyt kosztuje mniej.</p><p class="see"><a href="#kredyty">Lekcja: kredyty →</a></p></article>
+        <article class="term" id="g-recesja" data-terms="recesja spowolnienie gospodarka pkb"><div class="row-head"><span class="badge"><i data-lucide="factory" class="ic" aria-hidden="true"></i></span><h3>Recesja</h3></div><p>Okres, w którym gospodarka się kurczy: firmy produkują i sprzedają mniej, rośnie bezrobocie. Zbyt wysokie stopy procentowe mogą zbić inflację, ale też wywołać recesję.</p><p class="see"><a href="#stopy">Lekcja: stopy procentowe →</a></p></article>
+        <article class="term" id="g-rrso" data-terms="rrso koszt kredytu prowizja"><div class="row-head"><span class="badge"><i data-lucide="search" class="ic" aria-hidden="true"></i></span><h3>RRSO</h3></div><p>Rzeczywista roczna stopa oprocentowania. Pokazuje całkowity koszt kredytu w skali roku: odsetki oraz prowizje, ubezpieczenia i inne opłaty. Porównując oferty, patrz na RRSO, a nie na samo oprocentowanie.</p><p class="see"><a href="#kredyty">Lekcja: kredyty →</a></p></article>
+        <article class="term" id="g-stopa-referencyjna" data-terms="stopa referencyjna nbp rpp stopy procentowe bank centralny"><div class="row-head"><span class="badge"><i data-lucide="gauge" class="ic" aria-hidden="true"></i></span><h3>Stopa referencyjna NBP</h3></div><p>Główna stopa procentowa w Polsce. Ustala ją Rada Polityki Pieniężnej. Od niej zależy oprocentowanie lokat, kredytów i obligacji ROR oraz DOR. Gdy RPP podnosi stopy, pożyczanie drożeje, a inflacja zwykle zwalnia.</p><p class="ex" id="g-nbp-live">Sprawdzisz ją na stronie nbp.pl.</p><p class="see"><a href="#stopy">Lekcja: stopy procentowe →</a></p></article>
+        <article class="term" id="g-wibor" data-terms="wibor kredyt wskaźnik"><div class="row-head"><span class="badge"><i data-lucide="building-2" class="ic" aria-hidden="true"></i></span><h3>WIBOR</h3></div><p>Wskaźnik pokazujący, ile kosztuje pożyczanie pieniędzy między bankami. Oprocentowanie wielu kredytów o zmiennej stopie to WIBOR plus marża banku, więc gdy WIBOR rośnie, rosną raty.</p><p class="see"><a href="#kredyty">Lekcja: kredyty →</a></p></article>
+        <article class="term" id="g-wykup" data-terms="wykup termin wykupu"><div class="row-head"><span class="badge"><i data-lucide="calendar-check" class="ic" aria-hidden="true"></i></span><h3>Wykup</h3></div><p>Dzień, w którym emitent oddaje pieniądze za obligację: nominał i należne odsetki. Obligacje detaliczne możesz też zamienić przy wykupie na nowe, trochę taniej niż 100 zł.</p><p class="see"><a href="#obligacje">Lekcja: obligacje →</a></p></article>
+        <article class="term" id="g-wykup-przedterminowy" data-terms="wykup przedterminowy wcześniejszy opłata"><div class="row-head"><span class="badge"><i data-lucide="door-open" class="ic" aria-hidden="true"></i></span><h3>Wykup przedterminowy</h3></div><p>Oddanie obligacji przed końcem jej okresu. Pieniądze odzyskasz, ale z odsetek potrącona zostanie opłata, np. 3 zł od każdej obligacji EDO kupionej od września 2024 r.</p><p class="see"><a href="#obligacje">Lekcja: obligacje →</a></p></article>
+        <p class="gloss-empty" id="g-empty" hidden>Nie ma takiego hasła. Spróbuj innego słowa.</p>
+      </div>
+    </div>
+</section>
+
 </main>
 
 <footer>
-    <p>Materiał edukacyjny, nie porada inwestycyjna. Symulacje są uproszczone, a parametry przykładowe. Dane o inflacji: GUS (średnioroczny wskaźnik CPI). Aktualne oprocentowanie obligacji sprawdzisz na obligacjeskarbowe.pl, a stopy procentowe na nbp.pl.</p>
+    <p>Materiał edukacyjny, nie porada inwestycyjna. Symulacje są uproszczone, a parametry przykładowe. Dane historyczne o inflacji: GUS (średnioroczny wskaźnik CPI). Aktualne dane pobieramy codziennie z GUS (inflacja), NBP (stopy procentowe) i Ministerstwa Finansów (oferta obligacji); przy każdej liczbie podajemy, z jakiego dnia lub miesiąca pochodzi. <span id="live-foot"></span></p>
 </footer>
 
 <script>
@@ -1837,6 +1992,7 @@ mini('m-picker', (el) => {
     cells.bond.innerHTML = 'Obligacja <b>' + sym + '</b>';
     cells.term.innerHTML = 'Okres <b>' + termText(m) + '</b>';
     cells.rate.textContent = 'Oprocentowanie: ' + info.text;
+    $$('#bond-all tr[data-bond]').forEach((tr) => tr.setAttribute('aria-current', String(tr.dataset.bond === sym)));
   };
   chips.forEach((c) => c.addEventListener('click', () => pick(c)));
   pick(chips.find((c) => c.dataset.bond === 'TOS'));
@@ -2446,29 +2602,165 @@ document.addEventListener('keydown', (e) => {
 });
 $('#qz-reset').addEventListener('click', () => { renderQuiz(); window.scrollTo(0, 0); });
 
+/* ================= aktualne dane: data/rates.json (codziennie z GUS, NBP i MF) ================= */
+const RATES_URL = 'data/rates.json';
+const RATES_TIMEOUT_MS = 6000;
+/* Kopia z dnia wdrożenia: używana, gdy plik się nie wczyta (np. otwarcie z dysku). */
+const RATES_FALLBACK = {"inflation":{"value":4.1,"period":"2026-09","source":"GUS"},"nbp":{"source":"NBP","ref":3.75,"lombard":4.25,"deposit":3.25,"since":"2026-03-05"},"bonds":{"offer":"2026-11","items":{"OTS":{"series":"OTS0227","rate":2.0},"ROR":{"series":"ROR1127","first":4.0,"margin":0.0},"DOR":{"series":"DOR1128","first":4.15,"margin":0.15},"TOS":{"series":"TOS1129","rate":4.4},"COI":{"series":"COI1130","first":4.75,"margin":1.5},"EDO":{"series":"EDO1136","first":5.35,"margin":2.0},"ROS":{"series":"ROS1132","first":5.0,"margin":2.0},"ROD":{"series":"ROD1138","first":5.6,"margin":2.5}},"source":"Ministerstwo Finansów"},"updated":"2026-11-04"};
+const RATES_LINKS = {
+  inflation: 'https://stat.gov.pl/obszary-tematyczne/ceny-handel/wskazniki-cen/wskazniki-cen-towarow-i-uslug-konsumpcyjnych-pot-inflacja-/',
+  nbp: 'https://nbp.pl/polityka-pieniezna/decyzje-rpp/podstawowe-stopy-procentowe-nbp/',
+  bonds: 'https://www.obligacjeskarbowe.pl/'
+};
+const MONTHS_NOM = ['styczeń', 'luty', 'marzec', 'kwiecień', 'maj', 'czerwiec', 'lipiec', 'sierpień', 'wrzesień', 'październik', 'listopad', 'grudzień'];
+const MONTHS_GEN = ['stycznia', 'lutego', 'marca', 'kwietnia', 'maja', 'czerwca', 'lipca', 'sierpnia', 'września', 'października', 'listopada', 'grudnia'];
+const BOND_FIXED = ['OTS', 'TOS'];
+const BOND_BASE = { ROR: 'stopa NBP', DOR: 'stopa NBP', COI: 'inflacja', EDO: 'inflacja', ROS: 'inflacja', ROD: 'inflacja' };
+const BOND_FIRST = { ROR: 'w 1. miesiącu', DOR: 'w 1. miesiącu', COI: 'w 1. roku', EDO: 'w 1. roku', ROS: 'w 1. roku', ROD: 'w 1. roku' };
+const RATES = { data: null, origin: 'pending' };
+
+const ym = (s) => /^\d{4}-\d{2}$/.test(s || '') && +s.slice(5) >= 1 && +s.slice(5) <= 12;
+const ymd = (s) => /^\d{4}-\d{2}-\d{2}$/.test(s || '') && !isNaN(Date.parse(s));
+const num = (v, a, b) => typeof v === 'number' && isFinite(v) && v >= a && v <= b;
+function fmtMonth(s) { return MONTHS_NOM[+s.slice(5, 7) - 1] + ' ' + s.slice(0, 4); }
+function fmtDay(s) { return +s.slice(8, 10) + ' ' + MONTHS_GEN[+s.slice(5, 7) - 1] + ' ' + s.slice(0, 4); }
+/* Sanityzacja: to, co nie pasuje do schematu, odpada; reszta zostaje. */
+function cleanRates(d) {
+  if (!d || typeof d !== 'object') return null;
+  const out = {};
+  const i = d.inflation, n = d.nbp, b = d.bonds;
+  if (i && num(i.value, -5, 30) && ym(i.period)) out.inflation = { value: i.value, period: i.period };
+  if (n && num(n.ref, 0, 25) && ymd(n.since)) out.nbp = { ref: n.ref, since: n.since };
+  if (b && ym(b.offer) && b.items && typeof b.items === 'object') {
+    const items = {};
+    BOND_INFO_KEYS.forEach((k) => {
+      const x = b.items[k]; if (!x) return;
+      if (BOND_FIXED.includes(k) ? num(x.rate, 0, 20) : num(x.first, 0, 20) && num(x.margin, 0, 5)) items[k] = x;
+    });
+    if (Object.keys(items).length) out.bonds = { offer: b.offer, items };
+  }
+  if (ymd(d.updated)) out.updated = d.updated;
+  return out.inflation || out.nbp || out.bonds ? out : null;
+}
+const BOND_INFO_KEYS = ['OTS', 'ROR', 'DOR', 'TOS', 'COI', 'EDO', 'ROS', 'ROD'];
+function srcTag(key, text) {
+  const note = RATES.origin === 'fallback' ? ', zapisane w aplikacji' : '';
+  return `<span class="src"><a href="${RATES_LINKS[key]}" target="_blank" rel="noopener">${text}</a>${note}</span>`;
+}
+function setLive(id, key, html, value, date) {
+  const el = document.getElementById(id); if (!el) return;
+  el.dataset.origin = html ? RATES.origin : 'missing';
+  el.hidden = !html;
+  if (value != null) el.dataset.value = value; else delete el.dataset.value;
+  if (date) el.dataset.date = date; else delete el.dataset.date;
+  el.innerHTML = html || '';
+}
+function bondNow(k, x) {
+  if (BOND_FIXED.includes(k)) return `<b>${pc(x.rate, 2)}</b>stałe`;
+  return `<b>${pc(x.first, 2)}</b>${BOND_FIRST[k]}, potem ${BOND_BASE[k]} + ${pc(x.margin, 2)}`;
+}
+function applyRates() {
+  const d = RATES.data || {}, i = d.inflation, n = d.nbp, b = d.bonds;
+  const infHtml = i && `Inflacja w Polsce: <b>${pc(i.value)}</b> rok do roku ${srcTag('inflation', 'GUS, dane za ' + fmtMonth(i.period))}`;
+  const nbpHtml = n && `Stopa referencyjna NBP: <b>${pc(n.ref, 2)}</b> ${srcTag('nbp', 'NBP, obowiązuje od ' + fmtDay(n.since))}`;
+  setLive('live-inf', 'inflation', infHtml, i && i.value, i && i.period);
+  setLive('live-inf2', 'inflation', infHtml, i && i.value, i && i.period);
+  setLive('live-nbp', 'nbp', nbpHtml, n && n.ref, n && n.since);
+  setLive('live-nbp2', 'nbp', nbpHtml, n && n.ref, n && n.since);
+  setLive('live-bonds', 'bonds', b && `Kolumna „Teraz w ofercie”: oferta na <b>${fmtMonth(b.offer)}</b> ${srcTag('bonds', 'Ministerstwo Finansów, oprocentowanie zmienia się co miesiąc')}`, null, b && b.offer);
+  $$('#bond-all td[data-now]').forEach((td) => {
+    const x = b && b.items[td.dataset.now];
+    td.innerHTML = x ? bondNow(td.dataset.now, x) : '–';
+    td.dataset.origin = x ? RATES.origin : 'missing';
+  });
+  const edo = b && b.items.EDO, tos = b && b.items.TOS, offer = $('#bd-offer');
+  offer.disabled = !(edo && tos);
+  offer.textContent = edo && tos ? `Wstaw ofertę z ${MONTHS_GEN[+b.offer.slice(5) - 1]}: TOS i EDO` : 'Brak aktualnej oferty';
+  if (i && edo) {
+    const sum = Math.max(0, i.value) + edo.margin;
+    $('#g-index-live').innerHTML = `Na dzisiejszych danych: inflacja <b>${pc(i.value)}</b> (GUS, ${fmtMonth(i.period)}) + marża EDO z oferty na ${fmtMonth(b.offer)} <b>${pc(edo.margin, 2)}</b> = <b>${pc(sum, 2)}</b>. Tyle wyniósłby rok EDO, gdyby zaczynał się teraz.`;
+  }
+  if (i) $('#g-inf-live').innerHTML = `Ostatni odczyt: <b>${pc(i.value)}</b> rok do roku (GUS, ${fmtMonth(i.period)}). Cel NBP to 2,5%, z tolerancją 1 pkt proc.`;
+  if (n) $('#g-nbp-live').innerHTML = `Teraz: <b>${pc(n.ref, 2)}</b>, obowiązuje od ${fmtDay(n.since)} (NBP).`;
+  $('#live-foot').textContent = RATES.origin === 'live'
+    ? (d.updated ? `Ostatnia zmiana danych: ${fmtDay(d.updated)}.` : '')
+    : `Nie udało się pobrać świeżych danych, pokazujemy zapisane w aplikacji (z ${fmtDay(d.updated || '2026-11-04')}).`;
+  document.body.dataset.rates = RATES.origin;
+}
+async function loadRates() {
+  let data = null;
+  try {
+    const ctl = new AbortController(), timer = setTimeout(() => ctl.abort(), RATES_TIMEOUT_MS);
+    const res = await fetch(RATES_URL, { cache: 'no-cache', signal: ctl.signal });
+    clearTimeout(timer);
+    if (res.ok) data = cleanRates(await res.json());
+  } catch (e) { console.warn('rates: ' + e.message); }
+  RATES.origin = data ? 'live' : 'fallback';
+  RATES.data = data || cleanRates(RATES_FALLBACK);
+  applyRates();
+}
+$('#bd-offer').addEventListener('click', () => {
+  const it = RATES.data && RATES.data.bonds && RATES.data.bonds.items; if (!it) return;
+  setVal('bd-fixed', it.TOS.rate); setVal('bd-first', it.EDO.first); setVal('bd-margin', it.EDO.margin);
+  updBond();
+});
+
+/* ================= słownik ================= */
+const foldPl = (s) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/ł/g, 'l');
+const TERMS = $$('#gloss .term').map((el) => ({ el, hay: foldPl(el.dataset.terms + ' ' + el.textContent) }));
+function hasla(n) { return plural(n, 'hasło', 'hasła', 'haseł'); }
+function filterGloss() {
+  const q = foldPl($('#g-q').value.trim());
+  let shown = 0;
+  TERMS.forEach((t) => { const on = !q || q.split(/\s+/).every((w) => t.hay.includes(w)); t.el.hidden = !on; shown += on; });
+  $('#gloss').dataset.shown = shown;
+  $('#g-empty').hidden = shown > 0;
+  $('#g-count').textContent = q ? `Znaleziono: ${shown} ${hasla(shown)}` : `${shown} ${hasla(shown)}`;
+}
+function showTerm(slug) {
+  $$('#gloss .term.hit').forEach((x) => x.classList.remove('hit'));
+  const el = slug && document.getElementById('g-' + slug);
+  if (!el) return;
+  if (el.hidden) { $('#g-q').value = ''; filterGloss(); }
+  el.classList.add('hit');
+  el.setAttribute('tabindex', '-1');
+  requestAnimationFrame(() => { el.scrollIntoView({ block: 'start' }); el.focus({ preventScroll: true }); });
+}
+$('#g-q').addEventListener('input', filterGloss);
+document.addEventListener('keydown', (e) => {
+  if (e.key !== '/' || $('#v-slownik').hidden || e.target.closest('input, select, textarea, [contenteditable]')) return;
+  e.preventDefault(); $('#g-q').focus();
+});
+filterGloss();
+
 /* ================= nawigacja ================= */
 const VIEWS = ['start', 'inflacja', 'stopy', 'oszczedzanie', 'obligacje', 'akcje', 'kredyty', 'quiz'];
+const EXTRA_VIEWS = ['slownik'];            /* poza ścieżką lekcji: nie przesuwa paska postępu */
 function route() {
-  const h = location.hash.slice(1);
-  const v = VIEWS.includes(h) ? h : 'start';
+  const [h, sub] = location.hash.slice(1).split('/');
+  const v = VIEWS.includes(h) || EXTRA_VIEWS.includes(h) ? h : 'start';
   $$('section.view').forEach((s) => { s.hidden = s.id !== 'v-' + v; });
   $('main').dataset.view = v;
-  const bar = $('#lesson-progress'), step = VIEWS.indexOf(v);
-  bar.setAttribute('aria-valuenow', step);
-  bar.setAttribute('aria-valuetext', ($('nav.tabs a[href="#' + v + '"]') || {}).textContent.trim());
-  bar.setAttribute('aria-valuemax', VIEWS.length - 1);
-  bar.firstElementChild.style.width = (step / (VIEWS.length - 1) * 100) + '%';
+  if (VIEWS.includes(v)) {
+    const bar = $('#lesson-progress'), step = VIEWS.indexOf(v);
+    bar.setAttribute('aria-valuenow', step);
+    bar.setAttribute('aria-valuetext', ($('nav.tabs a[href="#' + v + '"]') || {}).textContent.trim());
+    bar.setAttribute('aria-valuemax', VIEWS.length - 1);
+    bar.firstElementChild.style.width = (step / (VIEWS.length - 1) * 100) + '%';
+  }
   $$('nav.tabs a').forEach((a) => {
     if (a.getAttribute('href') === '#' + v) { a.setAttribute('aria-current', 'page'); a.scrollIntoView({ block: 'nearest', inline: 'nearest' }); }
     else a.removeAttribute('aria-current');
   });
   window.scrollTo(0, 0);
   requestAnimationFrame(redrawAll);
+  if (v === 'slownik') showTerm(sub);
 }
 window.addEventListener('hashchange', route);
 
 /* ================= start ================= */
 updHero(); updInf(); drawHist(); gReset(); updSav(); updBond(); updSeesaw(); updStocks(); updDiv(); runMC(); updLoan(); renderQuiz();
+loadRates();
 route();
 addEventListener('load', () => icons());
 icons();

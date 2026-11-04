@@ -1,0 +1,33 @@
+name: Aktualne dane (inflacja, stopy NBP, obligacje)
+
+on:
+  schedule:
+    - cron: "17 6 * * *"   # codziennie ok. 7:17 czasu polskiego
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: rates
+  cancel-in-progress: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Pobierz dane
+        run: python3 scripts/fetch_rates.py
+      - name: Zapisz zmiany
+        run: |
+          if git diff --quiet -- data/rates.json; then echo "bez zmian"; exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/rates.json
+          git commit -m "Aktualizacja danych: inflacja, stopy NBP, oferta obligacji"
+          git push
