@@ -926,6 +926,7 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
     <div class="lesson-head">
       <div class="lesson-title"><span class="badge badge-lg"><i data-lucide="sprout" class="ic" aria-hidden="true"></i></span><h1 class="app-title">Procent składany: odsetki od odsetek</h1></div>
       <p class="lead">Najsilniejszy sprzymierzeniec oszczędzającego to czas. Im wcześniej zaczniesz, tym więcej pracy wykonają za ciebie odsetki.</p>
+      <p class="live" id="live-inf3" data-origin="pending" aria-live="polite"></p>
     </div>
     <div class="band">
     <div class="split">
@@ -968,11 +969,11 @@ footer p { color: var(--ink-3); font-size: var(--body-sm); }
           <div class="lab-body">
           <p class="task">Ustaw, ile odkładasz co miesiąc i jak długo. Porównaj, ile wpłacasz ty, a ile dokładają odsetki.</p>
           <div class="controls">
-            <div class="ctl"><label for="sv-start">Wpłata na start</label><output id="sv-start-o"></output><input type="range" id="sv-start" min="0" max="10000" step="100" value="500" data-out="zl"></div>
-            <div class="ctl"><label for="sv-month">Co miesiąc odkładasz</label><output id="sv-month-o"></output><input type="range" id="sv-month" min="0" max="1000" step="10" value="100" data-out="zl"></div>
+            <div class="ctl"><label for="sv-start">Wpłata na start</label><output id="sv-start-o"></output><input type="range" id="sv-start" min="0" max="50000" step="500" value="10000" data-out="zl"></div>
+            <div class="ctl"><label for="sv-month">Co miesiąc odkładasz</label><output id="sv-month-o"></output><input type="range" id="sv-month" min="0" max="1000" step="10" value="0" data-out="zl"></div>
             <div class="ctl"><label for="sv-rate">Oprocentowanie rocznie</label><output id="sv-rate-o"></output><input type="range" id="sv-rate" min="0" max="12" step="0.25" value="5" data-out="pct2"></div>
             <div class="ctl"><label for="sv-years">Przez ile lat</label><output id="sv-years-o"></output><input type="range" id="sv-years" min="1" max="50" step="1" value="25" data-out="yrs"></div>
-            <div class="ctl"><label for="sv-inf">Inflacja rocznie</label><output id="sv-inf-o"></output><input type="range" id="sv-inf" min="0" max="10" step="0.5" value="3" data-out="pct"></div>
+            <div class="ctl"><label for="sv-inf">Inflacja rocznie</label><output id="sv-inf-o"></output><input type="range" id="sv-inf" min="0" max="15" step="0.1" value="4.1" data-out="pct" data-live="inflation"></div>
             <div class="ctl"><label for="sv-cap">Kapitalizacja odsetek</label><span class="val"></span>
               <select id="sv-cap">
                 <option value="365">codzienna</option>
@@ -2154,7 +2155,7 @@ function updSav() {
   });
   const mm = m || 100;
   const a = grow(0, mm, r, 44, tax, f, mode), b = grow(0, mm, r, 34, tax, f, mode);
-  $('#sv-early').innerHTML = `Odkładasz ${zl(mm)} miesięcznie na ${pc(r * 100, 2)} aż do 60. urodzin. Start w wieku <b>16 lat</b>: na koniec ${zl(a.bal)} (wpłacisz ${zl(a.paid)}). Start w wieku <b>26 lat</b>: ${zl(b.bal)} (wpłacisz ${zl(b.paid)}). Dziesięć lat różnicy kosztuje <b>${zl(a.bal - b.bal)}</b>, choć wpłaty różnią się tylko o ${zl(a.paid - b.paid)}.`;
+  $('#sv-early').innerHTML = `${m ? 'Odkładasz' : 'Przykład: odkładasz'} ${zl(mm)} miesięcznie na ${pc(r * 100, 2)} aż do 60. urodzin. Start w wieku <b>16 lat</b>: na koniec ${zl(a.bal)} (wpłacisz ${zl(a.paid)}). Start w wieku <b>26 lat</b>: ${zl(b.bal)} (wpłacisz ${zl(b.paid)}). Dziesięć lat różnicy kosztuje <b>${zl(a.bal - b.bal)}</b>, choć wpłaty różnią się tylko o ${zl(a.paid - b.paid)}.`;
   updCap(P0, m, r, n, tax, f, mode);
 }
 function updCap(P0, m, r, n, tax, fSel, mode) {
@@ -2566,6 +2567,7 @@ function applyRates() {
   setLive('live-inf2', 'inflation', infHtml, i && i.value, i && i.period);
   setLive('live-nbp', 'nbp', nbpHtml, n && n.ref, n && n.since);
   setLive('live-nbp2', 'nbp', nbpHtml, n && n.ref, n && n.since);
+  setLive('live-inf3', 'inflation', infHtml, i && i.value, i && i.period);
   setLive('live-bonds', 'bonds', b && `Kolumna „Teraz w ofercie”: oferta na <b>${fmtMonth(b.offer)}</b> ${srcTag('bonds', 'Ministerstwo Finansów, oprocentowanie zmienia się co miesiąc')}`, null, b && b.offer);
   $$('#bond-all td[data-now]').forEach((td) => {
     const x = b && b.items[td.dataset.now];
@@ -2585,7 +2587,7 @@ function applyRates() {
     ? (d.updated ? `Ostatnia zmiana danych: ${fmtDay(d.updated)}.` : '')
     : `Nie udało się pobrać świeżych danych, pokazujemy zapisane w aplikacji (z ${fmtDay(d.updated || '2026-11-04')}).`;
   document.body.dataset.rates = RATES.origin;
-  labelScen(); updBond();
+  labelScen(); updBond(); liveDefaults(); updSav();
 }
 async function loadRates() {
   let data = null;
@@ -2604,6 +2606,17 @@ $('#bd-offer').addEventListener('click', () => {
   setVal('bd-fixed', it.TOS.rate); setVal('bd-first', it.EDO.first); setVal('bd-margin', it.EDO.margin);
   updBond();
 });
+
+/* Suwaki z data-live="inflation" startują od obecnej inflacji (GUS). Po ruchu użytkownika (data-touched) dane już ich nie nadpisują. */
+function liveDefaults() {
+  const v = curInflation().value;
+  $$('input[data-live="inflation"]').forEach((inp) => {
+    if (inp.dataset.touched) return;
+    setVal(inp.id, clamp(v, +inp.min, +inp.max));
+    inp.dataset.liveValue = v;
+  });
+}
+$$('input[data-live]').forEach((inp) => inp.addEventListener('input', (e) => { if (e.isTrusted) inp.dataset.touched = '1'; }));
 
 /* ================= słownik ================= */
 const foldPl = (s) => s.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '').replace(/ł/g, 'l');
@@ -2659,7 +2672,7 @@ function route() {
 window.addEventListener('hashchange', route);
 
 /* ================= start ================= */
-updHero(); updInf(); drawHist(); gReset(); updSav(); updBond(); updSeesaw(); updStocks(); updDiv(); runMC(); updLoan(); labelScen();
+liveDefaults(); updHero(); updInf(); drawHist(); gReset(); updSav(); updBond(); updSeesaw(); updStocks(); updDiv(); runMC(); updLoan(); labelScen();
 loadRates();
 route();
 addEventListener('load', () => icons());
